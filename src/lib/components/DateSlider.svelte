@@ -1,9 +1,7 @@
 <script>
 	import RangeSlider from 'svelte-range-slider-pips';
     import { browser } from '$app/env';
-
-
-	const MS_IN_DAY = 86400000;
+	import {MS_IN_DAY} from "$lib/consts";
 
 	const full_range = [
 		new Date('2021-07-10').getTime() / MS_IN_DAY,

@@ -5,6 +5,10 @@
 	import type { Writable } from 'svelte/store';
 	import { GeoData } from '$lib/geoJsonResponse';
 
+    let dateValues: [number, number] = [
+        new Date().getTime() / MS_IN_DAY - 20,
+        new Date().getTime() / MS_IN_DAY
+    ];
 	let geoData: Writable<null | GeoData> = writable(null);
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {

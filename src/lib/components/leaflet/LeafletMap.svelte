@@ -1,33 +1,66 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+	import {afterUpdate, onMount} from 'svelte';
     import { browser } from '$app/env';
-    import { GeoData } from "../../geoJsonResponse";
+    import { GeoData } from "$lib/geoJsonResponse";
+	import {MS_IN_DAY} from "$lib/consts";
 
     export let geoData: GeoData;
+	export let filterValues: [number, number];
 
-    onMount(async () => {
+	let map;
+	let markers;
+
+	const timeFromMoment = (date) => new Date(date.toDate()).getTime() / MS_IN_DAY;
+
+	onMount(async () => {
         if(browser) {
             const leaflet = await import('leaflet');
 
+			markers = leaflet.layerGroup();
 
-			const map = leaflet.map('map').setView([-41, 174], 6);
+			map = leaflet.map('map').setView([-41, 174], 6);
             leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            for (let feature of geoData.features) {
+
+			for (let feature of geoData.features) {
+				console.log(filterValues[0], filterValues[1], filterValues[0] < timeFromMoment(feature.properties.start) && filterValues[1] > timeFromMoment(feature.properties.end));
                 if (feature.properties.city !== null) {
 					leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
 						title: feature.properties.event,
-					}).addTo(map).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`)
+					}).addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
 				} else {
 					leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
 						title: feature.properties.event,
-					}).addTo(map).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`)
+					}).addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
 				}
             }
         }
     });
+
+	afterUpdate(async () => {
+		console.log("Updating");
+		const leaflet = await import('leaflet');
+
+		if (typeof map === "undefined" || typeof markers == "undefined") return;
+
+		markers.clearLayers();
+
+		for (let feature of geoData.features.filter((e) => filterValues[0] < timeFromMoment(e.properties.start) && filterValues[1] > timeFromMoment(e.properties.end))) {
+			console.log(filterValues[0], timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end), filterValues[1], filterValues[0] < timeFromMoment(feature.properties.start) && filterValues[1] > timeFromMoment(feature.properties.end));
+			if (feature.properties.city !== null) {
+				leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+					title: feature.properties.event,
+				}).addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
+			} else {
+				leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+					title: feature.properties.event,
+				}).addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
+			}
+		}
+
+	});
 </script>
 
 <main>
