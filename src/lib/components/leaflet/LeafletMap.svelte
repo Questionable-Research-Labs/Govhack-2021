@@ -8,20 +8,28 @@
 	export let filterValues: [number, number];
 
 	let map;
+	let leaflet;
 	let markers;
 
 	const timeFromMoment = (date) => new Date(date.toDate()).getTime() / MS_IN_DAY;
 
 	onMount(async () => {
         if(browser) {
-            const leaflet = await import('leaflet');
+            leaflet = await import('leaflet');
 
 			markers = leaflet.layerGroup();
-
-			map = leaflet.map('map').setView([-41, 174], 6);
-            leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+            });
+
+			map = leaflet.map('map', {
+				center: [-41, 174],
+				zoom: 6,
+				layers: [baseMap, markers]
+			});
+            
+			// leaflet.control.layers(markers).addTo(map);
+
 
 
 			for (let feature of geoData.features) {
@@ -41,14 +49,13 @@
 
 	afterUpdate(async () => {
 		console.log("Updating");
-		const leaflet = await import('leaflet');
 
 		if (typeof map === "undefined" || typeof markers == "undefined") return;
 
 		markers.clearLayers();
 
 		for (let feature of geoData.features.filter((e) => filterValues[0] < timeFromMoment(e.properties.start) && filterValues[1] > timeFromMoment(e.properties.end))) {
-			console.log(filterValues[0], timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end), filterValues[1], filterValues[0] < timeFromMoment(feature.properties.start) && filterValues[1] > timeFromMoment(feature.properties.end));
+			// console.log(filterValues[0], timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end), filterValues[1], filterValues[0] < timeFromMoment(feature.properties.start) && filterValues[1] > timeFromMoment(feature.properties.end));
 			if (feature.properties.city !== null) {
 				leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
 					title: feature.properties.event,

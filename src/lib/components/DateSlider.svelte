@@ -11,9 +11,8 @@
 	// How often the labels appear under the bar
 	const num_pip_labels = 12;
 	const pip_step = Math.round((full_range[1]-full_range[0])/(num_pip_labels-2))
-	console.log("Pip step:",pip_step)
 
-	export let values = [
+	export let dateRange = [
 		new Date().getTime() / MS_IN_DAY - 20,
 		new Date().getTime() / MS_IN_DAY
 	];
@@ -25,7 +24,7 @@
 </script>
 <div class="range-slider-wrapper">
 	<RangeSlider
-	bind:values
+	bind:values={dateRange}
 	min={full_range[0]}
 	max={full_range[1]}
 	pushy
