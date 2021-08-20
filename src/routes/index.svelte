@@ -1,19 +1,20 @@
 <script lang="ts">
-    import LeafletMap from "../lib/components/leaflet/LeafletMap.svelte";
+    import LeafletMap from "$lib/components/leaflet/LeafletMap.svelte";
     import {writable} from "svelte/store";
     import type {Writable} from "svelte/store";
     import {GeoData} from "$lib/geoJsonResponse";
 
-    let geoData: Writable<null | GeoData> = writable();
+    let geoData: Writable<null | GeoData> = writable(null);
     let geoDataValue: null | GeoData;
-    geoData.subscribe((e) =>
-        geoDataValue = e
+    geoData.subscribe((e) => {
+            geoDataValue = e
+        }
     );
-    
+
     fetch("https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson").then((response) =>
         response.json()
     ).then((jsonData) => {
-        if (typeof geoDataValue === null) {
+        if (geoDataValue === null) {
             geoData.set(new GeoData(jsonData));
         }
     }).catch((error) => {
@@ -26,7 +27,7 @@
 <main>
     <h1>Would ya look at that</h1>
     <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-    <LeafletMap/>
+    <LeafletMap geoData={$geoData}/>
 </main>
 
 

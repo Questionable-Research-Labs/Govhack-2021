@@ -1,6 +1,9 @@
-<script>
+<script lang="ts">
     import { onMount } from 'svelte';
     import { browser } from '$app/env';
+    import {GeoData} from "$lib/geoJsonResponse";
+
+    export let geoData: GeoData;
 
     onMount(async () => {
         if(browser) {
@@ -12,12 +15,12 @@
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            for (let i = 0; i < 10; i++) {
-                leaflet.marker([Math.random()*-100,Math.random()*200]).addTo(map)
-                    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.');
+            for (let feature of geoData.features) {
+                console.log(feature);
+                leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+                    title: feature.properties.event,
+                }).addTo(map)
             }
-
-
         }
     });
 </script>

@@ -10,7 +10,13 @@ export class GeoData {
 		this.type = data['type'];
 		this.features = data['features'].map((e) => {
 			return {
-				geometry: e['geometry'],
+				geometry: {
+					...e['geometry'],
+					coordinates: [
+						parseFloat(e['geometry']['coordinates'][1]),
+						parseFloat(e['geometry']['coordinates'][0])
+					]
+				},
 				type: e['type'],
 				properties: {
 					// @ts-ignore
