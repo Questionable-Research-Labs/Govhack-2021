@@ -23,8 +23,8 @@
 		return new Date(value * MS_IN_DAY).toISOString().split('T')[0];
 	}
 </script>
-
-<RangeSlider
+<div class="range-slider-wrapper">
+	<RangeSlider
 	bind:values
 	min={full_range[0]}
 	max={full_range[1]}
@@ -36,11 +36,14 @@
 	all="label"
 	formatter={displayDates}
 	handleFormatter={displayDates}
-	class="range-slider"
+	id="range-slider"
 />
+</div>
+
 
 <style lang="scss">
-	.range-slider {
-		z-index: 1000;
+	.range-slider-wrapper {
+		width: 80%;
+		margin: 0 auto;
 	}
 </style>
