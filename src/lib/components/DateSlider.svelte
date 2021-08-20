@@ -38,7 +38,11 @@
 	all="label"
 	formatter={displayDates}
 	handleFormatter={displayDates}
+	class="range-slider"
 />
 
 <style lang="scss">
+	.range-slider {
+		z-index: 1000;
+	}
 </style>

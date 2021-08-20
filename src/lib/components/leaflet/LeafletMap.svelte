@@ -41,6 +41,7 @@
         padding-bottom:70vh;
         position:relative;
         height:0;
+        z-index: 0;
 		#map {
 			left:0;
             top:0;
