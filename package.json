@@ -16,6 +16,7 @@
     "@sveltejs/adapter-cloudflare-workers": "^1.0.0-next.19",
     "@sveltejs/kit": "next",
     "@types/leaflet": "^1.7.4",
+    "@types/moment": "^2.13.0",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "eslint": "^7.22.0",
@@ -32,5 +33,8 @@
     "tslib": "^2.0.0",
     "typescript": "^4.0.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "moment": "^2.29.1"
+  }
 }
