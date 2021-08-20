@@ -4,7 +4,9 @@
 	import { writable } from 'svelte/store';
 	import type { Writable } from 'svelte/store';
 	import { GeoData } from '$lib/geoJsonResponse';
+	import {MS_IN_DAY} from "$lib/consts";
 
+    let dateValues: [number, number];
 	let geoData: Writable<null | GeoData> = writable(null);
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {
@@ -26,10 +28,10 @@
 </script>
 
 <main>
-	<h1>Would ya look at that</h1>
+	<h1>Would ya look at that {dateValues}</h1>
 	<div class="mapUI">
-		<LeafletMap geoData={$geoData} />
-		<DateSlider />
+		<LeafletMap geoData={$geoData} dateRange={dateValues} />
+		<DateSlider bind:dateRange={dateValues}/>
 	</div>
 </main>
 
