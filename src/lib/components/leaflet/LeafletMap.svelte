@@ -16,16 +16,15 @@
             }).addTo(map);
 
             for (let feature of geoData.features) {
-                console.log(feature);
-                leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
-                    title: feature.properties.event,
-                }).addTo(map).bindPopup(`<p>${feature.properties.event}</p><table>
-<tr><td>City</td><td>${feature.properties.city}</td></tr>
-<tr><td>Location</td><td>${feature.properties.location}</td></tr>
-<tr><td>Information</td><td>${feature.properties.information}</td></tr>
-<tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr>
-<tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr>
-</table>`)
+                if (feature.properties.city !== null) {
+					leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+						title: feature.properties.event,
+					}).addTo(map).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`)
+				} else {
+					leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+						title: feature.properties.event,
+					}).addTo(map).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`)
+				}
             }
         }
     });
