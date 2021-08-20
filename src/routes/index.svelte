@@ -30,7 +30,7 @@
 <main>
 	<h1>Would ya look at that {dateValues}</h1>
 	<div class="mapUI">
-		<LeafletMap geoData={$geoData} filterValues={dateValues} />
+		<LeafletMap geoData={$geoData} dateRange={dateValues} />
 		<DateSlider bind:dateRange={dateValues}/>
 	</div>
 </main>
