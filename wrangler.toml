@@ -1,0 +1,7 @@
+name = "govhack2021"
+type = "webpack"
+account_id = "a3d1d9be9df771a0330588ed6b567b3f"
+usage_model = ''
+compatibility_flags = []
+workers_dev = true
+site = {bucket = "./build",entry-point = "./workers-site"}
