@@ -3,7 +3,7 @@
     import { browser } from '$app/env';
     import { GeoData } from "$lib/geoJsonResponse";
 	import { MS_IN_DAY } from "$lib/consts";
-	import { timeFromMoment, StoreMarker, TestRange } from "$lib/filteringStore";
+	import { timeFromMoment, StoreMarker, TestRange, dateRangeTimings } from "$lib/filteringStore";
 
     export let geoData: GeoData;
 	export let dateRange: [number, number];
@@ -12,6 +12,28 @@
 	let leaflet;
 	let markers;
 
+	function loadMarkers() {
+		if (typeof geoData.features !== 'undefined') {
+			for (let feature of geoData.features) {
+                if (feature.properties.city !== null) {
+					let marker = leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+						title: feature.properties.event,
+					})
+					marker.addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
+					console.log("Marker: ",marker._leaflet_id)
+					StoreMarker([timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)],marker._leaflet_id)
+				} else {
+					let marker = leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+						title: feature.properties.event,
+					})
+					marker.addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
+					console.log("Marker ID:",marker._leaflet_id)
+					StoreMarker([timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)],marker._leaflet_id)
+
+				}
+			}
+		}
+	}
 
 	onMount(async () => {
         if(browser) {
@@ -29,26 +51,7 @@
 				});
 				
 			}
-
-			if (typeof geoData.features !== 'undefined') {
-				for (let feature of geoData.features) {
-                if (feature.properties.city !== null) {
-					let marker = leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
-						title: feature.properties.event,
-					})
-					marker.addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
-					console.log("Marker: ",marker._leaflet_id)
-					StoreMarker([timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)],marker._leaflet_id)
-				} else {
-					let marker = leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
-						title: feature.properties.event,
-					}).addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
-					console.log("Marker ID:",marker._leaflet_id)
-					StoreMarker([timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)],marker._leaflet_id)
-
-				}
-            }
-			}
+			loadMarkers();
 
         }
     });
@@ -59,10 +62,27 @@
 		if (typeof map === "undefined" || typeof markers == "undefined") return;
 
 		let markerList = markers.getLayers();
+		if (markerList.length==0) {
+			// Data hasn't been loaded yet, load it now
+			console.log("Post loading markers")
+			loadMarkers()
+		} else {
+
+		}
+
+
+		console.log(markerList)
 		for (let marker in markerList) {
 			let markerInRange = TestRange(dateRange,parseInt(marker));
-			console.log("Marker:",markers.getLayer(parseInt(marker)).options.title )
-				markers.getLayer(parseInt(marker)).setOpacity(0.5)
+			if (markerInRange !== dateRangeTimings.invalid) {
+				if (typeof markers.getLayer(parseInt(marker)) !== "undefined") {
+					markers.getLayer(parseInt(marker)).setOpacity(0.5);
+
+				} else {
+					console.log("What? Marker doesn't exist apparently")
+				}
+
+			}
 			
 		}
 
@@ -89,40 +109,40 @@
 <style lang="scss">
 	@import 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css';
 	main #map-wrapper {
-        overflow:hidden;
-        padding-bottom:70vh;
-        position:relative;
-        height:0;
-        z-index: 0;
+		overflow: hidden;
+		padding-bottom: 70vh;
+		position: relative;
+		height: 0;
+		z-index: 0;
 		#map {
-			left:0;
-            top:0;
-            height:100%;
-            width:100%;
-            position:absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 100%;
+			position: absolute;
 		}
 	}
-    @media (max-width: 480px) {
-        main #map-wrapper {
-            padding-bottom:40vh;
-        }
-    }
-    // @media (min-width: 481px) and (max-width: 768px) {
-    //     main #map-wrapper {
-    //         padding-bottom:80%;
-    //     }
+	@media (max-width: 480px) {
+		main #map-wrapper {
+			padding-bottom: 40vh;
+		}
+	}
+	// @media (min-width: 481px) and (max-width: 768px) {
+	//     main #map-wrapper {
+	//         padding-bottom:80%;
+	//     }
 
-    // }
+	// }
 
-    :global .leaflet-popup-content {
-      p {
-        font-weight: bold;
-        text-align: center;
-        width: 100%;
-      }
-        td:first-child {
-          font-weight: bold;
-          padding-right: 0.5em;
-        }
-    }
+	:global .leaflet-popup-content {
+		p {
+			font-weight: bold;
+			text-align: center;
+			width: 100%;
+		}
+		td:first-child {
+			font-weight: bold;
+			padding-right: 0.5em;
+		}
+	}
 </style>
