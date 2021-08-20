@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: yarn install
+      - run: yarn build
+      - name: Publish
+        uses: cloudflare/wrangler-action@1.2.0
+        env:
+          USER: root
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
