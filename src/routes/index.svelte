@@ -1,13 +1,21 @@
 <script lang="ts">
     import LeafletMap from "../lib/components/leaflet/LeafletMap.svelte";
     import {writable} from "svelte/store";
+    import type {Writable} from "svelte/store";
+    import {GeoData} from "$lib/geoJsonResponse";
 
-    let geoData = writable();
-
+    let geoData: Writable<null | GeoData> = writable();
+    let geoDataValue: null | GeoData;
+    geoData.subscribe((e) =>
+        geoDataValue = e
+    );
+    
     fetch("https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson").then((response) =>
         response.json()
     ).then((jsonData) => {
-        geoData.set(jsonData);
+        if (typeof geoDataValue === null) {
+            geoData.set(new GeoData(jsonData));
+        }
     }).catch((error) => {
         console.error("Could not fetch data:", error);
     });
