@@ -27,7 +27,6 @@
 
 <main>
 	<h1>Would ya look at that</h1>
-	<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 	<div class="mapUI">
 		<LeafletMap geoData={$geoData} />
 		<DateSlider />
@@ -38,6 +37,9 @@
 	main {
         width: 100vw;
         min-height: 100vh;
+        h1 {
+            text-align: center;
+        }
 		.mapUI {
 			display: flex;
 			flex-direction: column;
