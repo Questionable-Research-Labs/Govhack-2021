@@ -11,6 +11,9 @@
 
 
 			const map = leaflet.map('map').setView([-41, 174], 6);
+            leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
 
             for (let feature of geoData.features) {
                 console.log(feature);
