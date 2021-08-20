@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { browser } from '$app/env';
-    import {GeoData} from "$lib/geoJsonResponse";
+    import { GeoData } from "../../geoJsonResponse";
 
     export let geoData: GeoData;
 
@@ -9,7 +9,6 @@
         if(browser) {
             const leaflet = await import('leaflet');
 
-			const leaflet = await import('leaflet');
 
 			const map = leaflet.map('map').setView([-41, 174], 6);
 
