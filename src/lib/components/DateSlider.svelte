@@ -2,16 +2,13 @@
 	import RangeSlider from 'svelte-range-slider-pips';
     import { browser } from '$app/env';
 	import {MS_IN_DAY} from "$lib/consts";
+	import {dateToString} from "$lib/tools";
 
 	const full_range = [
 		new Date('2021-07-10').getTime() / MS_IN_DAY,
 		new Date().getTime() / MS_IN_DAY
 	]
 
-	const formatDate = (date: Date) =>
-        date
-            .toLocaleString("sv", { timeZone: "Pacific/Auckland" })
-            .split(" ")[0];
 	
 	// How often the labels appear under the bar
 	const num_pip_labels = 12;
@@ -21,11 +18,6 @@
 		new Date().getTime() / MS_IN_DAY - 20,
 		new Date().getTime() / MS_IN_DAY
 	];
-
-	function displayDates(value, pip_index) {
-		// return value
-		return formatDate(new Date(value * MS_IN_DAY));
-	}
 </script>
 <div class="range-slider-wrapper">
 	<RangeSlider
@@ -38,8 +30,8 @@
 	pips
 	pipstep={pip_step}
 	all="label"
-	formatter={displayDates}
-	handleFormatter={displayDates}
+	formatter={dateToString}
+	handleFormatter={dateToString}
 	id="range-slider"
 />
 </div>

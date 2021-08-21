@@ -6,6 +6,7 @@
 	import { GeoData } from '$lib/geoJsonResponse';
 	import {MS_IN_DAY} from "$lib/consts";
 	import SearchBox from "$lib/components/SearchBox.svelte";
+	import ResultHeading from '$lib/components/ResultHeading.svelte';
 
     let dateValues: [number, number];
 	let geoData: Writable<null | GeoData> = writable(null);
@@ -29,7 +30,7 @@
 </script>
 
 <main>
-	<h1>Would ya look at that {dateValues}</h1>
+	<ResultHeading dates={dateValues}/>
 	<SearchBox geoData={$geoData}/>
 	<div class="mapUI">
 		<LeafletMap geoData={$geoData} dateRange={dateValues} />
@@ -39,10 +40,7 @@
 
 <style lang="scss">
 	main {
-        min-height: 100vh;
-        h1 {
-            text-align: center;
-        }
+		min-height: 100vh;
 		.mapUI {
 			display: flex;
 			flex-direction: column;
