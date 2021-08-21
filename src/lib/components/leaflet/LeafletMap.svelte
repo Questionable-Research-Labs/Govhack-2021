@@ -2,7 +2,6 @@
 	import {afterUpdate, onMount} from 'svelte';
     import { browser } from '$app/env';
     import { GeoData } from "$lib/geoJsonResponse";
-	import { MS_IN_DAY } from "$lib/consts";
 	import { timeFromMoment, StoreMarker, TestRange, dateRangeTimings } from "$lib/filteringStore";
 
     export let geoData: GeoData;
@@ -53,7 +52,7 @@
     });
 
 	afterUpdate(async () => {
-		console.log("Updating");
+		// console.log("Updating");
 
 		if (typeof map === "undefined" || typeof markers == "undefined") return;
 
@@ -73,14 +72,19 @@
 		console.log(markerList)
 		for (let marker of markerList) {
 			let markerInRange = TestRange(dateRange,leaflet.stamp(marker));
-			if (markerInRange !== dateRangeTimings.invalid) {
+			console.log(markerInRange);
+			if (markerInRange === dateRangeTimings.invalid || markerInRange === dateRangeTimings.outOfRange) {
 				if (typeof markers.getLayer(leaflet.stamp(marker)) !== "undefined") {
 					markers.getLayer(leaflet.stamp(marker)).setOpacity(0.5);
-
 				} else {
 					console.log("What? Marker doesn't exist apparently")
 				}
-
+			} else {
+				if (typeof markers.getLayer(leaflet.stamp(marker)) !== "undefined") {
+					markers.getLayer(leaflet.stamp(marker)).setOpacity(1);
+				} else {
+					console.log("What? Marker doesn't exist apparently")
+				}
 			}
 			
 		}

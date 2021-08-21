@@ -5,6 +5,7 @@
 	import type { Writable } from 'svelte/store';
 	import { GeoData } from '$lib/geoJsonResponse';
 	import {MS_IN_DAY} from "$lib/consts";
+	import SearchBox from "$lib/components/SearchBox.svelte";
 
     let dateValues: [number, number];
 	let geoData: Writable<null | GeoData> = writable(null);
@@ -29,6 +30,7 @@
 
 <main>
 	<h1>Would ya look at that {dateValues}</h1>
+	<SearchBox geoData={$geoData}/>
 	<div class="mapUI">
 		<LeafletMap geoData={$geoData} dateRange={dateValues} />
 		<DateSlider bind:dateRange={dateValues}/>
