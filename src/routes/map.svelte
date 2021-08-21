@@ -51,9 +51,11 @@
 	<header class='header' id='header'>
 		<ResultHeading dates={dateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => places = p?.map(e => e.index)} />
-		{#if typeof $lastUpdate !== 'undefined'}
-			<p>Last Updated {$lastUpdate.format("DD/MM/YYYY HH:mm:ss")}</p>
-		{/if}
+		<div class='update-block'>
+			{#if typeof $lastUpdate !== 'undefined'}
+				<p class='update-block__text'>Last Updated {$lastUpdate.format("DD/MM/YYYY HH:mm:ss")}</p>
+			{/if}
+		</div>
 	</header>
 	<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places} />
 	<footer>
@@ -94,4 +96,19 @@
     }
 
   }
+
+	.update-block {
+    position: absolute;
+		top: calc(100% + 1em);
+		right: 1em;
+	}
+
+	.update-block__text {
+		font-size: 0.75em;
+		background: #333;
+		display: inline;
+		color: white;
+		padding: 0.5em;
+		border-radius: 0.5em;
+	}
 </style>

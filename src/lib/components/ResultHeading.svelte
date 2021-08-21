@@ -6,7 +6,7 @@
 
 {#if dates}
 	<div class='results-info'>
-		<img class='results-info__icon' src='/icons/icon.svg' alt='LoLI' width='128' height='128'>
+		<img class='results-info__icon' src='/icons/icon.svg' alt='Toi' width='128' height='128'>
 		<h3 class='results-info__title'>Showing Results</h3>
 		<div class='results-info__body'>
 			<span class='results-info__body__marker'>From
@@ -95,6 +95,12 @@
         width: 100%;
         transform: skewX(0) translateX(0);
       }
+    }
+  }
+
+  @media all and (max-width: 440px) {
+    .results-info__body__marker {
+			font-size: 0.7em;
     }
   }
 </style>
