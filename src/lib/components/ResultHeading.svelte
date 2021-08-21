@@ -39,7 +39,6 @@
 		}
 
     &__title {
-      color: black;
 			font-size: 1.25em;
 			align-self: center;
       font-weight: bold;
