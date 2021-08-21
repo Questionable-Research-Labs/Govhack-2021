@@ -6,6 +6,7 @@
 
 {#if dates}
 	<div class='results-info'>
+		<img class='results-info__icon' src='/icons/icon.svg' alt='LoLI' width='128' height='128'>
 		<h3 class='results-info__title'>Showing Results</h3>
 		<div class='results-info__body'>
 			<span class='results-info__body__marker'>From
@@ -25,6 +26,13 @@
 		flex-flow: row;
     padding: 1em;
     position: relative;
+
+		&__icon {
+			width: 60px;
+			height: 60px;
+			align-self: center;
+			margin-right: 0.5em;
+		}
 
 		&::before {
 			content: '';

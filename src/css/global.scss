@@ -12,12 +12,19 @@ h2 {
 }
 
 .leaflet-top {
-  top: 80px !important;
+  top: 93px !important;
+}
+
+@media all and (max-width: 1200px) {
+
+  .leaflet-top {
+    top: 170px !important;
+  }
 }
 
 @media all and (max-width: 770px) {
 
   .leaflet-top {
-    top: 165px !important;
+    top: 225px !important;
   }
 }
