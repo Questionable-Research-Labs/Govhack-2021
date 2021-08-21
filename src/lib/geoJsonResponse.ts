@@ -1,4 +1,7 @@
+// Moments a bit funky with typescript
+import {Moment} from 'moment'
 import moment from 'moment';
+
 
 export class GeoData {
 	name: string;
@@ -47,10 +50,10 @@ export interface Geometry {
 
 export interface Properties {
 	city: string;
-	end: Date;
+	end: Moment;
 	event: string;
 	information: string;
 	location: string;
-	start: Date;
+	start: Moment;
 	id: string;
 }
