@@ -10,6 +10,9 @@ Times of interest
 A web app designed to allow everyone easy and user-friendly access to a map of COVID-19
 locations of interest.
 
+## Toi Backend code
+Available at [Questionable-Research-Labs/Govhack2021-backend](https://github.com/Questionable-Research-Labs/Govhack2021-backend)
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
