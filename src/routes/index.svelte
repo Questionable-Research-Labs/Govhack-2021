@@ -1,3 +1,14 @@
+<script>
+	import { browser } from '$app/env';
+
+	if (browser) {
+		const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+		if (document.referrer.startsWith('android-app://') || navigator.standalone || isStandalone) {
+			window.location.href = "/map";
+		}
+	}
+</script>
+
 <svelte:head>
 	<title>Toi | Times of Interest</title>
 </svelte:head>
