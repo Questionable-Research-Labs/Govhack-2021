@@ -1,3 +1,5 @@
+![Logo](https://raw.githubusercontent.com/Questionable-Research-Labs/Govhack-2021/main/static/icons/icon%4032.png)
+
 # LoLI
 Locations of Localised Interest
 
