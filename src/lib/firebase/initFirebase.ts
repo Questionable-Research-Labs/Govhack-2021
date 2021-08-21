@@ -1,17 +1,19 @@
-import firebase from "firebase/app/dist/index.cjs.js";
 // Using Analytics will brake the whole website when blocked.
 // ^Crashes the startup thread
-import "firebase/analytics/dist/index.cjs.js";
-import "firebase/messaging/dist/index.cjs.js"
 
 import { firebaseConfig } from "./env";
 
 export async function initFirebase() {
     if (typeof window !== "undefined") {
+        const firebase = (await import('firebase/app')).default;
+        await import('firebase/analytics')
+        await import('firebase/messaging')
 
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
-        messaging.getToken({serviceWorkerRegistration: "service-worker.js", vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE' }).then((currentToken) => {
+        const registration = await navigator.serviceWorker.ready;
+
+        messaging.getToken({serviceWorkerRegistration: registration,vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE' }).then((currentToken) => {
             if (currentToken) {
                 console.log("Token Retrieval SUCESSSSSS")
 
