@@ -11,6 +11,7 @@
 	let dateValues: [number, number];
 	let geoData: Writable<null | GeoData> = writable(null);
 	let lastUpdate: Writable<Moment> = writable();
+	let loiCount: Writable<number> = writable(0);
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {
 		geoDataValue = e;
@@ -41,6 +42,16 @@
 			console.log('It shit itself', e);
 		}
 	})();
+	(async () => {
+		try {
+			let response = await fetch('https://govhack2021-backend.host.qrl.nz/loi');
+			let body = await response.json();
+			console.log(body);
+			loiCount.set(body["loi"]);
+		} catch (e) {
+			console.log('It shit itself', e);
+		}
+	})();
 </script>
 
 <main>
@@ -52,6 +63,10 @@
 		<div class='update-block'>
 			{#if typeof $lastUpdate !== 'undefined'}
 				<p class='update-block__text'>Last Updated {$lastUpdate.format("DD/MM/YYYY HH:mm:ss")}</p>
+			{/if}
+
+			{#if typeof $loiCount !== 'undefined'}
+				<p class='update-block__text'>Number of locations of interest: {$loiCount}</p>
 			{/if}
 		</div>
 	</header>
@@ -100,6 +115,8 @@
     position: absolute;
 		top: calc(100% + 1em);
 		right: 1em;
+		display: flex;
+		flex-flow: column;
 	}
 
 	.update-block__text {
