@@ -1,6 +1,8 @@
 <script>
 	import { browser } from '$app/env';
 
+
+
 	let pwa = false;
 
 	if (browser) {

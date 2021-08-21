@@ -1,16 +1,12 @@
 <script lang="ts">
-	import "../css/reset.scss";
-	import "../css/global.scss";
+	import '../css/reset.scss';
+	import '../css/global.scss';
 
-	import { initFirebase } from "$lib/firebase/initFirebase";
-	import { onMount } from "svelte";
-
-	onMount(()=> {
-		initFirebase();
-		Notification.requestPermission(function(status) {
-			console.log('Notification permission status:', status);
-		});
-
-	})
+	import Notifications from 'svelte-notifications';
+	import FirebaseNotify from '$lib/components/FirebaseNotify.svelte';
 </script>
-<slot></slot>
+
+<Notifications>
+	<FirebaseNotify/>
+	<slot/>
+</Notifications>

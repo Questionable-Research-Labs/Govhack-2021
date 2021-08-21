@@ -30,6 +30,7 @@
     "sass": "^1.38.0",
     "svelte": "^3.34.0",
     "svelte-check": "^2.0.0",
+    "svelte-notifications": "^0.9.91",
     "svelte-preprocess": "^4.0.0",
     "svelte-range-slider-pips": "^1.8.0",
     "tslib": "^2.0.0",
