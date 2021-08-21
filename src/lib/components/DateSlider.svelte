@@ -2,7 +2,7 @@
 	import RangeSlider from 'svelte-range-slider-pips';
     import { browser } from '$app/env';
 	import {MS_IN_DAY} from "$lib/consts";
-	import {dateToString} from "$lib/tools";
+	import {formatDate,dateToString} from "$lib/tools"
 
 	const full_range = [
 		new Date('2021-07-30').getTime() / MS_IN_DAY,
@@ -16,8 +16,15 @@
 
 	export let dateRange = [
 		new Date().getTime() / MS_IN_DAY - 20,
-		new Date().getTime() / MS_IN_DAY
+		Math.round( new Date().getTime() / MS_IN_DAY)
 	];
+
+	function pipFormatter(value: number, _ = undefined) {
+		return dateToString(value).split("-").slice(1,3).join("-")
+	}
+	function handleFormatter(value: number, _ = undefined) {
+		return dateToString(value)
+	}
 </script>
 <div class="range-slider-wrapper">
 	<RangeSlider
@@ -29,9 +36,10 @@
 	float
 	pips
 	pipstep={pip_step}
-	all="label"
-	formatter={dateToString}
-	handleFormatter={dateToString}
+	first="label"
+	rest="label"
+	formatter={pipFormatter}
+	handleFormatter={handleFormatter}
 	id="range-slider"
 />
 </div>
