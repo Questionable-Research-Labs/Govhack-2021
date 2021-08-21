@@ -2,7 +2,8 @@
 	import {afterUpdate, onMount} from 'svelte';
     import { browser } from '$app/env';
     import { GeoData } from "$lib/geoJsonResponse";
-	import { timeFromMoment, StoreMarker, TestRange, dateRangeTimings } from "$lib/filteringStore";
+	import { MS_IN_DAY } from "$lib/consts";
+	import { timeFromMoment, StoreMarker, TestRange, dateRangeTimings, GetMarkers } from "$lib/filteringStore";
 
     export let geoData: GeoData;
 	export let dateRange: [number, number];
@@ -56,7 +57,7 @@
 
 		if (typeof map === "undefined" || typeof markers == "undefined") return;
 
-		let markerList = markers.getLayers();
+		let markerList = GetMarkers();
 		if (markerList.length==0) {
 			// Data hasn't been loaded yet, load it now
 			console.log("Post loading markers")
@@ -71,17 +72,17 @@
 
 		console.log(markerList)
 		for (let marker of markerList) {
-			let markerInRange = TestRange(dateRange,leaflet.stamp(marker));
+			let markerInRange = TestRange(dateRange,marker);
 			console.log(markerInRange);
 			if (markerInRange === dateRangeTimings.invalid || markerInRange === dateRangeTimings.outOfRange) {
-				if (typeof markers.getLayer(leaflet.stamp(marker)) !== "undefined") {
-					markers.getLayer(leaflet.stamp(marker)).setOpacity(0.5);
+				if (typeof markers.getLayer(marker) !== "undefined") {
+					markers.getLayer(marker).setOpacity(0);
 				} else {
 					console.log("What? Marker doesn't exist apparently")
 				}
 			} else {
-				if (typeof markers.getLayer(leaflet.stamp(marker)) !== "undefined") {
-					markers.getLayer(leaflet.stamp(marker)).setOpacity(1);
+				if (typeof markers.getLayer(marker) !== "undefined") {
+					markers.getLayer(marker).setOpacity(1);
 				} else {
 					console.log("What? Marker doesn't exist apparently")
 				}
