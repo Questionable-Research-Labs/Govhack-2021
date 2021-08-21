@@ -5,7 +5,7 @@ export const formatDate = (date: Date): string =>
 		.toLocaleString("sv", { timeZone: "Pacific/Auckland" })
 		.split(" ")[0];
 
-export function dateToString(value: number, _): string {
+export function dateToString(value: number, _ = undefined): string {
 	// return value
 	return formatDate(new Date(value * MS_IN_DAY));
 }
