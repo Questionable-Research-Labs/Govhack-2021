@@ -51,6 +51,7 @@
   }
 
   @media only screen and (max-width: 440px) {
+
     .wrapper {
       flex-flow: column;
 			padding: 0;
