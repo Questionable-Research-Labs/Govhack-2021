@@ -1711,6 +1711,11 @@ svelte-range-slider-pips@^1.8.0:
   resolved "https://registry.yarnpkg.com/svelte-range-slider-pips/-/svelte-range-slider-pips-1.8.0.tgz#cea0f95979e73918a21a4376b1d1a0cbcea2740e"
   integrity sha512-7tlTd5bXrGUbJBqL+6YJ8taN1opB2CcUSlBBh7mbpla/T6WH/CxblqnNcQX5Gwghhkol4/u4QjKLe65crLsbDg==
 
+svelte-simple-modal@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/svelte-simple-modal/-/svelte-simple-modal-1.0.0.tgz#1a0c06d80c593630a82456123fef1833aa9205c8"
+  integrity sha512-xHfbNiD43WF7TLNkWT4yo1OPrAUkANvwTbejn9ix4n8V/KxlfqiTFmQoQlVSlR/ipfyVqh/lG5h1ZoEkHEUvlg==
+
 svelte@^3.34.0:
   version "3.42.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.42.1.tgz#d4b4d9068cce911835f7c6b8ff1d290e1a0b5657"

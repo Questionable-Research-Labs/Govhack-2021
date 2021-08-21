@@ -14,9 +14,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Toi | Times of Interest</title>
-</svelte:head>
+
 
 <main class='info'>
 	<img class='info__icon' src='/icons/icon.svg' alt='Toi' width='128' height='128' />

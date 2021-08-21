@@ -3,10 +3,17 @@
 	import '../css/global.scss';
 
 	import Notifications from 'svelte-notifications';
+	import Modal from 'svelte-simple-modal';
 	import FirebaseNotify from '$lib/components/FirebaseNotify.svelte';
 </script>
 
+<svelte:head>
+	<title>Toi | Times of Interest</title>
+</svelte:head>
+
 <Notifications>
-	<FirebaseNotify/>
-	<slot/>
+	<Modal>
+		<FirebaseNotify/>
+		<slot/>
+	</Modal>
 </Notifications>

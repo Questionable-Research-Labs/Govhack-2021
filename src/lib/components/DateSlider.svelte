@@ -30,8 +30,7 @@
 	}
 
 	onMount(()=>{
-		// num_pip_labels = Math.round(/50)
-		// Magical line of best fit to produce good amount of pins to
+		// Magical line of best fit to produce good amount of PIP to
 		// fit any given screen size
 		let x = window.screen.availWidth
 		num_pip_labels =  5.19817 + 0.00731804*x - 0.000001725093*x^2 + 4.394779e-10*x^3

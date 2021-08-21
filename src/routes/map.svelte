@@ -43,12 +43,10 @@
 	})();
 </script>
 
-<svelte:head>
-	<title>Toi | Times of Interest</title>
-</svelte:head>
-
 <main>
+	
 	<header class='header' id='header'>
+
 		<ResultHeading dates={dateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => places = p?.map(e => e.index)} />
 		<div class='update-block'>
@@ -67,6 +65,7 @@
   main {
     min-height: 100vh;
   }
+
 
   .header {
     position: fixed;
