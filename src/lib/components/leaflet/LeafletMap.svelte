@@ -50,7 +50,7 @@
 
 	function loadMarkers() {
 		if (typeof geoData !== 'undefined') {
-			for (let feature of geoData.features) {
+			for (let feature of geoData?.features) {
 				let marker = leaflet.marker(
 					feature.geometry.coordinates,
 					{
