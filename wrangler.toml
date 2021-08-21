@@ -1,7 +1,9 @@
 name = "govhack2021"
 type = "webpack"
-account_id = "a3d1d9be9df771a0330588ed6b567b3f"
+account_id = "034162a6d46bca3ff53f5ffb05e35ff1"
 usage_model = ''
+route = "*toi.qrl.nz/*"
+zone_id = '91ef5779b4f5dd227318de25a23e939e'
 compatibility_flags = []
-workers_dev = true
+workers_dev = false
 site = {bucket = "./build",entry-point = "./workers-site"}
