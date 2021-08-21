@@ -6,7 +6,7 @@
 
 {#if dates}
 	<div class='results-info'>
-		<img class='results-info__icon' src='/icons/icon.svg' alt='LoLI' width='128' height='128'>
+		<img class='results-info__icon' src='/icons/icon.svg' alt='Toi' width='128' height='128'>
 		<h3 class='results-info__title'>Showing Results</h3>
 		<div class='results-info__body'>
 			<span class='results-info__body__marker'>From

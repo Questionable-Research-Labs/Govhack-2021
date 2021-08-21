@@ -17,7 +17,7 @@
 </svelte:head>
 
 <main class='info'>
-	<img class='info__icon' src='/icons/icon.svg' alt='LoLI' width='128' height='128' />
+	<img class='info__icon' src='/icons/icon.svg' alt='Toi' width='128' height='128' />
 	<h1 class='info__title'>Toi</h1>
 	<h3 class='info__subtitle'>Times of Interest</h3>
 	{#if !pwa}
