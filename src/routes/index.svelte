@@ -39,7 +39,6 @@
 
 <style lang="scss">
 	main {
-        width: 100vw;
         min-height: 100vh;
         h1 {
             text-align: center;
