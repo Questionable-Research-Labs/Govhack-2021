@@ -9,7 +9,8 @@ export enum dateRangeTimings {
 	invalid
 }
 
-let markerStore: Map<number, RelevantTimes> = new Map();
+let markerStore: Map<number,RelevantTimes> = new Map();
+let popupDataStore: Map<number,string> = new Map();
 
 export const timeFromMoment = (date: Date | Moment) => {
 	let utcTime;
@@ -21,8 +22,11 @@ export const timeFromMoment = (date: Date | Moment) => {
 	return Math.round(utcTime / MS_IN_DAY);
 };
 
-export function StoreMarker(times: RelevantTimes, leafletID: number) {
-	markerStore[leafletID] = times;
+
+
+export function StoreMarker(times: RelevantTimes,leafletID: number, popupData: string) {
+    markerStore[leafletID] = times;
+    popupDataStore[leafletID] = popupData;
 }
 
 export function TestRange(dateRange: RelevantTimes, leafletID: number): dateRangeTimings {
@@ -43,4 +47,8 @@ export function TestRange(dateRange: RelevantTimes, leafletID: number): dateRang
 
 export function GetMarkers(): number[] {
 	return Array.from([...Object.keys(markerStore)].map((x) => parseInt(x)));
+}
+
+export function GetPopupData(leafletID: number): string {
+    return popupDataStore[leafletID]
 }

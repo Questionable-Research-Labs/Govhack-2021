@@ -8,7 +8,8 @@
 		StoreMarker,
 		TestRange,
 		dateRangeTimings,
-		GetMarkers
+		GetMarkers,
+		GetPopupData
 	} from '$lib/filteringStore'
 
 	export let geoData: GeoData;
@@ -54,11 +55,12 @@
 					}
 				);
 				marker.addTo(markers);
-				marker.bindPopup(generatePopup(feature.properties));
-				// console.log('Marker: ', marker);
+				let popupHTML = generatePopup(feature.properties);
+				marker.bindPopup(popupHTML);
 				StoreMarker(
 					[timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end)],
-					leaflet.stamp(marker)
+					leaflet.stamp(marker),
+					popupHTML
 				);
 			}
 		}
@@ -112,6 +114,7 @@
 			) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).setOpacity(0);
+					markers.getLayer(marker).unbindPopup();
 				} else {
 					console.log("What? Marker doesn't exist apparently");
 				}
@@ -124,24 +127,13 @@
 			} else {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).setOpacity(1);
+					markers.getLayer(marker).bindPopup(GetPopupData(marker));;
+
 				} else {
 					console.log("What? Marker doesn't exist apparently");
 				}
 			}
 		}
-
-		// for (let feature of filteredFeatures) {
-		// 	console.log(dateRange[0], timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end), dateRange[1], dateRange[0] < timeFromMoment(feature.properties.start) && dateRange[1] > timeFromMoment(feature.properties.end));
-		// 	if (feature.properties.city !== null) {
-		// 		leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
-		// 			title: feature.properties.event,
-		// 		}).addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
-		// 	} else {
-		// 		leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
-		// 			title: feature.properties.event,
-		// 		}).addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
-		// 	}
-		// }
 	});
 </script>
 
