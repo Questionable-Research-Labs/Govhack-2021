@@ -6,7 +6,7 @@
 
 {#if dates}
 	<div class='results-info'>
-		<h2 class='results-info__title'>Showing Results</h2>
+		<h3 class='results-info__title'>Showing Results</h3>
 		<div class='results-info__body'>
 			<span class='results-info__body__marker'>From
 				<span>{dateToString(dates[0])}</span>
@@ -20,33 +20,44 @@
 
 <style lang='scss'>
   .results-info {
-    text-align: center;
-    display: block;
+		text-align: left;
+    display: flex;
+		flex-flow: row;
     padding: 1em;
-    background-color: white;
+    position: relative;
+
+		&::before {
+			content: '';
+      position: absolute;
+			left: 0;
+			top: 0;
+			background-color: #333;
+			width: 100%;
+			height: 100%;
+			transform: skewX(-30deg) translateX(-5%);
+			z-index: -1;
+		}
 
     &__title {
-      margin-top: 0;
-      margin-bottom: 0.5em;
-      text-align: center;
       color: black;
+			font-size: 1.25em;
+			align-self: center;
+      font-weight: bold;
+      margin: 0 1em 0.5em 0.5em;
+			color: white;
     }
 
     &__body {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      text-align: center;
-      grid-gap: 1em;
 
       &__marker {
         text-transform: uppercase;
         background-color: #ffe330;
+
         padding: 1em;
         color: black;
         font-weight: bold;
+				display: inline-block;
+				margin-right: 1em;
 
         > span {
 

@@ -62,6 +62,9 @@
     width: 100%;
     top: 0;
     left: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		background-color: white;
   }
 
 	footer {
