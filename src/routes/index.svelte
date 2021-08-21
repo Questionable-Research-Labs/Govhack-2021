@@ -32,6 +32,10 @@
 		});
 </script>
 
+<svelte:head>
+	<title>LoLi | Locations of Localized interest</title>
+</svelte:head>
+
 <main>
 	<header class='header' id='header' >
 		<ResultHeading dates={dateValues} />
