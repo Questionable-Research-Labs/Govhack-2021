@@ -2,6 +2,7 @@
     import {GeoData} from "$lib/geoJsonResponse";
     import {afterUpdate} from "svelte";
     import {Place} from "$lib/place";
+    import FuzzySearch from "fuzzy-search";
 
     export let geoData: GeoData | null;
     export let probablePlaces: ((places: Place[]) => void);
@@ -11,11 +12,16 @@
 
     let searchTerm = "";
 
+    let fuse: FuzzySearch<Place>;
+    $: fuse = new FuzzySearch(places, ['location'], {
+        caseSensitive: false
+    });
+
     afterUpdate(() => {
         if (searchTerm === "") {
             probablePlaces(places);
         } else {
-            probablePlaces(places.filter(place => place.location.toLowerCase().includes(searchTerm.toLowerCase())));
+            probablePlaces(fuse.search(searchTerm));
         }
     });
 </script>

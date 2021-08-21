@@ -102,15 +102,15 @@
 				loadMarkers();
 			}
 		} else {
-			console.log('found', markerList.length, 'markers');
+			// console.log('found', markerList.length, 'markers');
 		}
 
-		console.log(markerList);
+		// console.log(markerList);
 
 		for (let i in markerList) {
 			let marker = markerList[i];
 			let markerInRange = TestRange(dateRange, marker);
-			console.log(markerInRange);
+			// console.log(markerInRange);
 			if (
 				markerInRange === dateRangeTimings.invalid ||
 				markerInRange === dateRangeTimings.outOfRange
