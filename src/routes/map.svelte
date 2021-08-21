@@ -30,6 +30,7 @@
 		.catch((error) => {
 			console.error('Could not fetch data:', error);
 		});
+
 </script>
 
 <svelte:head>

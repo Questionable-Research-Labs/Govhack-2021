@@ -1,6 +1,61 @@
 /// <reference lib="webworker" />
+console.log("Service Worker Loading")
 
 import { build, files, timestamp } from '$service-worker';
+// import firebase from "firebase/app";
+import firebase from "firebase/app";
+import "firebase/messaging";
+import { firebaseConfig } from "./lib/firebase/env";
+
+// Give the service worker access to Firebase Messaging.
+// Note that you can only use Firebase Messaging here. Other Firebase libraries
+// are not available in the service worker.
+importScripts('https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.9.1/firebase-messaging.js');
+
+// Initialize the Firebase app in the service worker by passing in
+// your app's Firebase config object.
+// https://firebase.google.com/docs/web/setup#config-object
+firebase.initializeApp(firebaseConfig);
+
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
+const messaging = firebase.messaging();
+messaging.getToken({ vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE' }).then((currentToken) => {
+	if (currentToken) {
+		console.log("Token Retrieval SUCESSSSSS")
+	  // Send the token to your server and update the UI if necessary
+	  // ...
+	} else {
+	  // Show permission request UI
+	  console.log('No registration token available. Request permission to generate one.');
+	  // ...
+	}
+  }).catch((err) => {
+	console.log('An error occurred while retrieving token. ', err);
+	// ...
+  });
+
+
+messaging.onBackgroundMessage((payload) => {
+	console.log('[firebase-messaging-sw.js] Received background message ', payload);
+	// Customize notification here
+	const notificationTitle = 'Background Message Title';
+	const notificationOptions = {
+	  body: 'Background Message body.',
+	  icon: '/firebase-logo.png'
+	};
+  
+	self.registration.showNotification(notificationTitle,
+	  notificationOptions);
+  });
+  
+  
+
+// const analytics = firebase.analytics();
+// analytics.logEvent('Startup');
+
+
 
 const worker = (self as unknown) as ServiceWorkerGlobalScope;
 const FILES = `cache${timestamp}`;

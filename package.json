@@ -37,6 +37,7 @@
   },
   "type": "module",
   "dependencies": {
+    "firebase": "^8.10.0",
     "fuzzy-search": "^3.2.1"
   }
 }
