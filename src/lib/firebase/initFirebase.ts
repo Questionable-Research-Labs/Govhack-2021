@@ -20,10 +20,10 @@ export async function initFirebase(notificationCallback: NotificationCallback ) 
 
         messaging.getToken({serviceWorkerRegistration: registration,vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE' }).then((currentToken) => {
             if (currentToken) {
-                console.log("Token Retrieval SUCESSSSSS")
-
-              // Send the token to your server and update the UI if necessary
-              // ...
+                console.log("Token Retrieval SUCESSSSSS");
+                fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${currentToken}`, {
+                    method: 'POST',
+                });
             } else {
               // Show permission request UI
               console.log('No registration token available. Request permission to generate one.');

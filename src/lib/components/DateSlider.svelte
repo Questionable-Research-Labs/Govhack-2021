@@ -1,6 +1,6 @@
 <script lang="ts">
 	import RangeSlider from 'svelte-range-slider-pips';
-    import { browser } from '$app/env';
+    import { onMount } from 'svelte';
 	import {MS_IN_DAY} from "$lib/consts";
 	import {formatDate,dateToString} from "$lib/tools"
 
@@ -11,8 +11,11 @@
 
 	
 	// How often the labels appear under the bar
-	const num_pip_labels = 12;
-	const pip_step = Math.round((full_range[1]-full_range[0])/(num_pip_labels-2))
+	// Starts at 2, so it initializes with almost none,
+	// but then fills the bar when we have data on screen
+	// size.
+	let num_pip_labels = 2;
+	$: pip_step = Math.round((full_range[1]-full_range[0])/(num_pip_labels-2))
 
 	export let dateRange = [
 		new Date().getTime() / MS_IN_DAY - 20,
@@ -25,6 +28,14 @@
 	function handleFormatter(value: number, _ = undefined) {
 		return dateToString(value)
 	}
+
+	onMount(()=>{
+		// num_pip_labels = Math.round(/50)
+		// Magical line of best fit to produce good amount of pins to
+		// fit any given screen size
+		let x = window.screen.availWidth
+		num_pip_labels =  5.19817 + 0.00731804*x - 0.000001725093*x^2 + 4.394779e-10*x^3
+	})
 </script>
 <div class="range-slider-wrapper">
 	<RangeSlider
