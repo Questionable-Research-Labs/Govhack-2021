@@ -44,7 +44,7 @@
 		output += "</table>"
 
 		// Add link to google maps
-		output += `<p><a href='https://www.google.co.nz/maps/@${location[0]},${location[1]},,3a,75y,274.21h,90t/data=!3m5!1e1!3m3!1soWCkFkVV5iHrk4sEDzCLNQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fpanoid%3DoWCkFkVV5iHrk4sEDzCLNQ%26cb_client%3Dmaps_sv.tactile.gps%26w%3D203%26h%3D100%26yaw%3D275.58746%26pitch%3D0%26thumbfov%3D100'>View on google maps</a></p>`;
+		output += `<p><a target='none' href='https://www.google.co.nz/maps/@${location[0]},${location[1]},,3a,75y,274.21h,90t/data=!3m5!1e1!3m3!1soWCkFkVV5iHrk4sEDzCLNQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fpanoid%3DoWCkFkVV5iHrk4sEDzCLNQ%26cb_client%3Dmaps_sv.tactile.gps%26w%3D203%26h%3D100%26yaw%3D275.58746%26pitch%3D0%26thumbfov%3D100'>View on google maps</a></p>`;
 		return output
 	}
 
