@@ -1,91 +1,96 @@
-<script lang='ts'>
-	import LeafletMap from '../lib/components/leaflet/LeafletMap.svelte';
-	import DateSlider from '../lib/components/DateSlider.svelte';
-	import type { Writable } from 'svelte/store';
-	import { writable } from 'svelte/store';
-	import { GeoData } from '$lib/geoJsonResponse';
-	import SearchBox from '$lib/components/SearchBox.svelte';
-	import ResultHeading from '$lib/components/ResultHeading.svelte';
-
-	let dateValues: [number, number];
-	let geoData: Writable<null | GeoData> = writable(null);
-	let geoDataValue: null | GeoData;
-	geoData.subscribe((e) => {
-		geoDataValue = e;
-	});
-
-	let places: number[];
-
-	$: console.log('Updated places ', places);
-
-	fetch(
-		'https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson'
-	)
-		.then((response) => response.json())
-		.then((jsonData) => {
-			if (geoDataValue === null) {
-				geoData.set(new GeoData(jsonData));
-			}
-		})
-		.catch((error) => {
-			console.error('Could not fetch data:', error);
-		});
-</script>
-
 <svelte:head>
 	<title>Toi | Times of Interest</title>
 </svelte:head>
 
-<main>
-	<header class='header' id='header' >
-		<ResultHeading dates={dateValues} />
-        <SearchBox geoData={$geoData} probablePlaces={(p) => places = p?.map(e => e.index)}/>
-	</header>
-	<div class='mapUI'>
-		<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places}/>
-	</div>
-	<footer>
-		<DateSlider bind:dateRange={dateValues} />
-	</footer>
+<main class='info'>
+	<img class='info__icon' src='/icons/icon.svg' alt='LoLI' width='128' height='128'>
+	<h1 class='info__title'>Toi</h1>
+	<h3 class='info__subtitle'>Times of Interest</h3>
+	<a class='info__button' href='/map'>View the map</a>
+	<section class='info__section'>
+		<h4 class='info__section__title'>What is Toi?</h4>
+		<p class='info__section__text'>
+			<b>Toi</b> is a application which allows people to easily search <b>COVID-19</b>
+			locations of interest between the specified dates. The website has a large easy to navigate map and a slider
+			at the bottom of the webpage to slide through all the different dates and see what the locations of interest were.
+		</p>
+	</section>
+	<section class='info__section'>
+		<h4 class='info__section__title'>How do I use Toi?</h4>
+		<p class='info__section__text'>
+			To use <b>Toi</b> you must first navigate to <a href='/map'>Here</a> to view the map. At the bottom of the screen
+			there is a large slider with this slider you can adjust the two points to select your range of dates. The first point
+			is the starting date and the second is the ending. After this blimps will appear on the map showcasing the locations of
+			interest. You can also filter to only a specific location by using the search box at the top of your screen.
+		</p>
+	</section>
+
+	<section class='info__section'>
+		<h4 class='info__section__title'>Open Source</h4>
+		<p class='info__section__text'>
+			This is an open source project! This means all of the code that went into this project is available to the public. If
+			you are interested in contributing or would just like to view the code for this website you can view it on github
+			<a href='https://github.com/Questionable-Research-Labs/Govhack-2021' target='_blank' rel='noreferrer'>Here</a>
+		</p>
+	</section>
+
+	<a class='footnote' href='https://qrl.nz' rel='noreferrer'>This project was developed by the <b>Questionable Research Labs</b> Team</a>
 </main>
 
 <style lang='scss'>
-  main {
-    min-height: 100vh;
 
-    .mapUI {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-  }
 
-  .header {
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    top: 0;
-    left: 0;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		background-color: white;
-  }
+	.info {
+		text-align: center;
+		padding: 1em;
 
-	footer {
-    position: fixed;
-		z-index: 1;
-		width: 100%;
-		bottom: 0;
-		left: 0;
-    padding: 1em;
-    background-color: white;
-  }
+		&__button {
+			display: block;
+			background-color: #333;
+			padding: 1em;
+			color: white;
+			max-width: 200px;
+			margin: 1em auto;
+			text-decoration: none;
+			font-weight: bold;
+			letter-spacing: 0.1em;
+		}
 
-  @media all and (max-width: 770px) {
-    .header {
-      grid-template-columns: 1fr;
+		&__title {
+			margin-bottom: 0;
+		}
 
-    }
+		&__subtitle {
+			color: gray;
+			margin-top: 0.2em;
+			margin-bottom: 2em;
+		}
 
-  }
+		&__section {
+			display: block;
+			max-width: 700px;
+			width: 100%;
+			margin: 2em auto;
+
+			&__title {
+				font-weight: bold;
+				font-size: 1.1em;
+				margin-bottom: 0.5em;
+			}
+
+			&__text {
+				line-height: 1.5;
+			}
+		}
+	}
+
+	.footnote {
+		margin-top: 5em;
+    color: gray;
+		text-decoration: none;
+	}
+
+	b {
+		font-weight: bold;
+	}
 </style>
