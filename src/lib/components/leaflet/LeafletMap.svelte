@@ -13,6 +13,7 @@
 
 	export let geoData: GeoData;
 	export let dateRange: [number, number];
+	export let filteredPlaces: number[];
 
 	let map;
 	let leaflet;
@@ -47,14 +48,14 @@
 		if (typeof geoData !== 'undefined') {
 			for (let feature of geoData.features) {
 				let marker = leaflet.marker(
-					[feature.geometry.coordinates[0], feature.geometry.coordinates[1]],
+					feature.geometry.coordinates,
 					{
 						title: feature.properties.event
 					}
 				);
 				marker.addTo(markers);
 				marker.bindPopup(generatePopup(feature.properties));
-				console.log('Marker: ', marker);
+				// console.log('Marker: ', marker);
 				StoreMarker(
 					[timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end)],
 					leaflet.stamp(marker)
@@ -100,13 +101,21 @@
 		}
 
 		console.log(markerList);
-		for (let marker of markerList) {
+
+		for (let i in markerList) {
+			let marker = markerList[i];
 			let markerInRange = TestRange(dateRange, marker);
 			console.log(markerInRange);
 			if (
 				markerInRange === dateRangeTimings.invalid ||
 				markerInRange === dateRangeTimings.outOfRange
 			) {
+				if (typeof markers.getLayer(marker) !== 'undefined') {
+					markers.getLayer(marker).setOpacity(0);
+				} else {
+					console.log("What? Marker doesn't exist apparently");
+				}
+			} else if (!filteredPlaces.includes(parseInt(i))) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).setOpacity(0);
 				} else {

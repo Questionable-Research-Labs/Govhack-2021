@@ -15,6 +15,10 @@
 		geoDataValue = e;
 	});
 
+	let places: number[];
+
+	$: console.log('Updated places ', places);
+
 	fetch(
 		'https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson'
 	)
@@ -32,9 +36,9 @@
 <main>
 	<ResultHeading dates={dateValues}/>
 	<DateSlider bind:dateRange={dateValues}/>
-	<SearchBox geoData={$geoData}/>
+	<SearchBox geoData={$geoData} probablePlaces={(p) => places = p?.map(e => e.index)}/>
 	<div class="mapUI">
-		<LeafletMap geoData={$geoData} dateRange={dateValues} />
+		<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places}/>
 	</div>
 </main>
 

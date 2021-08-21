@@ -1,35 +1,28 @@
 <script lang="ts">
     import {GeoData} from "$lib/geoJsonResponse";
-    import {writable} from "svelte/store";
-    import type {Writable} from "svelte/store";
     import {afterUpdate} from "svelte";
+    import {Place} from "$lib/place";
 
     export let geoData: GeoData | null;
+    export let probablePlaces: ((places: Place[]) => void);
+    let places: Place[] = [];
 
-    export let places = [];
-    let probablePlaces = [];
+    $: places = geoData?.features.map((feature, index) => new Place(index, feature.properties.event + ", " + feature.properties.location));
 
-    let searchCriteria: Writable<string> = writable("");
-
-    searchCriteria.subscribe((searchCriteria) => {
-        console.log(probablePlaces);
-        places = probablePlaces.filter((e) => e.contains(searchCriteria));
-        console.log(places);
-    });
+    let searchTerm = "";
 
     afterUpdate(() => {
-        if (geoData === null || typeof geoData === "undefined") return;
-        console.log(geoData);
-        for (let i = 0; i < geoData.features?.length; i++) {
-            let feature = geoData.features[i];
-            probablePlaces.push(i, feature.properties.event + ", " + feature.properties.event);
+        if (searchTerm === "") {
+            probablePlaces(places);
+        } else {
+            probablePlaces(places.filter(place => place.location.toLowerCase().includes(searchTerm.toLowerCase())));
         }
     });
 </script>
 
 <div class="wrapper">
     <label>Address/Location
-        <input type="text" bind:value={$searchCriteria}>
+        <input type="text" bind:value={searchTerm}>
         <span></span>
     </label>
 </div>
