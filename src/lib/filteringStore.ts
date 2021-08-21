@@ -1,4 +1,5 @@
 import { MS_IN_DAY } from "$lib/consts";
+import moment, {isMoment, Moment} from 'moment'
 
 
 type RelevantTimes = [number,number]
@@ -11,7 +12,16 @@ export enum dateRangeTimings {
 
 let markerStore: Map<number,RelevantTimes> = new Map();
 
-export const timeFromMoment = (date: Date) => Math.round(new Date(date).getTime() / MS_IN_DAY);
+export const timeFromMoment = (date: Date|Moment) => {
+    let utcTime;
+    if (isMoment(date)) {
+        utcTime = date.valueOf();
+    } else {
+        utcTime = date.getTime();
+    }
+    return Math.round( utcTime / MS_IN_DAY)
+};
+
 
 
 export function StoreMarker(times: RelevantTimes,leafletID: number) {
