@@ -31,10 +31,10 @@
 
 <main>
 	<ResultHeading dates={dateValues}/>
+	<DateSlider bind:dateRange={dateValues}/>
 	<SearchBox geoData={$geoData}/>
 	<div class="mapUI">
 		<LeafletMap geoData={$geoData} dateRange={dateValues} />
-		<DateSlider bind:dateRange={dateValues}/>
 	</div>
 </main>
 
