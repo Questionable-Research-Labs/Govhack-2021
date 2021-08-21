@@ -38,9 +38,9 @@
 			let body = await response.json();
 			lastUpdate.set(moment(body['datePushed']));
 		} catch (e) {
+			console.log('It shit itself', e);
 		}
 	})();
-			console.log('It shit itself', e);
 </script>
 
 <svelte:head>
