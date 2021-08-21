@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { dateToString } from '$lib/tools';
-	import NotificationRequester from '$lib/components/notificationRequester.svelte';
+	import NotificationRequester from '$lib/components/NotificationRequester.svelte';
 
 	export let dates: [number, number];
 </script>
