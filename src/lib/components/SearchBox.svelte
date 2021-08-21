@@ -32,11 +32,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2em;
+    padding: 0;
   }
 
-  label {
-    display: block;
+  input {
+      padding: 1em;
+      margin-left: 1em;
   }
 
   input:required + span:after {
