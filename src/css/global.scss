@@ -14,3 +14,10 @@ h2 {
 .leaflet-top {
   top: 80px !important;
 }
+
+@media all and (max-width: 770px) {
+
+  .leaflet-top {
+    top: 165px !important;
+  }
+}

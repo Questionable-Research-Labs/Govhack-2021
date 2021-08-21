@@ -145,29 +145,17 @@
 	@import 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css';
 	main #map-wrapper {
 		overflow: hidden;
-		padding-bottom: 100vh;
 		position: relative;
-		height: 0;
+		height: 100vh;
 		z-index: 0;
 		#map {
 			left: 0;
 			top: 0;
-			height: 100%;
-			width: 100%;
+			height: 100vh;
+			min-width: 100%;
 			position: absolute;
 		}
 	}
-	@media (max-width: 480px) {
-		main #map-wrapper {
-			padding-bottom: 40vh;
-		}
-	}
-	// @media (min-width: 481px) and (max-width: 768px) {
-	//     main #map-wrapper {
-	//         padding-bottom:80%;
-	//     }
-
-	// }
 
 	:global .leaflet-popup-content {
 		p {

@@ -77,11 +77,11 @@
     background-color: white;
   }
 
-  .header-minimize-button {
-    position: fixed;
-    left: 0;
-    top: 0;
-    padding: 1em;
-    z-index: 2;
+  @media all and (max-width: 770px) {
+    .header {
+      grid-template-columns: 1fr;
+
+    }
+
   }
 </style>

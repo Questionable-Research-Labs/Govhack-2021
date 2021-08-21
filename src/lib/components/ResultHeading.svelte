@@ -65,4 +65,29 @@
     }
 
   }
+
+	@media all and (max-width: 1200px) {
+    .results-info {
+			text-align: center;
+      flex-flow: column;
+      &::before {
+				width: 120%;
+        transform: skewX(-30deg) translateX(-20%);
+      }
+    }
+
+	}
+
+  @media all and (max-width: 770px) {
+    .header {
+      grid-template-columns: 1fr;
+
+    }
+    .results-info {
+      &::before {
+        width: 100%;
+        transform: skewX(0) translateX(0);
+      }
+    }
+  }
 </style>
