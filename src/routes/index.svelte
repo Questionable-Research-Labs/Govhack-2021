@@ -33,7 +33,7 @@
 </script>
 
 <svelte:head>
-	<title>LoLi | Locations of Localized interest</title>
+	<title>Toi | Times of Interest</title>
 </svelte:head>
 
 <main>

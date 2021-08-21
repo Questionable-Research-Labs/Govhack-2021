@@ -1,7 +1,7 @@
 ![Logo](https://raw.githubusercontent.com/Questionable-Research-Labs/Govhack-2021/main/static/icons/icon%4032.png)
 
-# LoLI
-Locations of Localised Interest
+# Toi
+Times of interest
 
 ![NodeJs](https://img.shields.io/badge/Powered%20By-Svelte-f7311b?style=for-the-badge)
 ![LINES OF CODE](https://img.shields.io/tokei/lines/github/Questionable-Research-Labs/Govhack-2021?style=for-the-badge)
