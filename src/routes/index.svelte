@@ -2,44 +2,50 @@
 	<title>Toi | Times of Interest</title>
 </svelte:head>
 
-<main class='info'>
-	<img class='info__icon' src='/icons/icon.svg' alt='LoLI' width='128' height='128'>
-	<h1 class='info__title'>Toi</h1>
-	<h3 class='info__subtitle'>Times of Interest</h3>
-	<a class='info__button' href='/map'>View the map</a>
-	<section class='info__section'>
-		<h4 class='info__section__title'>What is Toi?</h4>
-		<p class='info__section__text'>
-			<b>Toi</b> is a application which allows people to easily search <b>COVID-19</b>
-			locations of interest between the specified dates. The website has a large easy to navigate map and a slider
-			at the bottom of the webpage to slide through all the different dates and see what the locations of interest were.
+<main class="info">
+	<img class="info__icon" src="/icons/icon.svg" alt="LoLI" width="128" height="128" />
+	<h1 class="info__title">Toi</h1>
+	<h3 class="info__subtitle">Times of Interest</h3>
+	<a class="info__button" href="/map">View the map</a>
+	<section class="info__section">
+		<h4 class="info__section__title">What is Toi?</h4>
+		<p class="info__section__text">
+			<b>Toi</b> is an application that allows people to easily search <b>COVID-19</b>
+			locations of interest between the specified dates. The website has a large easy to navigate map
+			and a slider at the bottom of the webpage to slide through all the different dates and see what
+			the locations of interest were.
 		</p>
 	</section>
-	<section class='info__section'>
-		<h4 class='info__section__title'>How do I use Toi?</h4>
-		<p class='info__section__text'>
-			To use <b>Toi</b> you must first navigate to <a href='/map'>Here</a> to view the map. At the bottom of the screen
-			there is a large slider with this slider you can adjust the two points to select your range of dates. The first point
-			is the starting date and the second is the ending. After this blimps will appear on the map showcasing the locations of
-			interest. You can also filter to only a specific location by using the search box at the top of your screen.
-		</p>
-	</section>
-
-	<section class='info__section'>
-		<h4 class='info__section__title'>Open Source</h4>
-		<p class='info__section__text'>
-			This is an open source project! This means all of the code that went into this project is available to the public. If
-			you are interested in contributing or would just like to view the code for this website you can view it on github
-			<a href='https://github.com/Questionable-Research-Labs/Govhack-2021' target='_blank' rel='noreferrer'>Here</a>
+	<section class="info__section">
+		<h4 class="info__section__title">How do I use Toi?</h4>
+		<p class="info__section__text">
+			To use <b>Toi</b> you must first navigate to <a href="/map">Here</a> to view the map. At the bottom
+			of the screen, there is a large slider with this slider you can adjust the two points to select
+			your range of dates. The first point is the starting date and the second is the ending. After this
+			blimps will appear on the map showcasing the locations of interest. You can also filter to only
+			a specific location by using the search box at the top of your screen.
 		</p>
 	</section>
 
-	<a class='footnote' href='https://qrl.nz' rel='noreferrer'>This project was developed by the <b>Questionable Research Labs</b> Team</a>
+	<section class="info__section">
+		<h4 class="info__section__title">Open Source</h4>
+		<p class="info__section__text">
+			This is an open-source project! This means all of the code that went into this project is
+			available to the public. If you are interested in contributing or would just like to view the
+			code for this website you can view it on <a
+				href="https://github.com/Questionable-Research-Labs/Govhack-2021"
+				target="_blank"
+				rel="noreferrer">Github here</a
+			>
+		</p>
+	</section>
+
+	<a class="footnote" href="https://qrl.nz" rel="noreferrer"
+		>This project was developed by the <b>Questionable Research Labs</b> Team</a
+	>
 </main>
 
-<style lang='scss'>
-
-
+<style lang="scss">
 	.info {
 		text-align: center;
 		padding: 1em;
@@ -86,7 +92,7 @@
 
 	.footnote {
 		margin-top: 5em;
-    color: gray;
+		color: gray;
 		text-decoration: none;
 	}
 
