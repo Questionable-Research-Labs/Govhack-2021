@@ -26,11 +26,11 @@
 		flex-flow: row;
     padding: 1em;
     position: relative;
+		align-items: center;
 
 		&__icon {
 			width: 60px;
 			height: 60px;
-			align-self: center;
 			margin-right: 0.5em;
 		}
 
@@ -48,7 +48,6 @@
 
     &__title {
 			font-size: 1.25em;
-			align-self: center;
       font-weight: bold;
       margin: 0 1em 0.5em 0.5em;
 			color: white;
