@@ -3,7 +3,12 @@
 
 import { firebaseConfig } from "./env";
 
-export async function initFirebase() {
+
+interface NotificationCallback {
+    (message: string): void
+}
+
+export async function initFirebase(notificationCallback: NotificationCallback ) {
     if (typeof window !== "undefined") {
         const firebase = (await import('firebase/app')).default;
         await import('firebase/analytics')
@@ -32,6 +37,7 @@ export async function initFirebase() {
 
         messaging.onMessage((payload) => {
             console.log('Message received. ', payload);
+            notificationCallback("GOT NOTIFICATION"+payload)
             // ...
             });
         

@@ -28,3 +28,7 @@ h2 {
     top: 210px !important;
   }
 }
+
+.notifications * {
+  z-index: 999;
+}

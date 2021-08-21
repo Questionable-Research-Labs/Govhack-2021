@@ -11,17 +11,6 @@ const config = {
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
 		adapter: cloudflareAdaper(),
-		vite: {
-			build: {
-				rollupOptions: {
-					// external: ["firebase/app/dist/index.cjs.js"],
-					output: {
-						
-					}
-				},
-				minify: false
-			}
-		}
 	}
 };
 
