@@ -19,40 +19,40 @@
 {/if}
 
 <style lang='scss'>
-	.results-info {
-		text-align: center;
-		display: block;
-		padding: 1em;
-		background-color: #222;
+  .results-info {
+    text-align: center;
+    display: block;
+    padding: 1em;
+    background-color: white;
 
-		&__title {
-			margin-top: 0;
-			margin-bottom: 0.5em;
-			text-align: center;
-			color: white;
-		}
+    &__title {
+      margin-top: 0;
+      margin-bottom: 0.5em;
+      text-align: center;
+      color: black;
+    }
 
-		&__body {
-			width: 100%;
-			max-width: 500px;
-			margin: 0 auto;
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			text-align: center;
-			grid-gap: 1em;
+    &__body {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      grid-gap: 1em;
 
-			&__marker {
-				text-transform: uppercase;
+      &__marker {
+        text-transform: uppercase;
         background-color: #ffe330;
-				padding: 1em;
-				color: black;
-				font-weight: bold;
+        padding: 1em;
+        color: black;
+        font-weight: bold;
 
-				> span {
+        > span {
 
-				}
-			}
-		}
+        }
+      }
+    }
 
-	}
+  }
 </style>
