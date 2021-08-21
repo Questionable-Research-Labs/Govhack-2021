@@ -153,7 +153,7 @@
 	@import 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css';
 	main #map-wrapper {
 		overflow: hidden;
-		padding-bottom: 70vh;
+		padding-bottom: 100vh;
 		position: relative;
 		height: 0;
 		z-index: 0;

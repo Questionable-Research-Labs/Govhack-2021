@@ -5,7 +5,7 @@
 	import {dateToString} from "$lib/tools";
 
 	const full_range = [
-		new Date('2021-07-10').getTime() / MS_IN_DAY,
+		new Date('2021-07-30').getTime() / MS_IN_DAY,
 		new Date().getTime() / MS_IN_DAY
 	]
 
