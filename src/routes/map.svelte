@@ -6,9 +6,11 @@
 	import { GeoData } from '$lib/geoJsonResponse';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import ResultHeading from '$lib/components/ResultHeading.svelte';
+	import moment, { Moment } from 'moment';
 
 	let dateValues: [number, number];
 	let geoData: Writable<null | GeoData> = writable(null);
+	let lastUpdate: Writable<Moment> = writable();
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {
 		geoDataValue = e;
@@ -30,7 +32,15 @@
 		.catch((error) => {
 			console.error('Could not fetch data:', error);
 		});
-
+	(async () => {
+		try {
+			let response = await fetch('https://govhack2021-backend.host.qrl.nz/updated');
+			let body = await response.json();
+			lastUpdate.set(moment(body['datePushed']));
+		} catch (e) {
+		}
+	})();
+			console.log('It shit itself', e);
 </script>
 
 <svelte:head>
@@ -41,6 +51,9 @@
 	<header class='header' id='header'>
 		<ResultHeading dates={dateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => places = p?.map(e => e.index)} />
+		{#if typeof $lastUpdate !== 'undefined'}
+			<p>Last Updated {$lastUpdate.format("DD/MM/YYYY HH:mm:ss")}</p>
+		{/if}
 	</header>
 	<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places} />
 	<footer>
