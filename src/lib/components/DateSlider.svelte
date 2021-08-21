@@ -47,7 +47,17 @@
 
 <style lang="scss">
 	.range-slider-wrapper {
-		width: 80%;
+/*		UNCOMMENT FOR YELLOW
+    --range-handle: #ffe330;
+    --range-handle-focus: #ffe330;
+    --range-handle-border:   var(--range-handle);
+    --range-range-inactive:  var(--range-handle-inactive);
+    --range-range:           var(--range-handle-focus);
+    --range-float-inactive:  var(--range-handle-inactive);
+    --range-float:           var(--range-handle-focus);
+    --range-float-text:      black; */
+		max-width: 80%;
+		width: 100%;
 		margin: 0 auto;
 	}
 </style>

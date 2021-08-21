@@ -28,7 +28,7 @@
 
 <div class='wrapper'>
 	<label>Address/Location</label>
-	<input type='text' bind:value={searchTerm}>
+	<input type='text' bind:value={searchTerm} placeholder='Enter Address/Location'>
 </div>
 
 <style lang='scss'>
@@ -53,16 +53,19 @@
   @media only screen and (max-width: 440px) {
     .wrapper {
       flex-flow: column;
+			padding: 0;
     }
 
     label {
       font-size: 0.7em;
       padding-bottom: 0.5em;
+			display: none;
     }
 
     input {
-      padding: 0.25em;
-      font-size: 0.7em;
+      padding: 1em;
+			width: 100%;
+      font-size: 1em;
     }
   }
 </style>
