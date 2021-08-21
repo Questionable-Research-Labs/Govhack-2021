@@ -16,7 +16,7 @@ export const timeFromMoment = (date: Date) => new Date(date).getTime() / MS_IN_D
 
 export function StoreMarker(times: RelevantTimes,leafletID: number) {
     markerStore[leafletID] = times
-    console.log("MarkerStore",markerStore)
+    // console.log(markerStore)
 }
 
 export function TestRange(dateRange: RelevantTimes,leafletID: number): dateRangeTimings {

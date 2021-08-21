@@ -13,24 +13,20 @@
 	let markers;
 
 	function loadMarkers() {
-		if (typeof geoData.features !== 'undefined') {
+		if (typeof geoData !== 'undefined') {
 			for (let feature of geoData.features) {
+				let marker = leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
+						title: feature.properties.event,
+					});
+				marker.addTo(markers)
                 if (feature.properties.city !== null) {
-					let marker = leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
-						title: feature.properties.event,
-					})
-					marker.addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
-					console.log("Marker: ",marker._leaflet_id)
-					StoreMarker([timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)],marker._leaflet_id)
+					marker.bindPopup(`<p>${leaflet.stamp(marker)},  ${feature.properties.event}</p><table><tr><td>City</td><td>${feature.properties.city}</td></tr><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
 				} else {
-					let marker = leaflet.marker([feature.geometry.coordinates[0], feature.geometry.coordinates[1]], {
-						title: feature.properties.event,
-					})
-					marker.addTo(markers).bindPopup(`<p>${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
-					console.log("Marker ID:",marker._leaflet_id)
-					StoreMarker([timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)],marker._leaflet_id)
 
+					marker.bindPopup(`<p>${leaflet.stamp(marker)},  ${feature.properties.event}</p><table><tr><td>Location</td><td>${feature.properties.location}</td></tr><tr><td>Information</td><td>${feature.properties.information}</td></tr><tr><td>Start</td><td>${feature.properties.start.toLocaleString()}</td></tr><tr><td>End</td><td>${feature.properties.end.toLocaleString()}</td></tr></table>`);
 				}
+				console.log("Marker: ",marker)
+				StoreMarker([timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)],leaflet.stamp(marker))
 			}
 		}
 	}
@@ -65,18 +61,21 @@
 		if (markerList.length==0) {
 			// Data hasn't been loaded yet, load it now
 			console.log("Post loading markers")
-			loadMarkers()
+			if (browser) {
+				loadMarkers()
+			}
+			
 		} else {
-
+			console.log("found",markerList.length,"markers")
 		}
 
 
 		console.log(markerList)
-		for (let marker in markerList) {
-			let markerInRange = TestRange(dateRange,parseInt(marker));
+		for (let marker of markerList) {
+			let markerInRange = TestRange(dateRange,leaflet.stamp(marker));
 			if (markerInRange !== dateRangeTimings.invalid) {
-				if (typeof markers.getLayer(parseInt(marker)) !== "undefined") {
-					markers.getLayer(parseInt(marker)).setOpacity(0.5);
+				if (typeof markers.getLayer(leaflet.stamp(marker)) !== "undefined") {
+					markers.getLayer(leaflet.stamp(marker)).setOpacity(0.5);
 
 				} else {
 					console.log("What? Marker doesn't exist apparently")
