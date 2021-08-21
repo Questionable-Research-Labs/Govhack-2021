@@ -43,23 +43,26 @@
     padding: 1em;
     margin-left: 1em;
   }
+
   @media all and (max-width: 770px) {
 		.wrapper {
       padding: 1em 0;
 		}
   }
 
-  @media only screen and (max-width: 380px) {
+  @media only screen and (max-width: 440px) {
     .wrapper {
       flex-flow: column;
     }
 
     label {
+      font-size: 0.7em;
       padding-bottom: 0.5em;
     }
 
     input {
-      padding: 0.5em;
+      padding: 0.25em;
+      font-size: 0.7em;
     }
   }
 </style>

@@ -97,4 +97,10 @@
       }
     }
   }
+
+  @media all and (max-width: 440px) {
+    .results-info__body__marker {
+			font-size: 0.7em;
+    }
+  }
 </style>
