@@ -2,26 +2,39 @@
 	import { deregisterForPushNotifications, getMessagingToken } from '$lib/firebase/initFirebase';
 	import { notificationSettings } from '$lib/store';
 
-	setInterval(updatePermissionStatus, 1000);
 	let notificationsEnabled: boolean = false;
 	let notificationDenied = false;
+	let notificationsSupported = 'Notification' in window;
+
+	setInterval(updatePermissionStatus, 1000);
+	updatePermissionStatus();
 
 	notificationSettings.subscribe((value) => {
-		notificationsEnabled = value && (Notification.permission === 'granted');
+		if (notificationsSupported) {
+			notificationsEnabled = value && (Notification.permission === 'granted');
+		} else {
+			notificationsEnabled = false
+		}
 	});
 
 	let errorText = '';
 
 
 	function updatePermissionStatus() {
-		if (notificationSettings && Notification.permission !== 'granted') {
-			// User has disabled notifications
-			notificationSettings.set(false);
+		if (notificationsSupported) {
+			if (notificationSettings && Notification.permission !== 'granted') {
+				// User has disabled notifications
+				notificationSettings.set(false);
+			}
+			if (Notification.permission === 'denied') {
+				errorText = 'Notifications have been blocked, check site permissions';
+			}
+			notificationDenied = Notification.permission === 'denied';
+		} else {
+			errorText = 'Notifications not supported by your browser';
+			notificationDenied = true
 		}
-		if (Notification.permission === 'denied') {
-			errorText = 'Notifications have been blocked, check site permissions';
-		}
-		notificationDenied = Notification.permission === 'denied';
+
 	}
 
 	function enableNotifications() {
