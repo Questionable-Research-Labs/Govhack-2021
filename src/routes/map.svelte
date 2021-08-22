@@ -1,6 +1,6 @@
 <script lang='ts'>
-	import LeafletMap from '../lib/components/leaflet/LeafletMap.svelte';
-	import DateSlider from '../lib/components/DateSlider.svelte';
+	import LeafletMap from '$lib/components/LeafletMap.svelte';
+	import DateSlider from '$lib/components/DateSlider.svelte';
 	import type { Writable } from 'svelte/store';
 	import { writable } from 'svelte/store';
 	import { GeoData } from '$lib/geoJsonResponse';

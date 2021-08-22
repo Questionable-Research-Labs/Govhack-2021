@@ -1,14 +1,13 @@
 // Moments a bit funky with typescript
-import {Moment} from 'moment'
+import { Moment } from 'moment';
 import moment from 'moment';
-
 
 export class GeoData {
 	name: string;
 	type: string;
 	features: Features[];
 
-	constructor(data: Object) {
+	constructor(data: any) {
 		this.name = data['name'];
 		this.type = data['type'];
 		this.features = data['features'].map((e) => {
@@ -22,9 +21,7 @@ export class GeoData {
 				},
 				type: e['type'],
 				properties: {
-					// @ts-ignore
 					start: moment(e['properties']['Start'], 'DD/MM/YYYY hh:mm a'),
-					// @ts-ignore
 					end: moment(e['properties']['End'], 'DD/MM/YYYY hh:mm a'),
 					city: e['properties']['City'],
 					event: e['properties']['Event'],
@@ -44,7 +41,7 @@ export interface Features {
 }
 
 export interface Geometry {
-	coordinates: number[];
+	coordinates: [number, number];
 	type: string;
 }
 
