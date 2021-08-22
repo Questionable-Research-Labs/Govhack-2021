@@ -56,6 +56,10 @@
 			around you.</p>
 		<span class='fake-notif__time'>1:38 pm <span class='dot'></span> toi.qrl.nz</span>
 	</div>
+	<p>
+		We will provide you with notifications similar to the image above and you will receive
+		these whenever a new location of interest is added.
+	</p>
 	<div class='buttonContainer'>
 		{#if notificationsEnabled}
 			<button class='actionButton' on:click={disableNotifications}>Disable notifications</button>
@@ -83,7 +87,7 @@
     &__body {
       margin: 0;
       color: gray;
-			line-height: 1.5;
+      line-height: 1.5;
     }
 
     &__time {
@@ -107,13 +111,16 @@
   .actionButton {
     background-color: #333;
     color: white;
-    border-radius: 5px;
-    padding: 0.5rem;
+    padding: 1rem;
     border: none;
-    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+		letter-spacing: 0.1em;
+		margin-bottom: 1em;
 
     &:disabled {
-      background-color: rgb(112, 112, 112);
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 
