@@ -114,14 +114,15 @@
 		right: 1em;
 		display: flex;
 		flex-flow: column;
-	}
+    background: #333;
+    border-radius: 0.5em;
+  }
 
 	.update-block__text {
 		font-size: 0.75em;
-		background: #333;
-		display: inline;
+		display: block;
 		color: white;
 		padding: 0.5em;
-		border-radius: 0.5em;
+		margin: 0;
 	}
 </style>
