@@ -44,7 +44,7 @@
 		output += "</table>"
 
 		// Add link to google maps
-		output += `<p><a target='none' href='https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}'>View on google maps</a></p>`;
+		output += `<p><a target='none' href='https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}'>View in Google Streetview</a></p>`;
 		return output
 	}
 
