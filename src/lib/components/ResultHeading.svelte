@@ -30,10 +30,11 @@
 		text-align: left;
 		display: flex;
 		flex-flow: row;
-		padding: 1em;
-		position: relative;
+    position: relative;
 		align-items: center;
-		.notificationRequesterWrapper {
+    padding: 1em 6em 1em 1em;
+
+    .notificationRequesterWrapper {
 			position: absolute;
 			margin: 1em;
 			top: 0;
@@ -99,7 +100,9 @@
 			grid-template-columns: 1fr;
 		}
 		.results-info {
-			&::before {
+      padding: 1em;
+
+      &::before {
 				width: 100%;
 				transform: skewX(0) translateX(0);
 			}
