@@ -7,6 +7,8 @@ import firebase from "firebase/app";
 import "firebase/messaging";
 import { firebaseConfig } from "./lib/firebase/env";
 
+import {getItem,setItem} from 'localforage';
+
 // Give the service worker access to Firebase Messaging.
 // Note that you can only use Firebase Messaging here. Other Firebase libraries
 // are not available in the service worker.
@@ -21,6 +23,19 @@ firebase.initializeApp(firebaseConfig);
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
 const messaging = firebase.messaging();
+
+let allowNotifications = false;
+getItem('notify', function (err, value: string) {
+    if (err===null) {
+		console.log("Retried Stored notifications setting: ",value)
+		allowNotifications = JSON.parse(value)
+	} else {
+		setItem('notify','false',function (err) {
+			console.log("Can't set localforge",err)
+		})
+	}
+});
+
 
 
 
@@ -72,6 +87,7 @@ worker.addEventListener('activate', (event) => {
 			}
 
 			worker.clients.claim();
+			console.log("Service worker Ready")
 		})
 	);
 });
@@ -118,5 +134,15 @@ worker.addEventListener('fetch', (event) => {
 				return cachedAsset || fetchAndCache(event.request);
 			})()
 		);
+	}
+});
+
+self.addEventListener('message', (event) => {
+	if (event.data && event.data.type === 'NOTIFICATION_SETTINGS') {
+		console.log("received event of correct type",event.data.value)
+		allowNotifications = JSON.parse(event.data.value);
+		setItem('notify',event.data.value,function (err) {
+			console.log("Can't set localforge",err)
+		})
 	}
 });

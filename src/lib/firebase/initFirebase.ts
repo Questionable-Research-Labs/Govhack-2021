@@ -13,8 +13,6 @@ export async function getMessagingToken() {
     const firebase = (await import('firebase/app')).default;
     await import('firebase/analytics')
     await import('firebase/messaging')
-
-    firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
     const registration = await navigator.serviceWorker.ready;
     messaging.getToken({ serviceWorkerRegistration: registration, vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE' }).then((currentToken) => {
