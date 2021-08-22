@@ -10,7 +10,7 @@
 
 	let dateValues: [number, number];
 	let geoData: Writable<null | GeoData> = writable(null);
-	let lastUpdate: Writable<Moment> = writable();
+	let lastUpdate: Writable<Date> = writable();
 	let loiCount: Writable<number> = writable(0);
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {
@@ -28,6 +28,8 @@
 		.then((jsonData) => {
 			if (geoDataValue === null) {
 				geoData.set(new GeoData(jsonData));
+				loiCount.set(geoDataValue.features.length);
+
 			}
 		})
 		.catch((error) => {
@@ -37,17 +39,8 @@
 		try {
 			let response = await fetch('https://govhack2021-backend.host.qrl.nz/updated');
 			let body = await response.json();
-			lastUpdate.set(moment(body['datePushed']));
-		} catch (e) {
-			console.log('It shit itself', e);
-		}
-	})();
-	(async () => {
-		try {
-			let response = await fetch('https://govhack2021-backend.host.qrl.nz/loi');
-			let body = await response.json();
-			console.log(body);
-			loiCount.set(body['loi']);
+			console.log("Date pushed",body['getDatePushed'])
+			lastUpdate.set(new Date(body['getDatePushed']));
 		} catch (e) {
 			console.log('It shit itself', e);
 		}
@@ -60,7 +53,7 @@
 		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
 		<div class="update-block">
 			{#if typeof $lastUpdate !== 'undefined'}
-				<p class="update-block__text">Last Updated {$lastUpdate.format('DD/MM/YYYY HH:mm:ss')}</p>
+				<p class="update-block__text">Last Updated {$lastUpdate.toLocaleString()}</p>
 			{/if}
 
 			{#if typeof $loiCount !== 'undefined'}
