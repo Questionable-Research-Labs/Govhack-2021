@@ -11,13 +11,13 @@ To view the application click on `View the map`
 ## The map
 The meat of and potatoes of the application happens here
 
-![Map Screen](https://raw.githubusercontent.com/questionable-research-labs/govhack-2021/main/screenshots/welcome.png)
+![Map Screen](https://raw.githubusercontent.com/questionable-research-labs/govhack-2021/main/screenshots/map-screen.png)
 
 This is the view of the map with all of the COVID-19 locations of interest.
 
 ### Date filtering
 You can filter the locations by using the slider at the bottom
-![Date filter](https://raw.githubusercontent.com/questionable-research-labs/govhack-2021/main/screenshots/welcome.png)
+![Date filter](https://raw.githubusercontent.com/questionable-research-labs/govhack-2021/main/screenshots/date-filter.png)
 
 Drag the point change the date range, the filter range will be reflected in the header
 
@@ -27,7 +27,7 @@ Drag the point change the date range, the filter range will be reflected in the 
 
 Enter the name of the location to filter results in the Address/Location field
 
-![Date filter results](https://raw.githubusercontent.com/questionable-research-labs/govhack-2021/main/screenshots/date-results.png)
+![Date filter results](https://raw.githubusercontent.com/questionable-research-labs/govhack-2021/main/screenshots/location-filtering.png)
 
 ### Push notification
 
