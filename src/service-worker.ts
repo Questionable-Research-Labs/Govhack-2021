@@ -38,11 +38,13 @@ getItem('notify', function (err, value: string) {
 
 messaging.onBackgroundMessage((payload) => {
 	console.log('[firebase-messaging-sw.js] Received background message ', payload);
+
+	const notification = payload['notification'];
 	// Customize notification here
-	const notificationTitle = 'Background Message Title';
+	const notificationTitle = notification.title;
 	const notificationOptions = {
-		body: 'Background Message body.',
-		icon: '/firebase-logo.png'
+		body: notification.body,
+		icon: 'https://toi.qrl.nz/favicon.png'
 	};
 
 	worker.registration.showNotification(notificationTitle, notificationOptions);
