@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
 	import LeafletMap from '$lib/components/LeafletMap.svelte';
 	import DateSlider from '$lib/components/DateSlider.svelte';
 	import type { Writable } from 'svelte/store';
@@ -47,7 +47,7 @@
 			let response = await fetch('https://govhack2021-backend.host.qrl.nz/loi');
 			let body = await response.json();
 			console.log(body);
-			loiCount.set(body["loi"]);
+			loiCount.set(body['loi']);
 		} catch (e) {
 			console.log('It shit itself', e);
 		}
@@ -55,64 +55,61 @@
 </script>
 
 <main>
-	
-	<header class='header' id='header'>
-
+	<header class="header" id="header">
 		<ResultHeading dates={dateValues} />
-		<SearchBox geoData={$geoData} probablePlaces={(p) => places = p?.map(e => e.index)} />
-		<div class='update-block'>
+		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
+		<div class="update-block">
 			{#if typeof $lastUpdate !== 'undefined'}
-				<p class='update-block__text'>Last Updated {$lastUpdate.format("DD/MM/YYYY HH:mm:ss")}</p>
+				<p class="update-block__text">Last Updated {$lastUpdate.format('DD/MM/YYYY HH:mm:ss')}</p>
 			{/if}
 
 			{#if typeof $loiCount !== 'undefined'}
-				<p class='update-block__text'>Number of locations of interest: {$loiCount}</p>
+				<p class="update-block__text">Number of locations of interest: {$loiCount}</p>
 			{/if}
 		</div>
 	</header>
-	<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places} />
+	{#if $geoData != null}
+		<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places} />
+	{/if}
 	<footer>
 		<DateSlider bind:dateRange={dateValues} />
 	</footer>
 </main>
 
-<style lang='scss'>
-  main {
-    min-height: 100vh;
-  }
+<style lang="scss">
+	main {
+		min-height: 100vh;
+	}
 
+	.header {
+		position: fixed;
+		z-index: 1;
+		width: 100%;
+		top: 0;
+		left: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		background-color: white;
+	}
 
-  .header {
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    top: 0;
-    left: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background-color: white;
-  }
+	footer {
+		position: fixed;
+		z-index: 1;
+		width: 100%;
+		bottom: 0;
+		left: 0;
+		padding: 1em;
+		background-color: white;
+	}
 
-  footer {
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    padding: 1em;
-    background-color: white;
-  }
-
-  @media all and (max-width: 770px) {
-    .header {
-      grid-template-columns: 1fr;
-
-    }
-
-  }
+	@media all and (max-width: 770px) {
+		.header {
+			grid-template-columns: 1fr;
+		}
+	}
 
 	.update-block {
-    position: absolute;
+		position: absolute;
 		top: calc(100% + 1em);
 		right: 1em;
 		display: flex;

@@ -5,7 +5,6 @@ import { Writable, writable } from 'svelte/store';
 let storedNotificationSettings;
 if (browser) {
 	storedNotificationSettings = localStorage.getItem('notificationSettings') === 'on';
-	console.log('stored notification settings', storedNotificationSettings);
 }
 
 export const notificationSettings: Writable<boolean> = writable(storedNotificationSettings);

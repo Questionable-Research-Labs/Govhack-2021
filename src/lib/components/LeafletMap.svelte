@@ -49,7 +49,7 @@
 	}
 
 	function loadMarkers() {
-		if (typeof geoData !== 'undefined') {
+		if ((typeof geoData !== 'undefined' || geoData !== null) && typeof geoData.features !== "undefined") {
 			for (let feature of geoData?.features) {
 				let marker = leaflet.marker(
 					feature.geometry.coordinates,
@@ -121,7 +121,7 @@
 				} else {
 					console.log("What? Marker doesn't exist apparently");
 				}
-			} else if (!filteredPlaces.includes(parseInt(i))) {
+			} else if (typeof filteredPlaces !== "undefined" && !filteredPlaces.includes(parseInt(i))) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).setOpacity(0);
 				} else {
