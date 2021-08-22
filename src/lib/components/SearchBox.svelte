@@ -27,7 +27,7 @@
 </script>
 
 <div class='wrapper'>
-	<label>Address/Location</label>
+	<label>Filter by Address/Location</label>
 	<input type='text' bind:value={searchTerm} placeholder='Enter Address/Location'>
 </div>
 

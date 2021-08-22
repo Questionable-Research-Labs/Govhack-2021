@@ -5,6 +5,8 @@
 	let notificationsEnabled: boolean = false;
 	let notificationDenied = false;
 	let notificationsSupported = 'Notification' in window;
+	let errorText = '';
+
 
 	setInterval(updatePermissionStatus, 1000);
 	updatePermissionStatus();
@@ -17,7 +19,6 @@
 		}
 	});
 
-	let errorText = '';
 
 
 	function updatePermissionStatus() {

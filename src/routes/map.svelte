@@ -51,6 +51,12 @@
 	<header class="header" id="header">
 		<ResultHeading dates={dateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
+		<div class="copyright-notice">
+			<a class="copyright-notice__text" href="https://github.com/minhealthnz/nz-covid-data">
+				Locations of Interest from New Zealand Government
+			</a>
+	
+		</div>
 		<div class="update-block">
 			{#if typeof $lastUpdate !== 'undefined'}
 				<p class="update-block__text">Last Updated {$lastUpdate.toLocaleString()}</p>
@@ -60,12 +66,15 @@
 				<p class="update-block__text">Number of locations of interest: {$loiCount}</p>
 			{/if}
 		</div>
+
 	</header>
 	{#if $geoData != null}
 		<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places} />
 	{/if}
+
 	<footer>
 		<DateSlider bind:dateRange={dateValues} />
+
 	</footer>
 </main>
 
@@ -103,7 +112,7 @@
 
 	.update-block {
 		position: absolute;
-		top: calc(100% + 1em);
+		top: calc(100% + 3em);
 		right: 1em;
 		display: flex;
 		flex-flow: column;
@@ -111,11 +120,32 @@
     border-radius: 0.5em;
   }
 
+
 	.update-block__text {
 		font-size: 0.75em;
 		display: block;
 		color: white;
 		padding: 0.5em;
 		margin: 0;
+	}
+
+	.copyright-notice {
+	position: absolute;
+	top: calc(100% + 1em);
+			// bottom: calc(100% + 2em);
+		z-index: 4;
+		right: 1em;
+		display: flex;
+		flex-flow: column;
+		background: #333;
+		border-radius: 0.5em;
+  }
+  .copyright-notice__text {
+		font-size: 0.75em;
+		display: block;
+		color: white;
+		padding: 0.5em;
+		margin: 0;
+
 	}
 </style>
