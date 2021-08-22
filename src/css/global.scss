@@ -19,11 +19,22 @@ h3 {
 .leaflet-top {
   top: 93px !important;
 }
+@media all and (max-width: 1430px) {
 
+  .leaflet-top {
+    top: 128px !important;
+  }
+}
 @media all and (max-width: 1200px) {
 
   .leaflet-top {
     top: 170px !important;
+  }
+}
+@media all and (max-width: 940px) {
+
+  .leaflet-top {
+    top: 220px !important;
   }
 }
 
@@ -31,6 +42,12 @@ h3 {
 
   .leaflet-top {
     top: 255px !important;
+  }
+}
+@media all and (max-width: 440px) {
+
+  .leaflet-top {
+    top: 210px !important;
   }
 }
 
