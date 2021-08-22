@@ -55,6 +55,23 @@
 			</p>
 		</section>
 
+		<section class='info__section'>
+			<h4 class='info__section__title'>Data Used</h4>
+			<p class='info__section__text'>
+				This project uses data provided by the <b>New Zealand Government</b>. This data is licensed under the Creative Commons Attribution-Sharealike 4.0 Internation license.
+				You can view this data on <b>Ministry of Health New Zealand</b> github repository which is available
+				<a
+				href='https://github.com/minhealthnz/nz-covid-data'
+				target='_blank'
+				rel='noreferrer'>Here</a>
+				and to view the license for this data you can see the license file
+				<a
+					href='https://github.com/minhealthnz/nz-covid-data/blob/main/LICENSE'
+					target='_blank'
+					rel='noreferrer'>Here</a>
+			</p>
+		</section>
+
 		<a class='footnote' href='https://qrl.nz' rel='noreferrer'
 		>This project was developed by the <b>Questionable Research Labs</b> Team</a
 		>
