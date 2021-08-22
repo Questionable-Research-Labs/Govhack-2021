@@ -135,4 +135,8 @@
     color: rgb(189, 5, 5);
     text-align: center;
   }
+
+	p {
+		line-height: 1.5;
+	}
 </style>
