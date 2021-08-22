@@ -1,8 +1,31 @@
 <script lang="ts">
 	import { dateToString } from '$lib/tools';
 	import NotificationRequester from '$lib/components/NotificationRequester.svelte';
+	import Datepicker from 'svelte-calendar/src/Components/Datepicker.svelte';
+
+	import { MS_IN_DAY } from '$lib/consts'
+
+
 
 	export let dates: [number, number];
+
+	let chosenStart: Date = new Date(dates[0]*MS_IN_DAY);
+	let chosenEnd: Date = new Date(dates[1]*MS_IN_DAY);
+	function timeFromDate (date: Date ): number  {
+
+		return Math.round(date.getTime() / MS_IN_DAY);
+	};
+
+	function chosenStartCallback() {
+		console.log("Start Chosen",chosenStart);
+		dates[0]=timeFromDate(chosenStart)
+	}
+	function chosenEndCallback() {
+		console.log("Start Chosen",chosenStart);
+		dates[1]=timeFromDate(chosenEnd)
+	}	
+
+	
 </script>
 
 {#if dates}
@@ -14,14 +37,19 @@
 		
 		<h3 class="results-info__title">Showing Results</h3>
 		<div class="results-info__body">
-			<span class="results-info__body__marker"
-				>From
-				<span>{dateToString(dates[0])}</span>
-			</span>
-			<span class="results-info__body__marker"
-				>To
-				<span>{dateToString(dates[1])}</span>
-			</span>
+			<Datepicker bind:selected={chosenStart} on:dateSelected={chosenStartCallback} end={chosenEnd}>
+				<span class="results-info__body__marker"
+					>From
+					<span>{dateToString(dates[0])}</span>
+				</span>
+			</Datepicker>
+			<Datepicker bind:selected={chosenEnd} on:dateSelected={chosenEndCallback} start={chosenStart} end={new Date()}>
+				<span class="results-info__body__marker"
+					>To
+					<span>{dateToString(dates[1])}</span>
+				</span>
+			</Datepicker>
+
 		</div>
 	</div>
 {/if}
@@ -80,6 +108,7 @@
 				margin-right: 1em;
 
 				> span {
+					cursor: pointer;
 				}
 			}
 		}

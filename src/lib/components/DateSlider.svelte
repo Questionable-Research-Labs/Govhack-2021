@@ -17,10 +17,7 @@
 	let num_pip_labels = 2;
 	$: pip_step = Math.round((full_range[1]-full_range[0])/(num_pip_labels-2))
 
-	export let dateRange = [
-		new Date().getTime() / MS_IN_DAY - 20,
-		Math.round( new Date().getTime() / MS_IN_DAY)
-	];
+	export let dateRange;
 
 	function pipFormatter(value: number, _ = undefined) {
 		return dateToString(value).split("-").slice(1,3).join("-")

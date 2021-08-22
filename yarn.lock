@@ -1690,6 +1690,13 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
+svelte-calendar@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/svelte-calendar/-/svelte-calendar-2.0.4.tgz#0084a9e7a0279f43aaae4b4a108b0c68a960a0ee"
+  integrity sha512-a9TGBCc17qrvgdO79py2whwvtgaZzOHiMMygc2aNyYzETQI/H60g3kmHyq+llDf+wSEFWqy0LO71rBrzBCfRFA==
+  dependencies:
+    timeUtils "^2.0.0"
+
 svelte-check@^2.0.0:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.2.4.tgz#103140eeb4bbe65721e023ab210566041abe7224"
@@ -1756,6 +1763,11 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+timeUtils@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/timeUtils/-/timeUtils-2.0.0.tgz#b3ac3eaa8f6d47e9ca008c76e9fd5b0f0afc18c0"
+  integrity sha512-rk1y/5ix4HczK3q4caEvo2iIhgRIHL6g85sX2rPNse8sKUATzYEAX1jAYYsW139aAcn1b24jV4By0SLmosQVyA==
 
 to-regex-range@^5.0.1:
   version "5.0.1"

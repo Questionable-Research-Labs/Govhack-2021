@@ -29,6 +29,7 @@
     "prettier-plugin-svelte": "^2.2.0",
     "sass": "^1.38.0",
     "svelte": "^3.34.0",
+    "svelte-calendar": "^2.0.4",
     "svelte-check": "^2.0.0",
     "svelte-notifications": "^0.9.91",
     "svelte-preprocess": "^4.0.0",

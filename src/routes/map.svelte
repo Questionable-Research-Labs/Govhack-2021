@@ -7,8 +7,12 @@
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import ResultHeading from '$lib/components/ResultHeading.svelte';
 	import moment, { Moment } from 'moment';
+	import { MS_IN_DAY } from "$lib/consts";
 
-	let dateValues: [number, number];
+	let dateValues: [number, number] = [
+		new Date().getTime() / MS_IN_DAY - 20,
+		Math.round( new Date().getTime() / MS_IN_DAY)
+	];
 	let geoData: Writable<null | GeoData> = writable(null);
 	let lastUpdate: Writable<Date> = writable();
 	let loiCount: Writable<number> = writable(0);
@@ -49,7 +53,7 @@
 
 <main>
 	<header class="header" id="header">
-		<ResultHeading dates={dateValues} />
+		<ResultHeading bind:dates={dateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
 		<div class="copyright-notice">
 			<a class="copyright-notice__text" href="https://github.com/minhealthnz/nz-covid-data">
