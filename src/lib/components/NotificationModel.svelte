@@ -60,7 +60,7 @@
 <div>
 	<h3>Notifications</h3>
 	<p>
-		Enable notifications within out app to be notified whenever new locations of interest
+		Enable notifications within our app to be notified whenever new locations of interest
 		appear. We will send a notification straight to your device alerting you to how many
 		new locations have appeared.
 	</p>
