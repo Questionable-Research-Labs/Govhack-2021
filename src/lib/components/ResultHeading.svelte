@@ -10,7 +10,8 @@
 		<div class="notificationRequesterWrapper">
 			<NotificationRequester />
 		</div>
-		<img class="results-info__icon" src="/icons/icon.svg" alt="Toi" width="128" height="128" />
+		<a href="/"><img class="results-info__icon" src="/icons/icon.svg" alt="Toi" width="128" height="128" /></a>
+		
 		<h3 class="results-info__title">Showing Results</h3>
 		<div class="results-info__body">
 			<span class="results-info__body__marker"
