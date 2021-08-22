@@ -7,8 +7,16 @@ Times of interest
 ![LINES OF CODE](https://img.shields.io/tokei/lines/github/Questionable-Research-Labs/Govhack-2021?style=for-the-badge)
 ![LICENSE](https://img.shields.io/github/license/Questionable-Research-Labs/Govhack-2021?style=for-the-badge)
 
-A web app designed to allow everyone easy and user-friendly access to a map of COVID-19
-locations of interest.
+Toi (pronounced "toy") is a tool that lets you visualize the all the COVID-19 locations of interest and outlined by the New Zealand Ministry of Health, and allows you to filter by name and by time.
+
+## Features
+- Filtering by date, so you can see if you were in an area of interest during any given period of time
+- Search for location by name
+- Push notification for when new locations are added
+- Insatiable PWA with offline support
+- Intuitive map interface
+
+For a walk though visit [walkthrough.md](walkthrough.md)
 
 ## Toi Backend code
 Available at [Questionable-Research-Labs/Govhack2021-backend](https://github.com/Questionable-Research-Labs/Govhack2021-backend)
