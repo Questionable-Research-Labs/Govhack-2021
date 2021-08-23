@@ -19,6 +19,7 @@
 	let map;
 	let leaflet;
 	let markers;
+	let markerIcon;
 
 	/// The popup requires HTML in the form of a string,
 	/// so this generates a table with a title of all the data.
@@ -55,7 +56,8 @@
 		) {
 			for (let feature of geoData?.features) {
 				let marker = leaflet.marker(feature.geometry.coordinates, {
-					title: feature.properties.event
+					title: feature.properties.event,
+					icon: markerIcon
 				});
 				marker.addTo(markers);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
@@ -72,6 +74,19 @@
 	onMount(async () => {
 		if (browser) {
 			leaflet = await import('leaflet');
+
+			// Mirror of official icon, because of a bug in the icon image url discovery system in leaflet
+			// This is just swaps out the icons inside the library for the ones in the static directory
+			markerIcon = leaflet.icon({
+				iconRetinaUrl: "/leafletIcons/marker-icon-2x.png",
+				iconUrl: "/leafletIcons/marker-icon.png",
+				shadowUrl: "/leafletIcons/marker-shadow.png",
+				iconSize: [25, 41],
+				iconAnchor: [12, 41],
+				popupAnchor: [1, -34],
+				tooltipAnchor: [16, -28],
+				shadowSize: [41, 41]
+			})
 
 			markers = leaflet.layerGroup();
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -116,6 +131,7 @@
 				markerInRange === dateRangeTimings.outOfRange
 			) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
+					markers.getLayer(marker).getElement().style.display = 'none';
 					markers.getLayer(marker).setOpacity(0);
 					markers.getLayer(marker).unbindPopup();
 				} else {
@@ -123,12 +139,15 @@
 				}
 			} else if (typeof filteredPlaces !== 'undefined' && !filteredPlaces.includes(parseInt(i))) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
+					markers.getLayer(marker).getElement().style.display = 'none';
+
 					markers.getLayer(marker).setOpacity(0);
 				} else {
 					console.log("What? Marker doesn't exist apparently");
 				}
 			} else {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
+					markers.getLayer(marker).getElement().style.display = 'block';
 					markers.getLayer(marker).setOpacity(1);
 					markers.getLayer(marker).bindPopup(GetPopupData(marker));
 				} else {
