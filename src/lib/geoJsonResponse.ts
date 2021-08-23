@@ -25,7 +25,7 @@ export class GeoData {
 					end: moment(e['properties']['End'], 'DD/MM/YYYY hh:mm a'),
 					city: e['properties']['City'],
 					event: e['properties']['Event'],
-					information: e['properties']['Information'],
+					advice: e['properties']['Advice'],
 					location: e['properties']['Location'],
 					id: e['properties']['id']
 				}
@@ -49,7 +49,7 @@ export interface Properties {
 	city: string;
 	end: Moment;
 	event: string;
-	information: string;
+	advice: string;
 	location: string;
 	start: Moment;
 	id: string;

@@ -10,7 +10,7 @@
 		dateRangeTimings,
 		GetMarkers,
 		GetPopupData
-	} from '$lib/filteringStore'
+	} from '$lib/filteringStore';
 
 	export let geoData: GeoData;
 	export let dateRange: [number, number];
@@ -29,34 +29,34 @@
 		// Start table
 		output += '<table>';
 		/// Templates a table row with a key value pair
-		const tableLine = (key: string, value: string|Date) => {
+		const tableLine = (key: string, value: string | Date) => {
 			if (value !== null) {
 				output += `<tr><td>${key}</td><td>${value}</td></tr>`;
 			}
 		};
 		tableLine('City', dataTable.city);
 		tableLine('Location', dataTable.location);
-		tableLine('Information', dataTable.information);
+		tableLine('Advice', dataTable.advice);
 		tableLine('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
 		tableLine('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
-		
+
 		// End table
-		output += "</table>"
+		output += '</table>';
 
 		// Add link to google maps
 		output += `<p><a target='none' href='https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}'>View in Google Streetview</a></p>`;
-		return output
+		return output;
 	}
 
 	function loadMarkers() {
-		if ((typeof geoData !== 'undefined' || geoData !== null) && typeof geoData.features !== "undefined") {
+		if (
+			(typeof geoData !== 'undefined' || geoData !== null) &&
+			typeof geoData.features !== 'undefined'
+		) {
 			for (let feature of geoData?.features) {
-				let marker = leaflet.marker(
-					feature.geometry.coordinates,
-					{
-						title: feature.properties.event
-					}
-				);
+				let marker = leaflet.marker(feature.geometry.coordinates, {
+					title: feature.properties.event
+				});
 				marker.addTo(markers);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 				marker.bindPopup(popupHTML);
@@ -121,7 +121,7 @@
 				} else {
 					console.log("What? Marker doesn't exist apparently");
 				}
-			} else if (typeof filteredPlaces !== "undefined" && !filteredPlaces.includes(parseInt(i))) {
+			} else if (typeof filteredPlaces !== 'undefined' && !filteredPlaces.includes(parseInt(i))) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).setOpacity(0);
 				} else {
@@ -130,8 +130,7 @@
 			} else {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).setOpacity(1);
-					markers.getLayer(marker).bindPopup(GetPopupData(marker));;
-
+					markers.getLayer(marker).bindPopup(GetPopupData(marker));
 				} else {
 					console.log("What? Marker doesn't exist apparently");
 				}
