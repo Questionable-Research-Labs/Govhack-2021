@@ -9,8 +9,8 @@
 
 	export let dates: [number, number];
 
-	let chosenStart: Date = new Date(dates[0]*MS_IN_DAY);
-	let chosenEnd: Date = new Date(dates[1]*MS_IN_DAY);
+	$: chosenStart = new Date(dates[0]*MS_IN_DAY);
+	$: chosenEnd = new Date(dates[1]*MS_IN_DAY);
 	function timeFromDate (date: Date ): number  {
 
 		return Math.round(date.getTime() / MS_IN_DAY);
