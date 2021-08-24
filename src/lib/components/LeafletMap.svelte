@@ -68,7 +68,9 @@
 		output += `<p><a target='none' href='https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}'>View in Google Streetview</a></p>`;
 		return output;
 	}
-
+	
+	// Called once when the geojson data is loaded
+	// Should 
 	function loadMarkers() {
 		let now = moment();
 		if (
@@ -87,15 +89,8 @@
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
-					let deltaDateAdded = now.diff(feature.properties.dateAdded, 'days');
-					switch (deltaDateAdded) {
-						case 0:
-							(marker.getElement() as HTMLElement).style.filter = 'hue-rotate(140deg)';
-							break;
-						case 1:
-							(marker.getElement() as HTMLElement).style.filter = 'hue-rotate(50deg)';
-							break;
-					}
+					let deltaDateAdded = now.diff(feature.properties.dateAdded, 'days',true);
+					(marker.getElement() as HTMLElement).style.filter = `hue-rotate(${Math.max(-70*deltaDateAdded+160,0)}deg)`
 				}
 
 				StoreMarker(

@@ -4,7 +4,7 @@
 
 <style lang="scss">
 	div {
-        margin-top: 1em;
+        
 		display: flex;
 		flex-flow: column;
 		background: #333;
@@ -12,6 +12,18 @@
 		font-size: 0.75rem;
 		color: white;
         padding: 0.75rem;
-        width: fit-content
+        width: fit-content;
+        margin-top: 1em;
+        margin-right: 1em;
+
 	}
+
+    @media(max-width: 770px) {
+        div {
+            border-radius: 0;
+            margin-top: 0;
+            margin-right: 0;
+            padding: 0.4rem;
+        }
+    }
 </style>

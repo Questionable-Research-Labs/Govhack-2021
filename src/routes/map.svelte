@@ -82,6 +82,20 @@
 					Locations of interest: {$loiCount}
 				{/if}
 			</InfoBlock>
+			<InfoBlock>
+				<b>Discovery Date</b>
+				<div class="map-key">
+					<div class="labels">
+						<div>Today</div>
+						<div>Yesterday</div>
+						<div>Before That</div>
+
+					</div>
+					<div class="bar">
+
+					</div>
+				</div>
+			</InfoBlock>
 		</div>
 	</header>
 	{#if $geoData != null}
@@ -114,8 +128,25 @@
 		position: absolute;
 		top: calc(100%);
 		z-index: 4;
-		right: 1em;
+		right: 0;
 		align-items: flex-end;
+		.map-key {
+			display: grid;
+			grid-template-columns: 1fr 1em;
+			grid-column-gap: 0.2rem;
+
+			.labels {
+				text-align: right;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.bar {
+				height: 100%;
+				background: linear-gradient(#f02b15 0%, #2F86CC 100%);
+				width: 1em;
+			}
+		}
 	}
 
 	footer {
