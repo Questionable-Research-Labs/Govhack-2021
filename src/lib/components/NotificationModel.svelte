@@ -1,60 +1,13 @@
 <script lang='ts'>
-	import { deregisterForPushNotifications, getMessagingToken } from '$lib/firebase/initFirebase';
-	import { notificationSettings } from '$lib/store';
+	import * as notify from "$lib/notificationManager";
+  import { onMount } from 'svelte';
 
-	let notificationsEnabled: boolean = false;
-	let notificationDenied = false;
-	let notificationsSupported = 'Notification' in window;
-	let errorText = '';
+  onMount(()=>{
+    console.log("ClientSide");
+    setInterval(notify.updatePermissionStatus, 1000);
+    notify.updatePermissionStatus();
+  })
 
-
-	setInterval(updatePermissionStatus, 1000);
-	updatePermissionStatus();
-
-	notificationSettings.subscribe((value) => {
-		if (notificationsSupported) {
-			notificationsEnabled = value && (Notification.permission === 'granted');
-		} else {
-			notificationsEnabled = false
-		}
-	});
-
-
-
-	function updatePermissionStatus() {
-		if (notificationsSupported) {
-			if (notificationSettings && Notification.permission !== 'granted') {
-				// User has disabled notifications
-				notificationSettings.set(false);
-			}
-			if (Notification.permission === 'denied') {
-				errorText = 'Notifications have been blocked, check site permissions';
-			}
-			notificationDenied = Notification.permission === 'denied';
-		} else {
-			errorText = 'Notifications not supported by your browser';
-			notificationDenied = true
-		}
-
-	}
-
-	function enableNotifications() {
-		Notification.requestPermission(function(status) {
-			if (Notification.permission === 'granted') {
-				getMessagingToken();
-				notificationSettings.set(true);
-			} else {
-				errorText = 'Permission Denied';
-			}
-		});
-	}
-
-	function disableNotifications() {
-		console.log('Disabling Notifications');
-		deregisterForPushNotifications();
-		notificationSettings.set(false);
-		console.log('Disabled Notifications');
-	}
 </script>
 
 <div>
@@ -75,14 +28,14 @@
 		these whenever a new location of interest is added.
 	</p>
 	<div class='buttonContainer'>
-		{#if notificationsEnabled}
-			<button class='actionButton' on:click={disableNotifications}>Disable notifications</button>
+		{#if notify.notificationsEnabled}
+			<button class='actionButton' on:click={notify.disableNotifications}>Disable notifications</button>
 		{:else}
-			<button class='actionButton' on:click={enableNotifications} disabled={notificationDenied}>Enable notifications
+			<button class='actionButton' on:click={notify.enableNotifications} disabled={notify.notificationDenied}>Enable notifications
 			</button>
 		{/if}
 	</div>
-	<div class='error'>{errorText}</div>
+	<div class='error'>{notify.notificationErrorText}</div>
 </div>
 
 <style lang='scss'>

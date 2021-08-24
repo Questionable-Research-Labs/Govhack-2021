@@ -2,6 +2,7 @@
 // ^Crashes the startup thread
 
 import { firebaseConfig } from "./env";
+import { notificationsEnabled } from "$lib/notificationManager"
 
 let notificationToken;
 
@@ -10,6 +11,7 @@ interface NotificationCallback {
 }
 
 export async function getMessagingToken() {
+    
     const firebase = (await import('firebase/app')).default;
     await import('firebase/analytics')
     await import('firebase/messaging')
@@ -32,6 +34,7 @@ export async function getMessagingToken() {
         console.log('An error occurred while retrieving token. ', err);
         // ...
     });
+
 }
 export function deregisterForPushNotifications() {
     if (typeof notificationToken !== "undefined") {
@@ -48,11 +51,14 @@ export async function initFirebase(notificationCallback: NotificationCallback) {
         const firebase = (await import('firebase/app')).default;
         await import('firebase/analytics')
         await import('firebase/messaging')
-
-        firebase.initializeApp(firebaseConfig);
+        if (firebase.apps.length === 0) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const messaging = firebase.messaging();
-        await getMessagingToken();
 
+        if (notificationsEnabled) {
+            await getMessagingToken();
+        }
 
 
 

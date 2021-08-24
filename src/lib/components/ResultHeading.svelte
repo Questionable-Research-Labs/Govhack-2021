@@ -3,29 +3,24 @@
 	import NotificationRequester from '$lib/components/NotificationRequester.svelte';
 	import Datepicker from 'svelte-calendar/src/Components/Datepicker.svelte';
 
-	import { MS_IN_DAY } from '$lib/consts'
-
-
+	import { MS_IN_DAY } from '$lib/consts';
 
 	export let dates: [number, number];
 
-	$: chosenStart = new Date(dates[0]*MS_IN_DAY);
-	$: chosenEnd = new Date(dates[1]*MS_IN_DAY);
-	function timeFromDate (date: Date ): number  {
-
+	$: chosenStart = new Date(dates[0] * MS_IN_DAY);
+	$: chosenEnd = new Date(dates[1] * MS_IN_DAY);
+	function timeFromDate(date: Date): number {
 		return Math.round(date.getTime() / MS_IN_DAY);
-	};
+	}
 
 	function chosenStartCallback() {
-		console.log("Start Chosen",chosenStart);
-		dates[0]=timeFromDate(chosenStart)
+		console.log('Start Chosen', chosenStart);
+		dates[0] = timeFromDate(chosenStart);
 	}
 	function chosenEndCallback() {
-		console.log("Start Chosen",chosenStart);
-		dates[1]=timeFromDate(chosenEnd)
-	}	
-
-	
+		console.log('Start Chosen', chosenStart);
+		dates[1] = timeFromDate(chosenEnd);
+	}
 </script>
 
 {#if dates}
@@ -33,23 +28,36 @@
 		<div class="notificationRequesterWrapper">
 			<NotificationRequester />
 		</div>
-		<a href="/"><img class="results-info__icon" src="/icons/icon.svg" alt="Toi" width="128" height="128" /></a>
-		
+		<a href="/"
+			><img
+				class="results-info__icon"
+				src="/icons/icon.svg"
+				alt="Toi"
+				width="128"
+				height="128"
+			/></a
+		>
+
 		<h3 class="results-info__title">Showing Results</h3>
 		<div class="results-info__body">
+			<!-- Another broken library... Works fully but types are broken. -->
 			<Datepicker bind:selected={chosenStart} on:dateSelected={chosenStartCallback} end={chosenEnd}>
 				<span class="results-info__body__marker"
 					>From
 					<span>{dateToString(dates[0])}</span>
 				</span>
 			</Datepicker>
-			<Datepicker bind:selected={chosenEnd} on:dateSelected={chosenEndCallback} start={chosenStart} end={new Date()}>
+			<Datepicker
+				bind:selected={chosenEnd}
+				on:dateSelected={chosenEndCallback}
+				start={chosenStart}
+				end={new Date()}
+			>
 				<span class="results-info__body__marker"
 					>To
 					<span>{dateToString(dates[1])}</span>
 				</span>
 			</Datepicker>
-
 		</div>
 	</div>
 {/if}
@@ -59,11 +67,11 @@
 		text-align: left;
 		display: flex;
 		flex-flow: row;
-    position: relative;
+		position: relative;
 		align-items: center;
-    padding: 1em 6em 1em 1em;
+		padding: 1em 6em 1em 1em;
 
-    .notificationRequesterWrapper {
+		.notificationRequesterWrapper {
 			position: absolute;
 			margin: 1em;
 			top: 0;
@@ -126,13 +134,10 @@
 	}
 
 	@media all and (max-width: 770px) {
-		.header {
-			grid-template-columns: 1fr;
-		}
 		.results-info {
-      padding: 1em;
+			padding: 1em;
 
-      &::before {
+			&::before {
 				width: 100%;
 				transform: skewX(0) translateX(0);
 			}
