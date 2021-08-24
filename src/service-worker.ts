@@ -39,16 +39,31 @@ getItem('notify', function (err, value: string) {
 messaging.onBackgroundMessage((payload) => {
 	console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
-	const notification = payload['notification'];
-	// Customize notification here
-	const notificationTitle = notification.title;
-	const notificationOptions = {
-		body: notification.body,
-		icon: 'https://toi.qrl.nz/favicon.png'
-	};
-
-	worker.registration.showNotification(notificationTitle, notificationOptions);
+	
 });
+
+self.addEventListener('notificationclick', function (event) {
+    //For root applications: just change "'./'" to "'/'"
+    //Very important having the last forward slash on "new URL('./', location)..."
+    const rootUrl = new URL('/').href; 
+    event.notification.close();
+    event.waitUntil(
+        clients.matchAll().then(matchedClients =>
+        {
+            for (let client of matchedClients)
+            {
+                if (client.url.indexOf(rootUrl) >= 0)
+                {
+                    return client.focus();
+                }
+            }
+
+            return clients.openWindow(rootUrl).then(function (client) { client.focus(); });
+        })
+    );
+});
+
+
 
 // const analytics = firebase.analytics();
 // analytics.logEvent('Startup');

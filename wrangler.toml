@@ -7,3 +7,4 @@ zone_id = '91ef5779b4f5dd227318de25a23e939e'
 compatibility_flags = []
 workers_dev = false
 site = {bucket = "./build",entry-point = "./workers-site"}
+vars = { NODE_ENV = "production" }
