@@ -30,7 +30,7 @@
 		</div>
 		<a href="/"
 			><img
-				class="results-info__icon"
+				class="icon"
 				src="/icons/icon.svg"
 				alt="Toi"
 				width="128"
@@ -38,11 +38,11 @@
 			/></a
 		>
 
-		<h3 class="results-info__title">Showing Results</h3>
-		<div class="results-info__body">
+		<h3 class="title">Showing Results</h3>
+		<div class="body">
 			<!-- Another broken library... Works fully but types are broken. -->
 			<Datepicker bind:selected={chosenStart} on:dateSelected={chosenStartCallback} end={chosenEnd}>
-				<span class="results-info__body__marker"
+				<span class="calenderInner"
 					>From
 					<span>{dateToString(dates[0])}</span>
 				</span>
@@ -53,7 +53,7 @@
 				start={chosenStart}
 				end={new Date()}
 			>
-				<span class="results-info__body__marker"
+				<span class="calenderInner"
 					>To
 					<span>{dateToString(dates[1])}</span>
 				</span>
@@ -79,7 +79,7 @@
 			z-index: 2;
 			color: white;
 		}
-		&__icon {
+		.icon {
 			width: 60px;
 			height: 60px;
 			margin-right: 0.5em;
@@ -97,15 +97,15 @@
 			z-index: -1;
 		}
 
-		&__title {
+		.title {
 			font-size: 1.25em;
 			font-weight: bold;
 			margin: 0 1em 0.5em 0.5em;
 			color: white;
 		}
 
-		&__body {
-			&__marker {
+		.body {
+			.calenderInner {
 				text-transform: uppercase;
 				background-color: #ffe330;
 
@@ -115,9 +115,7 @@
 				display: inline-block;
 				margin-right: 1em;
 
-				> span {
-					cursor: pointer;
-				}
+				cursor: pointer;
 			}
 		}
 	}
@@ -145,7 +143,7 @@
 	}
 
 	@media all and (max-width: 440px) {
-		.results-info__body__marker {
+		.calenderInner {
 			font-size: 0.7em;
 		}
 	}
