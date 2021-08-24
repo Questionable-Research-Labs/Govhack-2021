@@ -23,6 +23,7 @@ export class GeoData {
 				properties: {
 					start: moment(e['properties']['Start'], 'DD/MM/YYYY hh:mm a'),
 					end: moment(e['properties']['End'], 'DD/MM/YYYY hh:mm a'),
+					dateAdded: moment(e['properties']['Added'], 'DD/MM/YYYY hh:mm a'),
 					city: e['properties']['City'],
 					event: e['properties']['Event'],
 					advice: e['properties']['Advice'],
@@ -53,4 +54,5 @@ export interface Properties {
 	location: string;
 	start: Moment;
 	id: string;
+	dateAdded: Moment;
 }

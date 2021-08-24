@@ -37,6 +37,7 @@
 		};
 		tableLine('City', dataTable.city);
 		tableLine('Location', dataTable.location);
+		tableLine('Date Added', `${dataTable.start.format('YYYY-MM-D LT')}`)
 		tableLine('Advice', dataTable.advice);
 		tableLine('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
 		tableLine('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
@@ -192,6 +193,21 @@
 			text-align: center;
 			font-weight: bold;
 			width: 100%;
+		}
+
+		tr:last-child {
+			td {
+				border: none;
+			}
+		}
+
+		td {
+			border-bottom: 1px rgba(0,0,0,0.1) groove ;
+		}
+
+		table {
+			border-spacing: 0 0.5em;
+			border-collapse: separate;
 		}
 	}
 </style>
