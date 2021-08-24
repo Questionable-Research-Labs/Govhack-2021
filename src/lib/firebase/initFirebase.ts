@@ -42,9 +42,14 @@ export async function getMessagingToken() {
 
 }
 export function deregisterForPushNotifications() {
-    console.log("Deregister for notifications")
-    fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${notificationToken}`, {method: 'DELETE'});
-    notificationTokenRegistered.set(false);
+    if (typeof notificationToken !== "undefined") {
+        console.log("Deregister for notifications")
+        fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${notificationToken}`, {method: 'DELETE'});
+        notificationTokenRegistered.set(false);
+    } else {
+        console.log("Would deregister, but never registered")
+    }
+
 }
 
 export async function initFirebase(notificationCallback: NotificationCallback) {
@@ -57,9 +62,16 @@ export async function initFirebase(notificationCallback: NotificationCallback) {
         }
         const messaging = firebase.messaging();
 
-        if (notificationsEnabled) {
-            await getMessagingToken();
-        }
+        console.log("Notification Enabled")
+
+        notificationsEnabled.subscribe((value)=> {
+            console.log("Notifications Enabled settings changed,",value)
+            if (value) {
+                getMessagingToken();
+            } else {
+                deregisterForPushNotifications();
+            }
+        });
 
 
 

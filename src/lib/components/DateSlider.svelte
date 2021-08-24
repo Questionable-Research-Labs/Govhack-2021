@@ -32,7 +32,6 @@
 			// fit any given screen size
 			let x = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 			num_pip_labels =  0.007442*x+1.430
-			console.log("Pip lables",num_pip_labels," for x ",x)
 		}
 		window.addEventListener('resize', updatePipNum);
 		updatePipNum();

@@ -39,7 +39,7 @@
 			</button>
 		{/if}
 	</div>
-	<div class='error'>{notify.notificationErrorText}</div>
+	<div class='error'>{@html notify.notificationErrorText}</div>
 </div>
 
 <style lang='scss'>

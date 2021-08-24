@@ -1,4 +1,3 @@
-console.log("Running Notification Manager")
 
 import { browser } from '$app/env';
 import { deregisterForPushNotifications, getMessagingToken } from '$lib/firebase/initFirebase';
@@ -14,11 +13,11 @@ export let notificationErrorText = '';
 let storeCaches = {"notificationTokenRegistered": false}
 
 function updateNotificationEnabled() {
-    console.log("Updating Notification settings");
 
     if (notificationsSupported()) {
-        notificationsEnabled.set((Notification.permission === 'granted') && storeCaches["notificationTokenRegistered"] && storeCaches["notificationSettings"]);
+        notificationsEnabled.set((Notification.permission === 'granted') &&  storeCaches["notificationSettings"]);
     } else {
+        console.log("Notifications not supported")
         notificationsEnabled.set(false)
     }
 }
@@ -43,7 +42,7 @@ export function updatePermissionStatus() {
             notificationSettings.set(false);
         }
         if (Notification.permission === 'denied') {
-            notificationErrorText = 'Notifications have been blocked, check site permissions';
+            notificationErrorText = 'Notifications have been blocked, check site permissions<br><a target=”_blank” rel=”noopener noreferrer” href="https://support.google.com/chrome/answer/3220216?hl=en&co=GENIE.Platform%3DDesktop">Chrome Guide</a>';
         }
         notificationDenied = Notification.permission === 'denied';
     } else {
@@ -57,8 +56,7 @@ export function enableNotifications() {
     Notification.requestPermission(function (status) {
         if (Notification.permission === 'granted') {
             notificationSettings.set(true);
-            console.log("Permissions Received, trying to configure with Firebase.")
-            getMessagingToken();
+            updateNotificationEnabled();
         } else {
             notificationErrorText = 'Permission Denied';
         }
@@ -67,6 +65,5 @@ export function enableNotifications() {
 
 export function disableNotifications() {
     notificationSettings.set(false);
-    deregisterForPushNotifications();
-
+    updateNotificationEnabled();
 }

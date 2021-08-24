@@ -106,7 +106,6 @@
 	});
 
 	afterUpdate(async () => {
-		// console.log("Updating");
 
 		if (typeof map === 'undefined' || typeof markers == 'undefined') return;
 
@@ -118,15 +117,12 @@
 				loadMarkers();
 			}
 		} else {
-			// console.log('found', markerList.length, 'markers');
 		}
 
-		// console.log(markerList);
 
 		for (let i in markerList) {
 			let marker = markerList[i];
 			let markerInRange = TestRange(dateRange, marker);
-			// console.log(markerInRange);
 			if (
 				markerInRange === dateRangeTimings.invalid ||
 				markerInRange === dateRangeTimings.outOfRange
