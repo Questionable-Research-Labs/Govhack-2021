@@ -89,8 +89,15 @@
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
-					let deltaDateAdded = now.diff(feature.properties.dateAdded, 'days',true);
-					(marker.getElement() as HTMLElement).style.filter = `hue-rotate(${Math.max(-70*deltaDateAdded+160,0)}deg)`
+					let deltaDateAdded = now.startOf('day').diff(feature.properties.dateAdded.startOf('day'), 'days');
+					
+					// Use HSL to Transition #237CC9 (blue marker) to full #f72f2f (red)
+					let hueRotateAmount = Math.max(-48*deltaDateAdded+148, 0);
+					let saturationAmount = Math.max(8*deltaDateAdded+93,70);
+
+					let filter = `hue-rotate(${hueRotateAmount}deg) saturate(${saturationAmount}%)`;
+
+					(marker.getElement() as HTMLElement).style.filter = filter;
 				}
 
 				StoreMarker(

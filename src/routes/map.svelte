@@ -83,7 +83,7 @@
 				{/if}
 			</InfoBlock>
 			<InfoBlock>
-				<b>Discovery Date</b>
+				<b style="margin-bottom: 0.5rem;">Discovery Date</b>		
 				<div class="map-key">
 					<div class="labels">
 						<div>Today</div>
@@ -134,6 +134,7 @@
 			display: grid;
 			grid-template-columns: 1fr 1em;
 			grid-column-gap: 0.2rem;
+			height: 4em;
 
 			.labels {
 				text-align: right;
@@ -143,8 +144,9 @@
 			}
 			.bar {
 				height: 100%;
-				background: linear-gradient(#f02b15 0%, #2F86CC 100%);
+				background: linear-gradient(#f02b15 0%,#D751AF 40%,#9171E1 80%, #2F86CC 100%);
 				width: 1em;
+				border-radius: 1rem;
 			}
 		}
 	}

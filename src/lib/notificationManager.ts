@@ -1,8 +1,5 @@
-
-import { browser } from '$app/env';
-import { deregisterForPushNotifications, getMessagingToken } from '$lib/firebase/initFirebase';
 import { notificationSettings,notificationTokenRegistered, notificationsEnabled } from '$lib/store';
-import { onMount } from 'svelte';
+
 
 
 export let notificationDenied = false;

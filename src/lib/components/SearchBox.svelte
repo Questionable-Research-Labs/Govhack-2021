@@ -27,8 +27,8 @@
 </script>
 
 <div class='wrapper'>
-	<label>Filter by Address/Location</label>
-	<input type='text' bind:value={searchTerm} placeholder='Enter Address/Location'>
+	<label for="searchBox">Filter by Address/Location</label>
+	<input type='text' bind:value={searchTerm} placeholder='Enter Address/Location' id="searchBox">
 </div>
 
 <style lang='scss'>
