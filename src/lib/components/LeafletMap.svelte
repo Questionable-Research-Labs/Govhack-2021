@@ -3,7 +3,7 @@
 		return (t) => Math.round(a+(b-a)*t)
 	}
 
-	export let loiCount = tweened(0, {
+	export const loiCount = tweened(0, {
 		duration: 400,
 		easing: cubicOut,
 		interpolate: interpolate
@@ -104,6 +104,8 @@
 					popupHTML
 				);
 			}
+			map.fitBounds(markers.getBounds());
+
 		}
 	}
 
@@ -124,7 +126,7 @@
 				shadowSize: [41, 41]
 			});
 
-			markers = leaflet.layerGroup();
+			markers = leaflet.featureGroup();
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution:
 					'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -132,7 +134,7 @@
 
 			if (typeof map === 'undefined') {
 				map = leaflet.map('map', {
-					center: [-41, 174],
+					center: [-41, 174], //baseline zoom and location, updates on marker load
 					zoom: 6,
 					layers: [baseMap, markers]
 				});

@@ -1,22 +1,23 @@
 <script lang="ts">
 	import { default as LeafletMap, loiCount } from '$lib/components/LeafletMap.svelte';
 	import DateSlider from '$lib/components/DateSlider.svelte';
+	import InfoBlock from '$lib/components/InfoBlock.svelte';
+
 	import type { Writable } from 'svelte/store';
 	import { writable } from 'svelte/store';
 	import { GeoData } from '$lib/geoJsonResponse';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import ResultHeading from '$lib/components/ResultHeading.svelte';
 	import moment, { Moment } from 'moment';
-	import { MS_IN_DAY } from "$lib/consts";
+	import { MS_IN_DAY } from '$lib/consts';
 
-	
 	let full_range = [
 		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
 		new Date().getTime() / MS_IN_DAY
-	]
+	];
 	let dateValues: [number, number] = [
-		Math.round( new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
-		Math.round( new Date().getTime() / MS_IN_DAY)
+		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
+		Math.round(new Date().getTime() / MS_IN_DAY)
 	];
 
 	let geoData: Writable<null | GeoData> = writable(null);
@@ -24,15 +25,14 @@
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {
 		geoDataValue = e;
-		if (e!==null) {
-			let start_min = e.features.reduce(function(prev, curr) {
+		if (e !== null) {
+			let start_min = e.features.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
-			console.log("Start min",start_min.properties.start.valueOf())
+			console.log('Start min', start_min.properties.start.valueOf());
 			full_range[0] = start_min.properties.start.valueOf() / MS_IN_DAY;
-			dateValues[0] = full_range[0]
+			dateValues[0] = full_range[0];
 		}
-
 	});
 
 	let places: number[];
@@ -46,7 +46,6 @@
 		.then((jsonData) => {
 			if (geoDataValue === null) {
 				geoData.set(new GeoData(jsonData));
-
 			}
 		})
 		.catch((error) => {
@@ -56,7 +55,7 @@
 		try {
 			let response = await fetch('https://govhack2021-backend.host.qrl.nz/updated');
 			let body = await response.json();
-			console.log("Date pushed",body['getDatePushed'])
+			console.log('Date pushed', body['getDatePushed']);
 			lastUpdate.set(new Date(body['getDatePushed']));
 		} catch (e) {
 			console.log('It shit itself', e);
@@ -68,30 +67,29 @@
 	<header class="header" id="header">
 		<ResultHeading bind:dates={dateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
-		<div class="copyright-notice">
-			<a class="copyright-notice__text" href="https://github.com/minhealthnz/nz-covid-data">
-				Locations of Interest from New Zealand Government
-			</a>
-	
-		</div>
-		<div class="update-block">
-			{#if typeof $lastUpdate !== 'undefined'}
-				<p class="update-block__text">Last Updated {$lastUpdate.toLocaleString()}</p>
-			{/if}
+		<div class="info-block-container">
+			<InfoBlock>
+				<a href="https://github.com/minhealthnz/nz-covid-data">
+					Data from the New Zealand Government
+				</a>
+			</InfoBlock>
+			<InfoBlock>
+				{#if typeof $lastUpdate !== 'undefined'}
+					Last updated {moment($lastUpdate).fromNow()}<br>
+				{/if}
 
-			{#if typeof $loiCount !== 'undefined'}
-				<p class="update-block__text">Number of locations of interest: {$loiCount}</p>
-			{/if}
+				{#if typeof $loiCount !== 'undefined'}
+					Locations of interest: {$loiCount}
+				{/if}
+			</InfoBlock>
 		</div>
-
 	</header>
 	{#if $geoData != null}
 		<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places} />
 	{/if}
 
 	<footer>
-		<DateSlider bind:dateRange={dateValues} bind:full_range={full_range} />
-
+		<DateSlider bind:dateRange={dateValues} bind:full_range />
 	</footer>
 </main>
 
@@ -110,6 +108,15 @@
 		grid-template-columns: 1fr 1fr;
 		background-color: white;
 	}
+	.info-block-container {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: calc(100%);
+		z-index: 4;
+		right: 1em;
+		align-items: flex-end;
+	}
 
 	footer {
 		position: fixed;
@@ -125,44 +132,5 @@
 		.header {
 			grid-template-columns: 1fr;
 		}
-	}
-
-	.update-block {
-		position: absolute;
-		top: calc(100% + 3em);
-		right: 1em;
-		display: flex;
-		flex-flow: column;
-    background: #333;
-    border-radius: 0.5em;
-  }
-
-
-	.update-block__text {
-		font-size: 0.75em;
-		display: block;
-		color: white;
-		padding: 0.5em;
-		margin: 0;
-	}
-
-	.copyright-notice {
-	position: absolute;
-	top: calc(100% + 1em);
-			// bottom: calc(100% + 2em);
-		z-index: 4;
-		right: 1em;
-		display: flex;
-		flex-flow: column;
-		background: #333;
-		border-radius: 0.5em;
-  }
-  .copyright-notice__text {
-		font-size: 0.75em;
-		display: block;
-		color: white;
-		padding: 0.5em;
-		margin: 0;
-
 	}
 </style>
