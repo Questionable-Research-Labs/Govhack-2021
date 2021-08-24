@@ -4,10 +4,7 @@
 	import {MS_IN_DAY} from "$lib/consts";
 	import {formatDate,dateToString} from "$lib/tools"
 
-	const full_range = [
-		new Date('2021-07-30').getTime() / MS_IN_DAY,
-		new Date().getTime() / MS_IN_DAY
-	]
+	export let full_range;
 
 	
 	// How often the labels appear under the bar

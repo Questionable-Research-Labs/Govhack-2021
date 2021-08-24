@@ -9,16 +9,31 @@
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from "$lib/consts";
 
+	
+	let full_range = [
+		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
+		new Date().getTime() / MS_IN_DAY
+	]
 	let dateValues: [number, number] = [
-		new Date().getTime() / MS_IN_DAY - 20,
+		Math.round( new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
 		Math.round( new Date().getTime() / MS_IN_DAY)
 	];
+
 	let geoData: Writable<null | GeoData> = writable(null);
 	let lastUpdate: Writable<Date> = writable();
 	let loiCount: Writable<number> = writable(0);
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {
 		geoDataValue = e;
+		if (e!==null) {
+			let start_min = e.features.reduce(function(prev, curr) {
+				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
+			});
+			console.log("Start min",start_min.properties.start.valueOf())
+			full_range[0] = start_min.properties.start.valueOf() / MS_IN_DAY;
+			dateValues[0] = full_range[0]
+		}
+
 	});
 
 	let places: number[];
@@ -77,7 +92,7 @@
 	{/if}
 
 	<footer>
-		<DateSlider bind:dateRange={dateValues} />
+		<DateSlider bind:dateRange={dateValues} bind:full_range={full_range} />
 
 	</footer>
 </main>
