@@ -2,34 +2,42 @@ console.log("Running Notification Manager")
 
 import { browser } from '$app/env';
 import { deregisterForPushNotifications, getMessagingToken } from '$lib/firebase/initFirebase';
-import { notificationSettings } from '$lib/store';
+import { notificationSettings,notificationTokenRegistered, notificationsEnabled } from '$lib/store';
 import { onMount } from 'svelte';
 
-export let notificationsEnabled: boolean = false;
+
 export let notificationDenied = false;
-export let notificationsSupported = false;
+const notificationsSupported = () => (typeof window === 'undefined') ? false : 'Notification' in window;
 export let notificationErrorText = '';
 
 
+let storeCaches = {"notificationTokenRegistered": false}
 
+function updateNotificationEnabled() {
+    console.log("Updating Notification settings");
 
+    if (notificationsSupported()) {
+        notificationsEnabled.set((Notification.permission === 'granted') && storeCaches["notificationTokenRegistered"] && storeCaches["notificationSettings"]);
+    } else {
+        notificationsEnabled.set(false)
+    }
+}
 
 notificationSettings.subscribe((value) => {
-    console.log("Updating Notification settings")
-
-    if (notificationsSupported) {
-        notificationsEnabled = value && (Notification.permission === 'granted');
-    } else {
-        notificationsEnabled = false
-    }
+    storeCaches["notificationSettings"] = value;
+    updateNotificationEnabled();
 });
 
+notificationTokenRegistered.subscribe((value)=> {
+
+    storeCaches["notificationTokenRegistered"] = value
+    updateNotificationEnabled();
+})
 
 
 export function updatePermissionStatus() {
-    console.log("Updating Permissions")
-    notificationsSupported = 'Notification' in window
-    if (notificationsSupported) {
+    if (notificationsSupported()) {
+        notificationDenied = false
         if (notificationSettings && Notification.permission !== 'granted') {
             // User has disabled notifications
             notificationSettings.set(false);
@@ -58,8 +66,7 @@ export function enableNotifications() {
 }
 
 export function disableNotifications() {
-    console.log('Disabling Notifications');
-    deregisterForPushNotifications();
     notificationSettings.set(false);
-    console.log('Disabled Notifications');
+    deregisterForPushNotifications();
+
 }

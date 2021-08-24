@@ -2,7 +2,7 @@
 // ^Crashes the startup thread
 
 import { firebaseConfig } from "./env";
-import { notificationsEnabled } from "$lib/notificationManager"
+import {notificationTokenRegistered, notificationsEnabled} from "$lib/store"
 
 let notificationToken;
 
@@ -16,13 +16,18 @@ export async function getMessagingToken() {
     await import('firebase/analytics')
     await import('firebase/messaging')
     const messaging = firebase.messaging();
+    console.log("Waiting for service worker")
     const registration = await navigator.serviceWorker.ready;
+    console.log("getting Token")
     messaging.getToken({ serviceWorkerRegistration: registration, vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE' }).then((currentToken) => {
         if (currentToken) {
-            console.log("Token Retrieval SUCESSSSSS");
             fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${currentToken}`, {
                 method: 'POST',
             });
+            notificationTokenRegistered.set(true)
+
+            console.log("Token Retrieval SUCESSSSSS");
+
             notificationToken = currentToken
         } else {
             // Show permission request UI
@@ -37,13 +42,9 @@ export async function getMessagingToken() {
 
 }
 export function deregisterForPushNotifications() {
-    if (typeof notificationToken !== "undefined") {
-        fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${notificationToken}`, {
-                method: 'DELETE',
-            });
-    } else {
-        console.log("Trying to turn off notifications but was never on in the first place")
-    }
+    console.log("Deregister for notifications")
+    fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${notificationToken}`, {method: 'DELETE'});
+    notificationTokenRegistered.set(false);
 }
 
 export async function initFirebase(notificationCallback: NotificationCallback) {

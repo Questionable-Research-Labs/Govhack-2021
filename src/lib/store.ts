@@ -30,3 +30,10 @@ if (browser) {
 			});
 	});
 }
+
+
+// Notification Token
+export const notificationTokenRegistered: Writable<boolean> = writable(false);
+
+// Notifications are able to sent
+export const notificationsEnabled: Writable<boolean> = writable(false);

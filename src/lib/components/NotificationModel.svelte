@@ -1,5 +1,6 @@
 <script lang='ts'>
 	import * as notify from "$lib/notificationManager";
+  import { notificationsEnabled } from "$lib/store";
   import { onMount } from 'svelte';
 
   onMount(()=>{
@@ -8,6 +9,9 @@
     notify.updatePermissionStatus();
   })
 
+  notificationsEnabled.subscribe((value)=>{
+    console.log("Value Changed")
+  })
 </script>
 
 <div>
@@ -28,7 +32,7 @@
 		these whenever a new location of interest is added.
 	</p>
 	<div class='buttonContainer'>
-		{#if notify.notificationsEnabled}
+		{#if $notificationsEnabled}
 			<button class='actionButton' on:click={notify.disableNotifications}>Disable notifications</button>
 		{:else}
 			<button class='actionButton' on:click={notify.enableNotifications} disabled={notify.notificationDenied}>Enable notifications
