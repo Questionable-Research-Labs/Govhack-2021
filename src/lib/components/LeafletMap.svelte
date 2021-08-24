@@ -11,6 +11,7 @@
 		GetMarkers,
 		GetPopupData
 	} from '$lib/filteringStore';
+	import moment from 'moment';
 
 	export let geoData: GeoData;
 	export let dateRange: [number, number];
@@ -37,7 +38,11 @@
 		};
 		tableLine('City', dataTable.city);
 		tableLine('Location', dataTable.location);
-		tableLine('Date Added', `${dataTable.start.format('YYYY-MM-D LT')}`)
+		if (dataTable.dateAdded.isValid()) {
+			tableLine('Date Added', `${dataTable.dateAdded.format('YYYY-MM-D LT')}`);
+		} else {
+			tableLine('Date Added', 'Not specified');
+		}
 		tableLine('Advice', dataTable.advice);
 		tableLine('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
 		tableLine('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
@@ -51,6 +56,7 @@
 	}
 
 	function loadMarkers() {
+		let now = moment();
 		if (
 			(typeof geoData !== 'undefined' || geoData !== null) &&
 			typeof geoData.features !== 'undefined'
@@ -63,6 +69,20 @@
 				marker.addTo(markers);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 				marker.bindPopup(popupHTML);
+
+				// Color code the markers based on how recently they were added
+				if (feature.properties.dateAdded.isValid()) {
+					let deltaDateAdded = now.diff(feature.properties.dateAdded, 'days');
+					switch (deltaDateAdded) {
+						case 0:
+							(marker.getElement() as HTMLElement).style.filter = 'hue-rotate(140deg)';
+							break;
+						case 1:
+							(marker.getElement() as HTMLElement).style.filter = 'hue-rotate(50deg)';
+							break;
+					}
+				}
+
 				StoreMarker(
 					[timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end)],
 					leaflet.stamp(marker),
@@ -79,21 +99,22 @@
 			// Mirror of official icon, because of a bug in the icon image url discovery system in leaflet
 			// This is just swaps out the icons inside the library for the ones in the static directory
 			markerIcon = leaflet.icon({
-				iconRetinaUrl: "/leafletIcons/marker-icon-2x.png",
-				iconUrl: "/leafletIcons/marker-icon.png",
-				shadowUrl: "/leafletIcons/marker-shadow.png",
+				iconRetinaUrl: '/leafletIcons/marker-icon-2x.png',
+				iconUrl: '/leafletIcons/marker-icon.png',
+				shadowUrl: '/leafletIcons/marker-shadow.png',
 				iconSize: [25, 41],
 				iconAnchor: [12, 41],
 				popupAnchor: [1, -34],
 				tooltipAnchor: [16, -28],
 				shadowSize: [41, 41]
-			})
+			});
 
 			markers = leaflet.layerGroup();
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution:
 					'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			});
+
 			if (typeof map === 'undefined') {
 				map = leaflet.map('map', {
 					center: [-41, 174],
@@ -198,7 +219,7 @@
 		}
 
 		td {
-			border-bottom: 1px rgba(0,0,0,0.1) groove ;
+			border-bottom: 1px rgba(0, 0, 0, 0.1) solid;
 		}
 
 		table {

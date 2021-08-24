@@ -1,7 +1,6 @@
 // Moments a bit funky with typescript
 import { Moment } from 'moment';
 import moment from 'moment';
-
 export class GeoData {
 	name: string;
 	type: string;
@@ -11,6 +10,13 @@ export class GeoData {
 		this.name = data['name'];
 		this.type = data['type'];
 		this.features = data['features'].map((e) => {
+			let dateAdded: Moment;
+			if (e['properties']['Added'].includes('-')) {
+				dateAdded = moment(e['properties']['Added'], 'YYYY-MM-DD HH:mm:ss');
+			} else {
+				dateAdded = moment(e['properties']['Added'], 'DD/MM/YYYY h:mm');
+			}
+
 			return {
 				geometry: {
 					...e['geometry'],
@@ -23,7 +29,7 @@ export class GeoData {
 				properties: {
 					start: moment(e['properties']['Start'], 'DD/MM/YYYY hh:mm a'),
 					end: moment(e['properties']['End'], 'DD/MM/YYYY hh:mm a'),
-					dateAdded: moment(e['properties']['Added'], 'DD/MM/YYYY hh:mm a'),
+					dateAdded,
 					city: e['properties']['City'],
 					event: e['properties']['Event'],
 					advice: e['properties']['Advice'],
