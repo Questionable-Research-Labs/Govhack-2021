@@ -1,8 +1,21 @@
+<script lang="ts" context="module">
+	function interpolate(a,b) {
+		return (t) => Math.round(a+(b-a)*t)
+	}
+
+	export let loiCount = tweened(0, {
+		duration: 400,
+		easing: cubicOut,
+		interpolate: interpolate
+	});
+</script>
+
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
 	import { browser } from '$app/env';
 	import type { Features, GeoData, Properties } from '$lib/geoJsonResponse';
-	import { MS_IN_DAY } from '$lib/consts';
+	import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
 	import {
 		timeFromMoment,
 		StoreMarker,
@@ -16,6 +29,7 @@
 	export let geoData: GeoData;
 	export let dateRange: [number, number];
 	export let filteredPlaces: number[];
+
 
 	let map;
 	let leaflet;
@@ -61,6 +75,7 @@
 			(typeof geoData !== 'undefined' || geoData !== null) &&
 			typeof geoData.features !== 'undefined'
 		) {
+			loiCount.set(geoData?.features.length);
 			for (let feature of geoData?.features) {
 				let marker = leaflet.marker(feature.geometry.coordinates, {
 					title: feature.properties.event,
@@ -140,6 +155,7 @@
 		} else {
 		}
 
+		let totalShown = 0
 
 		for (let i in markerList) {
 			let marker = markerList[i];
@@ -165,6 +181,7 @@
 				}
 			} else {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
+					totalShown += 1;
 					markers.getLayer(marker).getElement().style.display = 'block';
 					markers.getLayer(marker).setOpacity(1);
 					markers.getLayer(marker).bindPopup(GetPopupData(marker));
@@ -173,6 +190,7 @@
 				}
 			}
 		}
+		loiCount.set(totalShown);
 	});
 </script>
 

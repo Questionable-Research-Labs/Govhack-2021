@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LeafletMap from '$lib/components/LeafletMap.svelte';
+	import { default as LeafletMap, loiCount } from '$lib/components/LeafletMap.svelte';
 	import DateSlider from '$lib/components/DateSlider.svelte';
 	import type { Writable } from 'svelte/store';
 	import { writable } from 'svelte/store';
@@ -21,7 +21,6 @@
 
 	let geoData: Writable<null | GeoData> = writable(null);
 	let lastUpdate: Writable<Date> = writable();
-	let loiCount: Writable<number> = writable(0);
 	let geoDataValue: null | GeoData;
 	geoData.subscribe((e) => {
 		geoDataValue = e;
@@ -47,7 +46,6 @@
 		.then((jsonData) => {
 			if (geoDataValue === null) {
 				geoData.set(new GeoData(jsonData));
-				loiCount.set(geoDataValue.features.length);
 
 			}
 		})
