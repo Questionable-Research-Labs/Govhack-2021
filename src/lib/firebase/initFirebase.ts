@@ -77,7 +77,7 @@ export async function initFirebase(notificationCallback: NotificationCallback) {
 
         messaging.onMessage((payload) => {
             console.log('Message received. ', payload);
-            notificationCallback("GOT NOTIFICATION" + payload)
+            notificationCallback("There are new Locations of Interest, refresh the app to see them.");
             // ...
         });
 

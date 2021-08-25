@@ -11,7 +11,7 @@
 		notificationHandler.addNotification({
 			text: text,
 			position: 'top-right',
-			removeAfter: 4000
+			type: 'success'
 		});
 	}
 	onMount(() => {
