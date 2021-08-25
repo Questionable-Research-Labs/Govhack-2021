@@ -33,10 +33,9 @@ export function TestRange(dateRange: RelevantTimes, leafletID: number): dateRang
 	let relevantTimes = markerStore[leafletID];
 
 	if (typeof relevantTimes !== 'undefined') {
-		let startTimeInRange = dateRange[0] <= relevantTimes[0] && dateRange[1] >= relevantTimes[0];
-		let endTimeInRange = dateRange[0] <= relevantTimes[1] && dateRange[1] >= relevantTimes[1];
+		let markerInsideOfRange = Math.floor(dateRange[0]) <= relevantTimes[1] && Math.floor(dateRange[1]) >= relevantTimes[0]; 
 
-		return startTimeInRange || endTimeInRange
+		return markerInsideOfRange
 			? dateRangeTimings.inRange
 			: dateRangeTimings.outOfRange;
 	} else {
