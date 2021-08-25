@@ -11,11 +11,20 @@
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from '$lib/consts';
 
-	let full_range = [
+	let fullRangeActive = [
 		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
 		new Date().getTime() / MS_IN_DAY
 	];
-	let dateValues: [number, number] = [
+	let activeDateValues: [number, number] = [
+		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
+		Math.round(new Date().getTime() / MS_IN_DAY)
+	];
+
+	let fullRangeAdded = [
+		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
+		new Date().getTime() / MS_IN_DAY
+	];
+	let addedDateValues: [number, number] = [
 		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
 		Math.round(new Date().getTime() / MS_IN_DAY)
 	];
@@ -26,12 +35,27 @@
 	geoData.subscribe((e) => {
 		geoDataValue = e;
 		if (e !== null) {
-			let start_min = e.features.reduce(function (prev, curr) {
+			let activeStartMin = e.features.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
-			console.log('Start min', start_min.properties.start.valueOf());
-			full_range[0] = start_min.properties.start.valueOf() / MS_IN_DAY;
-			dateValues[0] = full_range[0];
+
+			let addedStartMin = e.features.reduce((prev, curr) =>
+				curr.properties.dateAdded.isValid()
+					? prev.properties.dateAdded.valueOf() < curr.properties.dateAdded.valueOf()
+						? prev
+						: curr
+					: prev
+			);
+
+			console.log(addedStartMin);
+
+			console.log('Range Start min', activeStartMin.properties.start.valueOf());
+			console.log('Added Start min', addedStartMin.properties.start.valueOf());
+
+			fullRangeActive[0] = activeStartMin.properties.start.valueOf() / MS_IN_DAY;
+			activeDateValues[0] = fullRangeActive[0];
+			fullRangeAdded[0] = addedStartMin.properties.start.valueOf() / MS_IN_DAY;
+			addedDateValues[0] = fullRangeAdded[0];
 		}
 	});
 
@@ -39,6 +63,8 @@
 
 	$: console.log('Updated places ', places);
 
+	$: filterByAdded =
+		addedDateValues[0] == fullRangeAdded[0] && addedDateValues[0] == fullRangeAdded[0];
 	fetch(
 		'https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson'
 	)
@@ -65,7 +91,7 @@
 
 <main>
 	<header class="header" id="header">
-		<ResultHeading bind:dates={dateValues} />
+		<ResultHeading bind:dates={activeDateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
 		<div class="info-block-container">
 			<InfoBlock>
@@ -75,7 +101,7 @@
 			</InfoBlock>
 			<InfoBlock>
 				{#if typeof $lastUpdate !== 'undefined'}
-					Last updated {moment($lastUpdate).fromNow()}<br>
+					Last updated {moment($lastUpdate).fromNow()}<br />
 				{/if}
 
 				{#if typeof $loiCount !== 'undefined'}
@@ -83,27 +109,42 @@
 				{/if}
 			</InfoBlock>
 			<InfoBlock>
-				<b style="margin-bottom: 0.5rem;">Discovery Date</b>		
+				<b style="margin-bottom: 0.5rem;">Discovery Date</b>
 				<div class="map-key">
 					<div class="labels">
 						<div>Today</div>
 						<div>Yesterday</div>
 						<div>Before That</div>
-
 					</div>
-					<div class="bar">
-
-					</div>
+					<div class="bar" />
 				</div>
 			</InfoBlock>
 		</div>
 	</header>
 	{#if $geoData != null}
-		<LeafletMap geoData={$geoData} dateRange={dateValues} filteredPlaces={places} />
+		<LeafletMap
+			geoData={$geoData}
+			activeDateRange={activeDateValues}
+			filteredPlaces={places}
+			addedDateRange={addedDateValues}
+			filterAdded={filterByAdded}
+		/>
 	{/if}
 
 	<footer>
-		<DateSlider bind:dateRange={dateValues} bind:full_range />
+		<h1>Filter by active time</h1>
+		<DateSlider
+			bind:dateRange={activeDateValues}
+			bind:fullRange={fullRangeActive}
+			id="active-range-slider"
+		/>
+		<h1>Filter by date added</h1>
+		<DateSlider
+			bind:dateRange={addedDateValues}
+			bind:fullRange={fullRangeAdded}
+			showAll={true}
+			id="added-range-slider"
+		/>
 	</footer>
 </main>
 
@@ -144,7 +185,7 @@
 			}
 			.bar {
 				height: 100%;
-				background: linear-gradient(#f02b15 0%,#D751AF 40%,#9171E1 80%, #2F86CC 100%);
+				background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
 				width: 1em;
 				border-radius: 1rem;
 			}
@@ -159,6 +200,16 @@
 		left: 0;
 		padding: 1em;
 		background-color: white;
+
+		h1 {
+			text-align: center;
+			font-size: 10pt;
+			font-weight: 300;
+
+			&:last-child {
+				padding-top: 1em;
+			}
+		}
 	}
 
 	@media all and (max-width: 770px) {

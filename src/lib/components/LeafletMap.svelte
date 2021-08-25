@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-	function interpolate(a,b) {
-		return (t) => Math.round(a+(b-a)*t)
+	function interpolate(a, b) {
+		return (t) => Math.round(a + (b - a) * t);
 	}
 
 	export const loiCount = tweened(0, {
@@ -19,17 +19,18 @@
 	import {
 		timeFromMoment,
 		StoreMarker,
-		TestRange,
-		dateRangeTimings,
+		TestRange as testRange,
+		dateRangeTimings as DateRangeTimings,
 		GetMarkers,
 		GetPopupData
 	} from '$lib/filteringStore';
 	import moment from 'moment';
 
 	export let geoData: GeoData;
-	export let dateRange: [number, number];
+	export let activeDateRange: [number, number];
+	export let addedDateRange: [number, number];
+	export let filterAdded: boolean;
 	export let filteredPlaces: number[];
-
 
 	let map;
 	let leaflet;
@@ -68,9 +69,9 @@
 		output += `<p><a target='none' href='https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}'>View in Google Streetview</a></p>`;
 		return output;
 	}
-	
+
 	// Called once when the geojson data is loaded
-	// Should 
+	// Should
 	function loadMarkers() {
 		let now = moment();
 		if (
@@ -89,11 +90,13 @@
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
-					let deltaDateAdded = now.startOf('day').diff(feature.properties.dateAdded.startOf('day'), 'days');
-					
+					let deltaDateAdded = now
+						.startOf('day')
+						.diff(feature.properties.dateAdded.startOf('day'), 'days');
+
 					// Use HSL to Transition #237CC9 (blue marker) to full #f72f2f (red)
-					let hueRotateAmount = Math.max(-48*deltaDateAdded+148, 0);
-					let saturationAmount = Math.max(8*deltaDateAdded+93,70);
+					let hueRotateAmount = Math.max(-48 * deltaDateAdded + 148, 0);
+					let saturationAmount = Math.max(8 * deltaDateAdded + 93, 70);
 
 					let filter = `hue-rotate(${hueRotateAmount}deg) saturate(${saturationAmount}%)`;
 
@@ -107,7 +110,6 @@
 				);
 			}
 			map.fitBounds(markers.getBounds());
-
 		}
 	}
 
@@ -146,7 +148,6 @@
 	});
 
 	afterUpdate(async () => {
-
 		if (typeof map === 'undefined' || typeof markers == 'undefined') return;
 
 		let markerList = GetMarkers();
@@ -159,14 +160,18 @@
 		} else {
 		}
 
-		let totalShown = 0
+		let totalShown = 0;
 
 		for (let i in markerList) {
 			let marker = markerList[i];
-			let markerInRange = TestRange(dateRange, marker);
+			let markerInRange = testRange(activeDateRange, marker);
+			let markerInAddedRange = testRange(addedDateRange, marker);
 			if (
-				markerInRange === dateRangeTimings.invalid ||
-				markerInRange === dateRangeTimings.outOfRange
+				markerInRange === DateRangeTimings.Invalid ||
+				markerInRange === DateRangeTimings.OutOfRange ||
+				((markerInAddedRange === DateRangeTimings.Invalid ||
+					markerInAddedRange === DateRangeTimings.OutOfRange) &&
+					filterAdded)
 			) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).getElement().style.display = 'none';
