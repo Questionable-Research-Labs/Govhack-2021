@@ -41,23 +41,25 @@
 		<h3 class="title">Showing Results</h3>
 		<div class="body">
 			<!-- Another broken library... Works fully but types are broken. -->
-			<Datepicker bind:selected={chosenStart} on:dateSelected={chosenStartCallback} end={chosenEnd}>
-				<span class="calenderInner"
-					>From
-					<span>{dateToString(dates[0])}</span>
-				</span>
-			</Datepicker>
-			<Datepicker
+				<Datepicker bind:selected={chosenStart} on:dateSelected={chosenStartCallback} end={chosenEnd}>
+					<div class="calenderInner" title="Start Date Selector"
+						>From
+						<span>{dateToString(dates[0])}</span>
+					</div>
+				</Datepicker>
+
+				<Datepicker
 				bind:selected={chosenEnd}
 				on:dateSelected={chosenEndCallback}
 				start={chosenStart}
 				end={new Date()}
 			>
-				<span class="calenderInner"
+				<div class="calenderInner" title="End Date Selector"
 					>To
 					<span>{dateToString(dates[1])}</span>
-				</span>
+			</div>
 			</Datepicker>
+
 		</div>
 	</div>
 {/if}

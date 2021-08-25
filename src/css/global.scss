@@ -19,6 +19,10 @@ h3 {
 .leaflet-top {
   top: 93px !important;
 }
+
+.rangeNub {
+  cursor: grab;
+}
 @media all and (max-width: 1430px) {
 
   .leaflet-top {
