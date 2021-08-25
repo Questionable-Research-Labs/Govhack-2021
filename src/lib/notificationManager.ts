@@ -14,7 +14,6 @@ function updateNotificationEnabled() {
     if (notificationsSupported()) {
         notificationsEnabled.set((Notification.permission === 'granted') &&  storeCaches["notificationSettings"]);
     } else {
-        console.log("Notifications not supported")
         notificationsEnabled.set(false)
     }
 }

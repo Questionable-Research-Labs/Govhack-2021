@@ -23,6 +23,7 @@
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-svelte3": "^3.2.0",
+    "fuse.js": "^6.4.6",
     "leaflet": "^1.7.1",
     "moment": "^2.29.1",
     "prettier": "~2.2.1",
@@ -41,7 +42,7 @@
   "type": "module",
   "dependencies": {
     "firebase": "^8.10.0",
-    "fuzzy-search": "^3.2.1",
+    "fuzzysearch-ts": "^1.0.3",
     "localforage": "^1.10.0"
   }
 }

@@ -13,28 +13,25 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
 	import { browser } from '$app/env';
-	import type { Features, GeoData, Properties } from '$lib/geoJsonResponse';
+	import type { Feature, GeoData, Properties } from '$lib/geoJsonResponse';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import {
-		timeFromMoment,
 		StoreMarker,
-		TestRange,
 		dateRangeTimings,
 		GetMarkers,
 		GetPopupData
-	} from '$lib/filteringStore';
+	} from '$lib/markerStore';
 	import moment from 'moment';
 
 	export let geoData: GeoData;
-	export let dateRange: [number, number];
-	export let filteredPlaces: number[];
-
 
 	let map;
 	let leaflet;
 	let markers;
 	let markerIcon;
+
+	export let filterCache: Feature[];
 
 	/// The popup requires HTML in the form of a string,
 	/// so this generates a table with a title of all the data.

@@ -3,33 +3,24 @@
 	import { afterUpdate, getContext } from 'svelte';
 	import { Place } from '$lib/place';
 	import SearchInfoModel from './models/searchInfoModel.svelte';
-	import FuzzySearch from 'fuzzy-search';
 	const { open } = getContext('simple-modal');
 
 	export let geoData: GeoData | null;
-	export let probablePlaces: ((places: Place[]) => void);
-	let places: Place[] = [];
+	// export let probablePlaces: ((places: Place[]) => void);
+	// let places: Place[] = [];
 
-	$: places = geoData?.features.map((feature, index) => new Place(index, feature.properties.event + ', ' + feature.properties.location));
+	// $: places = geoData?.features.map((feature, index) => new Place(index, feature.properties.event + ', ' + feature.properties.location));
 
-	let searchTerm = '';
+	export let searchTerm = '';
 
-	let fuse: FuzzySearch<Place>;
-	$: fuse = new FuzzySearch(places, ['location'], {
-		caseSensitive: false
-	});
+	// let fuse: FuzzySearch<Place>;
+	// $: fuse = new FuzzySearch(places, ['location'], {
+	// 	caseSensitive: false
+	// });
 
 	function infoPopup() {
 		open(SearchInfoModel, {  });
 	}
-
-	afterUpdate(() => {
-		if (searchTerm === '') {
-			probablePlaces(places);
-		} else {
-			probablePlaces(fuse.search(searchTerm));
-		}
-	});
 </script>
 
 <div class='wrapper'>

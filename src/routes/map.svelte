@@ -8,6 +8,7 @@
 	import { GeoData } from '$lib/geoJsonResponse';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import ResultHeading from '$lib/components/ResultHeading.svelte';
+	import Filter from '$lib/filter.svelte';
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from '$lib/consts';
 
@@ -64,6 +65,7 @@
 </script>
 
 <main>
+	<Filter/>
 	<header class="header" id="header">
 		<ResultHeading bind:dates={dateValues} />
 		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
