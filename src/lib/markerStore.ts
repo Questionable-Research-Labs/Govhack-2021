@@ -15,7 +15,7 @@ let popupDataStore: Map<number,string> = new Map();
 
 export function StoreMarker(featureID: string,leafletID: number, popupData: string) {
     markerStore[featureID] = leafletID;
-    popupDataStore[featureID] = popupData;
+    popupDataStore[leafletID] = popupData;
 }
 
 export function GetMarkerID(featureID: string): number {

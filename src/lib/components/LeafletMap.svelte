@@ -34,14 +34,21 @@
 
 	function setMarkerState(marker,enabled: boolean) {
 		if (enabled) {
-			marker.getElement().style.display = 'block';
-			marker.setOpacity(1);
-			marker.bindPopup(GetPopupData(marker));
+			if (marker.getElement().style.display != 'block') {
+				marker.getElement().style.display = 'block';
+				marker.setOpacity(1);
+				marker.bindPopup(GetPopupData(leaflet.stamp(marker)));
+			}
+
 
 		} else {
-			marker.getElement().style.display = 'none';
-			marker.setOpacity(0);
-			marker.unbindPopup();
+			if (marker.getElement().style.display != 'none') {
+				marker.getElement().style.display = 'none';
+				marker.setOpacity(0);
+				marker.unbindPopup();
+			}
+
+
 		}
 		
 	}
@@ -97,6 +104,12 @@
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 				marker.bindPopup(popupHTML);
 
+				StoreMarker(
+					feature.properties.id,
+					leaflet.stamp(marker),
+					popupHTML
+				);
+
 				setMarkerState(marker,enabled)
 
 				// Color code the markers based on how recently they were added
@@ -111,12 +124,6 @@
 
 					(marker.getElement() as HTMLElement).style.filter = filter;
 				}
-
-				StoreMarker(
-					feature.properties.id,
-					leaflet.stamp(marker),
-					popupHTML
-				);
 			}
 			map.fitBounds(markersLayer.getBounds());
 

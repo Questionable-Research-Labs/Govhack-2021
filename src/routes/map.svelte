@@ -71,7 +71,7 @@
 	/>
 	<header class="header" id="header">
 		<ResultHeading bind:dates={dateRange} />
-		<SearchBox />
+		<SearchBox bind:searchTerm/>
 		<div class="info-block-container">
 			<InfoBlock>
 				<a href="https://github.com/minhealthnz/nz-covid-data">

@@ -5,9 +5,6 @@
 
 <script lang="ts">
     // This is a svelte file for the Auto Subscribe feature
-
-    import { readable, writable } from "svelte/store";
-    import type { Readable, Writable } from "svelte/store";
     import { tweened } from "svelte/motion";
     import { cubicOut } from 'svelte/easing';
 
@@ -68,12 +65,20 @@
         return filterList.map(check => check(feature)).every(Boolean);
     }
 
+    function checkIfFilterCache() {
+        if (typeof filterCache === "undefined") {
+            return false
+        }
+        return dateRange[0]===filterCache[0][0] && dateRange[1]===filterCache[0][1] && searchTerm===filterCache[1]
+    }
+
     $: {
         // Svelte quite often fires updates when not needed
-        if ([dateRange,searchTerm]!==filterCache && geoData !== null) {
+        if (geoData !== null) {
             console.log("Updating Filter")
             filterCache = [dateRange,searchTerm];
             filteredLocationList = geoData.features.map((feature: Feature)=>[feature,combineLogic(feature)])
+            loiCount.set(filteredLocationList.map(([_,enabled]: [Feature,boolean])=>enabled).filter(Boolean).length)
         } else {
             console.log("Skipping Update")
         }
