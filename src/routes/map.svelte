@@ -63,8 +63,10 @@
 
 	$: console.log('Updated places ', places);
 
-	$: filterByAdded =
-		addedDateValues[0] == fullRangeAdded[0] && addedDateValues[0] == fullRangeAdded[0];
+	$: showAllAdded = addedDateValues[0] == fullRangeAdded[0];
+
+	$: console.log('Filterred by added', showAllAdded);
+
 	fetch(
 		'https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson'
 	)
@@ -127,7 +129,7 @@
 			activeDateRange={activeDateValues}
 			filteredPlaces={places}
 			addedDateRange={addedDateValues}
-			filterAdded={filterByAdded}
+			showAdded={showAllAdded}
 		/>
 	{/if}
 

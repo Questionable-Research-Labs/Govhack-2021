@@ -22,14 +22,15 @@
 		TestRange as testRange,
 		dateRangeTimings as DateRangeTimings,
 		GetMarkers,
-		GetPopupData
+		GetPopupData,
+		testRangeAdded
 	} from '$lib/filteringStore';
 	import moment from 'moment';
 
 	export let geoData: GeoData;
 	export let activeDateRange: [number, number];
 	export let addedDateRange: [number, number];
-	export let filterAdded: boolean;
+	export let showAdded: boolean;
 	export let filteredPlaces: number[];
 
 	let map;
@@ -105,6 +106,7 @@
 
 				StoreMarker(
 					[timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end)],
+					timeFromMoment(feature.properties.dateAdded),
 					leaflet.stamp(marker),
 					popupHTML
 				);
@@ -165,13 +167,13 @@
 		for (let i in markerList) {
 			let marker = markerList[i];
 			let markerInRange = testRange(activeDateRange, marker);
-			let markerInAddedRange = testRange(addedDateRange, marker);
+			let markerInAddedRange = testRangeAdded(addedDateRange, marker);
 			if (
 				markerInRange === DateRangeTimings.Invalid ||
 				markerInRange === DateRangeTimings.OutOfRange ||
-				((markerInAddedRange === DateRangeTimings.Invalid ||
-					markerInAddedRange === DateRangeTimings.OutOfRange) &&
-					filterAdded)
+				(!showAdded &&
+					(markerInAddedRange === DateRangeTimings.Invalid ||
+						markerInAddedRange === DateRangeTimings.OutOfRange))
 			) {
 				if (typeof markers.getLayer(marker) !== 'undefined') {
 					markers.getLayer(marker).getElement().style.display = 'none';
