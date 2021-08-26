@@ -19,19 +19,35 @@
 	import {
 		StoreMarker,
 		dateRangeTimings,
-		GetMarkers,
-		GetPopupData
+		GetPopupData,
+		GetMarkerID
 	} from '$lib/markerStore';
 	import moment from 'moment';
-
-	export let geoData: GeoData;
 
 	let map;
 	let leaflet;
 	let markers;
 	let markerIcon;
 
-	export let filterCache: Feature[];
+	export let filteredLocationList: [Feature,boolean][];
+	
+
+	function setMarkerState(marker,enabled: boolean) {
+		if (typeof markers.getLayer(marker) !== "undefined") {
+			if (enabled) {
+				markers.getLayer(marker).getElement().style.display = 'block';
+				markers.getLayer(marker).setOpacity(1);
+				markers.getLayer(marker).bindPopup(GetPopupData(marker));
+
+			} else {
+				markers.getLayer(marker).getElement().style.display = 'none';
+				markers.getLayer(marker).setOpacity(0);
+				markers.getLayer(marker).unbindPopup();
+			}
+		}
+		
+	}
+
 
 	/// The popup requires HTML in the form of a string,
 	/// so this generates a table with a title of all the data.
@@ -71,11 +87,10 @@
 	function loadMarkers() {
 		let now = moment();
 		if (
-			(typeof geoData !== 'undefined' || geoData !== null) &&
-			typeof geoData.features !== 'undefined'
+			(typeof filteredLocationList !== 'undefined' || filteredLocationList !== null)
 		) {
-			loiCount.set(geoData?.features.length);
-			for (let feature of geoData?.features) {
+			loiCount.set(filteredLocationList.length);
+			for (let [feature, enabled] of filteredLocationList) {
 				let marker = leaflet.marker(feature.geometry.coordinates, {
 					title: feature.properties.event,
 					icon: markerIcon
@@ -83,6 +98,8 @@
 				marker.addTo(markers);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 				marker.bindPopup(popupHTML);
+
+				setMarkerState(marker,enabled)
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
@@ -98,7 +115,7 @@
 				}
 
 				StoreMarker(
-					[timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end)],
+					feature.properties.id,
 					leaflet.stamp(marker),
 					popupHTML
 				);
@@ -146,52 +163,45 @@
 
 		if (typeof map === 'undefined' || typeof markers == 'undefined') return;
 
-		let markerList = GetMarkers();
-		if (markerList.length == 0) {
-			// Data hasn't been loaded yet, load it now
-			console.log('Post loading markers');
-			if (browser) {
-				loadMarkers();
-			}
-		} else {
+		for (let [feature,enabled] of filteredLocationList) {
+			let featureID = feature.properties.id
+			let marker = markers.getLayer(GetMarkerID(featureID))
+			setMarkerState(marker,enabled);
 		}
 
-		let totalShown = 0
+		// for (let markerID of markerIDList) {
+		// 	let markerInRange = TestRange(dateRange, marker);
+		// 	if (
+		// 		markerInRange === dateRangeTimings.invalid ||
+		// 		markerInRange === dateRangeTimings.outOfRange
+		// 	) {
+		// 		if (typeof markers.getLayer(marker) !== 'undefined') {
+		// 			markers.getLayer(marker).getElement().style.display = 'none';
+		// 			markers.getLayer(marker).setOpacity(0);
+		// 			markers.getLayer(marker).unbindPopup();
+		// 		} else {
+		// 			console.log("What? Marker doesn't exist apparently");
+		// 		}
+		// 	} else if (typeof filteredPlaces !== 'undefined' && !filteredPlaces.includes(parseInt(i))) {
+		// 		if (typeof markers.getLayer(marker) !== 'undefined') {
+		// 			markers.getLayer(marker).getElement().style.display = 'none';
 
-		for (let i in markerList) {
-			let marker = markerList[i];
-			let markerInRange = TestRange(dateRange, marker);
-			if (
-				markerInRange === dateRangeTimings.invalid ||
-				markerInRange === dateRangeTimings.outOfRange
-			) {
-				if (typeof markers.getLayer(marker) !== 'undefined') {
-					markers.getLayer(marker).getElement().style.display = 'none';
-					markers.getLayer(marker).setOpacity(0);
-					markers.getLayer(marker).unbindPopup();
-				} else {
-					console.log("What? Marker doesn't exist apparently");
-				}
-			} else if (typeof filteredPlaces !== 'undefined' && !filteredPlaces.includes(parseInt(i))) {
-				if (typeof markers.getLayer(marker) !== 'undefined') {
-					markers.getLayer(marker).getElement().style.display = 'none';
-
-					markers.getLayer(marker).setOpacity(0);
-				} else {
-					console.log("What? Marker doesn't exist apparently");
-				}
-			} else {
-				if (typeof markers.getLayer(marker) !== 'undefined') {
-					totalShown += 1;
-					markers.getLayer(marker).getElement().style.display = 'block';
-					markers.getLayer(marker).setOpacity(1);
-					markers.getLayer(marker).bindPopup(GetPopupData(marker));
-				} else {
-					console.log("What? Marker doesn't exist apparently");
-				}
-			}
-		}
-		loiCount.set(totalShown);
+		// 			markers.getLayer(marker).setOpacity(0);
+		// 		} else {
+		// 			console.log("What? Marker doesn't exist apparently");
+		// 		}
+		// 	} else {
+		// 		if (typeof markers.getLayer(marker) !== 'undefined') {
+		// 			totalShown += 1;
+		// 			markers.getLayer(marker).getElement().style.display = 'block';
+		// 			markers.getLayer(marker).setOpacity(1);
+		// 			markers.getLayer(marker).bindPopup(GetPopupData(marker));
+		// 		} else {
+		// 			console.log("What? Marker doesn't exist apparently");
+		// 		}
+		// 	}
+		// }
+		// loiCount.set(totalShown);
 	});
 </script>
 

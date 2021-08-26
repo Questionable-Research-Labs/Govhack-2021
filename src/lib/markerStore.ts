@@ -8,18 +8,22 @@ export enum dateRangeTimings {
 	invalid
 }
 
-let markerStore: Map<number,DateRange> = new Map();
+let markerStore: Map<string,number> = new Map();
 let popupDataStore: Map<number,string> = new Map();
 
 
 
-export function StoreMarker(times: DateRange,leafletID: number, popupData: string) {
-    markerStore[leafletID] = times;
-    popupDataStore[leafletID] = popupData;
+export function StoreMarker(featureID: string,leafletID: number, popupData: string) {
+    markerStore[featureID] = leafletID;
+    popupDataStore[featureID] = popupData;
+}
+
+export function GetMarkerID(featureID: string): number {
+	return markerStore[featureID]
 }
 
 
-export function GetMarkers(): number[] {
+export function GetMarkerIDs(): number[] {
 	return Array.from([...Object.keys(markerStore)].map((x) => parseInt(x)));
 }
 

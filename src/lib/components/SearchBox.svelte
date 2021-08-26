@@ -5,7 +5,6 @@
 	import SearchInfoModel from './models/searchInfoModel.svelte';
 	const { open } = getContext('simple-modal');
 
-	export let geoData: GeoData | null;
 	// export let probablePlaces: ((places: Place[]) => void);
 	// let places: Place[] = [];
 
