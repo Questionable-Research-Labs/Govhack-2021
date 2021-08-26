@@ -18,7 +18,7 @@
     import {GeoData} from "$lib/geoJsonResponse";
 
     export let dateRange: [number, number];
-    export let searchBox: string;
+    export let searchTerm: string;
     export let geoData: GeoData|null;
     async function updateGeoJSON() {
         fetch(
@@ -61,7 +61,7 @@
     }
 
     function TestStringSearch(feature: Feature): boolean {
-        return fuzzysearch((searchBox).toLowerCase(),(feature.properties.location+feature.properties.event).toLowerCase())
+        return fuzzysearch((searchTerm).toLowerCase(),(feature.properties.location+feature.properties.event).toLowerCase())
     }
 
     function combineLogic (feature: Feature): boolean {
@@ -70,8 +70,9 @@
 
     $: {
         // Svelte quite often fires updates when not needed
-        if ([dateRange,searchBox]!==filterCache && geoData !== null) {
-            filterCache = [dateRange,searchBox];
+        if ([dateRange,searchTerm]!==filterCache && geoData !== null) {
+            console.log("Updating Filter")
+            filterCache = [dateRange,searchTerm];
             filteredLocationList = geoData.features.map((feature: Feature)=>[feature,combineLogic(feature)])
         } else {
             console.log("Skipping Update")

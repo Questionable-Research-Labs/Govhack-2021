@@ -26,24 +26,22 @@
 
 	let map;
 	let leaflet;
-	let markers;
+	let markersLayer;
 	let markerIcon;
 
 	export let filteredLocationList: [Feature,boolean][];
 	
 
 	function setMarkerState(marker,enabled: boolean) {
-		if (typeof markers.getLayer(marker) !== "undefined") {
-			if (enabled) {
-				markers.getLayer(marker).getElement().style.display = 'block';
-				markers.getLayer(marker).setOpacity(1);
-				markers.getLayer(marker).bindPopup(GetPopupData(marker));
+		if (enabled) {
+			marker.getElement().style.display = 'block';
+			marker.setOpacity(1);
+			marker.bindPopup(GetPopupData(marker));
 
-			} else {
-				markers.getLayer(marker).getElement().style.display = 'none';
-				markers.getLayer(marker).setOpacity(0);
-				markers.getLayer(marker).unbindPopup();
-			}
+		} else {
+			marker.getElement().style.display = 'none';
+			marker.setOpacity(0);
+			marker.unbindPopup();
 		}
 		
 	}
@@ -95,7 +93,7 @@
 					title: feature.properties.event,
 					icon: markerIcon
 				});
-				marker.addTo(markers);
+				markersLayer.addLayer(marker);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 				marker.bindPopup(popupHTML);
 
@@ -120,7 +118,7 @@
 					popupHTML
 				);
 			}
-			map.fitBounds(markers.getBounds());
+			map.fitBounds(markersLayer.getBounds());
 
 		}
 	}
@@ -142,7 +140,7 @@
 				shadowSize: [41, 41]
 			});
 
-			markers = leaflet.featureGroup();
+			markersLayer = leaflet.featureGroup();
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution:
 					'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -152,7 +150,7 @@
 				map = leaflet.map('map', {
 					center: [-41, 174], //baseline zoom and location, updates on marker load
 					zoom: 6,
-					layers: [baseMap, markers]
+					layers: [baseMap, markersLayer]
 				});
 			}
 			loadMarkers();
@@ -161,11 +159,11 @@
 
 	afterUpdate(async () => {
 
-		if (typeof map === 'undefined' || typeof markers == 'undefined') return;
+		if (typeof map === 'undefined' || typeof markersLayer == 'undefined') return;
 
 		for (let [feature,enabled] of filteredLocationList) {
 			let featureID = feature.properties.id
-			let marker = markers.getLayer(GetMarkerID(featureID))
+			let marker = markersLayer.getLayer(GetMarkerID(featureID))
 			setMarkerState(marker,enabled);
 		}
 

@@ -15,7 +15,7 @@
 	import { MS_IN_DAY } from '$lib/consts';
 
 	// FILTERS
-
+	let fullDateRangeConfigured = false;
 	let fullDateRange = [
 		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
 		new Date().getTime() / MS_IN_DAY
@@ -47,7 +47,8 @@
 
 	let geoData: GeoData | null = null;
 	$: {
-		if (geoData !== null) {
+		if (geoData !== null && !fullDateRangeConfigured) {
+			fullDateRangeConfigured = true
 			let start_min = geoData.features.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
@@ -64,9 +65,9 @@
 	<Filter
 		bind:geoData
 		bind:dateRange
-		bind:searchBox={searchTerm}
+		bind:searchTerm
 		bind:filteredLocationList
-		bind:loiCount={loiCount}
+		bind:loiCount
 	/>
 	<header class="header" id="header">
 		<ResultHeading bind:dates={dateRange} />
@@ -100,7 +101,7 @@
 		</div>
 	</header>
 	{#if geoData != null}
-		<LeafletMap filteredLocationList={filteredLocationList} />
+		<LeafletMap bind:filteredLocationList />
 	{/if}
 
 	<footer>
