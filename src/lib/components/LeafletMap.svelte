@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-	function interpolate(a,b) {
-		return (t) => Math.round(a+(b-a)*t)
+	function interpolate(a, b) {
+		return (t) => Math.round(a + (b - a) * t);
 	}
 
 	export const loiCount = tweened(0, {
@@ -86,9 +86,9 @@
 		output += `<p><a target='none' href='https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}'>View in Google Streetview</a></p>`;
 		return output;
 	}
-	
+
 	// Called once when the geojson data is loaded
-	// Should 
+	// Should
 	function loadMarkers() {
 		let now = moment();
 		if (
@@ -114,11 +114,13 @@
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
-					let deltaDateAdded = now.startOf('day').diff(feature.properties.dateAdded.startOf('day'), 'days');
-					
+					let deltaDateAdded = now
+						.startOf('day')
+						.diff(feature.properties.dateAdded.startOf('day'), 'days');
+
 					// Use HSL to Transition #237CC9 (blue marker) to full #f72f2f (red)
-					let hueRotateAmount = Math.max(-48*deltaDateAdded+148, 0);
-					let saturationAmount = Math.max(8*deltaDateAdded+93,70);
+					let hueRotateAmount = Math.max(-48 * deltaDateAdded + 148, 0);
+					let saturationAmount = Math.max(8 * deltaDateAdded + 93, 70);
 
 					let filter = `hue-rotate(${hueRotateAmount}deg) saturate(${saturationAmount}%)`;
 

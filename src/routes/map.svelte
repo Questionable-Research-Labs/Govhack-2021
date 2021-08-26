@@ -161,6 +161,16 @@
 		left: 0;
 		padding: 1em;
 		background-color: white;
+
+		h1 {
+			text-align: center;
+			font-size: 10pt;
+			font-weight: 300;
+
+			&:last-child {
+				padding-top: 1em;
+			}
+		}
 	}
 
 	@media all and (max-width: 770px) {
