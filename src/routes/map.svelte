@@ -3,10 +3,10 @@
 	import DateSlider from '$lib/components/DateSlider.svelte';
 	import InfoBlock from '$lib/components/InfoBlock.svelte';
 
-	import type { Writable, Readable } from 'svelte/store';
-	import type { Tweened } from "svelte/motion";
+	import type { Writable } from 'svelte/store';
+	import type { Tweened } from 'svelte/motion';
 
-	import { writable, readable } from 'svelte/store';
+	import { writable } from 'svelte/store';
 	import type { GeoData, Feature } from '$lib/geoJsonResponse';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import ResultHeading from '$lib/components/ResultHeading.svelte';
@@ -35,7 +35,6 @@
 		Math.round(new Date().getTime() / MS_IN_DAY)
 	];
 
-
 	let searchTerm: string = '';
 
 	// STATS
@@ -59,7 +58,7 @@
 	let geoData: GeoData | null = null;
 	$: {
 		if (geoData !== null && !fullDateRangesConfigured) {
-			fullDateRangesConfigured = true
+			fullDateRangesConfigured = true;
 			let activeStartMin = geoData.features.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
@@ -77,8 +76,6 @@
 
 			fullAddedDateRange[0] = addedStartMin.properties.start.valueOf() / MS_IN_DAY;
 			addedDateRange[0] = fullAddedDateRange[0];
-
-
 		}
 	}
 
@@ -97,7 +94,7 @@
 	/>
 	<header class="header" id="header">
 		<ResultHeading bind:dates={activeDateRange} />
-		<SearchBox bind:searchTerm/>
+		<SearchBox bind:searchTerm />
 		<div class="info-block-container">
 			<InfoBlock>
 				<a href="https://github.com/minhealthnz/nz-covid-data">

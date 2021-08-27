@@ -8,6 +8,7 @@
 	function pushNotificationCallback(text: string) {
 		console.log('Creating Notification');
 		// If IDE go spaz, it's because there is a type bug in library, but this is the correct and only way
+		// @ts-ignore
 		notificationHandler.addNotification({
 			text: text,
 			position: 'top-right',

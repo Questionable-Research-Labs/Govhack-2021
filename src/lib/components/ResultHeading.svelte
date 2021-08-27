@@ -28,37 +28,28 @@
 		<div class="notificationRequesterWrapper">
 			<NotificationRequester />
 		</div>
-		<a href="/"
-			><img
-				class="icon"
-				src="/icons/icon.svg"
-				alt="Toi"
-				width="128"
-				height="128"
-			/></a
-		>
+		<a href="/"><img class="icon" src="/icons/icon.svg" alt="Toi" width="128" height="128" /></a>
 
 		<h3 class="title">Showing Results</h3>
 		<div class="body">
 			<!-- Another broken library... Works fully but types are broken. -->
-				<Datepicker
+			<Datepicker
 				bind:selected={chosenEnd}
 				on:dateSelected={chosenEndCallback}
 				start={chosenStart}
 				end={new Date()}
 			>
-				<div class="calenderInner" title="End Date Selector"
-					>To
+				<div class="calenderInner" title="End Date Selector">
+					To
 					<span>{dateToString(dates[1])}</span>
-			</div>
+				</div>
 			</Datepicker>
 			<Datepicker bind:selected={chosenStart} on:dateSelected={chosenStartCallback} end={chosenEnd}>
-				<div class="calenderInner" title="Start Date Selector"
-					>From
+				<div class="calenderInner" title="Start Date Selector">
+					From
 					<span>{dateToString(dates[0])}</span>
 				</div>
 			</Datepicker>
-
 		</div>
 	</div>
 {/if}

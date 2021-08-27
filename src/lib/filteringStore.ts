@@ -25,10 +25,10 @@ export function StoreMarker(
 	popupDataStore[leafletID] = popupData;
 }
 
-export function GetMarkers(): number[] {
+export function getMarkers(): number[] {
 	return Array.from([...Object.keys(markerStore)].map((x) => parseInt(x)));
 }
 
-export function GetPopupData(leafletID: number): string {
+export function getPopupData(leafletID: number): string {
 	return popupDataStore[leafletID];
 }

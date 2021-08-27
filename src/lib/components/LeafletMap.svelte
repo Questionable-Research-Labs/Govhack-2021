@@ -16,12 +16,7 @@
 	import type { Feature, GeoData, Properties } from '$lib/geoJsonResponse';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
-	import {
-		StoreMarker,
-		dateRangeTimings,
-		GetPopupData,
-		GetMarkerID
-	} from '$lib/markerStore';
+	import { storeMarker, dateRangeTimings, getPopupData, getMarkerID } from '$lib/markerStore';
 	import moment from 'moment';
 
 	let map;
@@ -29,30 +24,23 @@
 	let markersLayer;
 	let markerIcon;
 
-	export let filteredLocationList: [Feature,boolean][];
-	
+	export let filteredLocationList: [Feature, boolean][];
 
-	function setMarkerState(marker,enabled: boolean) {
+	function setMarkerState(marker, enabled: boolean) {
 		if (enabled) {
 			if (marker.getElement().style.display != 'block') {
 				marker.getElement().style.display = 'block';
 				marker.setOpacity(1);
-				marker.bindPopup(GetPopupData(leaflet.stamp(marker)));
+				marker.bindPopup(getPopupData(leaflet.stamp(marker)));
 			}
-
-
 		} else {
 			if (marker.getElement().style.display != 'none') {
 				marker.getElement().style.display = 'none';
 				marker.setOpacity(0);
 				marker.unbindPopup();
 			}
-
-
 		}
-		
 	}
-
 
 	/// The popup requires HTML in the form of a string,
 	/// so this generates a table with a title of all the data.
@@ -91,9 +79,7 @@
 	// Should
 	function loadMarkers() {
 		let now = moment();
-		if (
-			(typeof filteredLocationList !== 'undefined' || filteredLocationList !== null)
-		) {
+		if (typeof filteredLocationList !== 'undefined' || filteredLocationList !== null) {
 			loiCount.set(filteredLocationList.length);
 			for (let [feature, enabled] of filteredLocationList) {
 				let marker = leaflet.marker(feature.geometry.coordinates, {
@@ -104,13 +90,9 @@
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 				marker.bindPopup(popupHTML);
 
-				StoreMarker(
-					feature.properties.id,
-					leaflet.stamp(marker),
-					popupHTML
-				);
+				storeMarker(feature.properties.id, leaflet.stamp(marker), popupHTML);
 
-				setMarkerState(marker,enabled)
+				setMarkerState(marker, enabled);
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
@@ -128,7 +110,6 @@
 				}
 			}
 			map.fitBounds(markersLayer.getBounds());
-
 		}
 	}
 
@@ -167,13 +148,12 @@
 	});
 
 	afterUpdate(async () => {
-
 		if (typeof map === 'undefined' || typeof markersLayer == 'undefined') return;
-		
-		for (let [feature,enabled] of filteredLocationList) {
-			let featureID = feature.properties.id
-			let marker = markersLayer.getLayer(GetMarkerID(featureID))
-			setMarkerState(marker,enabled);
+
+		for (let [feature, enabled] of filteredLocationList) {
+			let featureID = feature.properties.id;
+			let marker = markersLayer.getLayer(getMarkerID(featureID));
+			setMarkerState(marker, enabled);
 		}
 	});
 </script>

@@ -31,7 +31,6 @@ if (browser) {
 	});
 }
 
-
 // Notification Token
 export const notificationTokenRegistered: Writable<boolean> = writable(false);
 

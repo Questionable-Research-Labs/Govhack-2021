@@ -1,91 +1,94 @@
 // Using Analytics will brake the whole website when blocked.
 // ^Crashes the startup thread
 
-import { firebaseConfig } from "./env";
-import {notificationTokenRegistered, notificationsEnabled} from "$lib/store"
+import { firebaseConfig } from './env';
+import { notificationTokenRegistered, notificationsEnabled } from '$lib/store';
 
 let notificationToken;
 
 interface NotificationCallback {
-    (message: string): void
+	(message: string): void;
 }
 
 export async function getMessagingToken() {
-    
-    const firebase = (await import('firebase/app')).default;
-    await import('firebase/analytics')
-    await import('firebase/messaging')
-    const messaging = firebase.messaging();
-    console.log("Waiting for service worker")
-    const registration = await navigator.serviceWorker.ready;
-    console.log("getting Token")
-    messaging.getToken({ serviceWorkerRegistration: registration, vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE' }).then((currentToken) => {
-        if (currentToken) {
-            fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${currentToken}`, {
-                method: 'POST',
-            });
-            notificationTokenRegistered.set(true)
+	const firebase = (await import('firebase/app')).default;
+	await import('firebase/analytics');
+	await import('firebase/messaging');
+	const messaging = firebase.messaging();
+	console.log('Waiting for service worker');
+	const registration = await navigator.serviceWorker.ready;
+	console.log('getting Token');
+	messaging
+		.getToken({
+			serviceWorkerRegistration: registration,
+			vapidKey:
+				'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE'
+		})
+		.then((currentToken) => {
+			if (currentToken) {
+				fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${currentToken}`, {
+					method: 'POST'
+				});
+				notificationTokenRegistered.set(true);
 
-            console.log("Token Retrieval SUCESSSSSS");
+				console.log('Token Retrieval SUCESSSSSS');
 
-            notificationToken = currentToken
-        } else {
-            // Show permission request UI
-            console.log('No registration token available. Requesting permission to generate one.');
+				notificationToken = currentToken;
+			} else {
+				// Show permission request UI
+				console.log('No registration token available. Requesting permission to generate one.');
 
-            // ...
-        }
-    }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-        // ...
-    });
-
+				// ...
+			}
+		})
+		.catch((err) => {
+			console.log('An error occurred while retrieving token. ', err);
+			// ...
+		});
 }
 export function deregisterForPushNotifications() {
-    if (typeof notificationToken !== "undefined") {
-        console.log("Deregister for notifications")
-        fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${notificationToken}`, {method: 'DELETE'});
-        notificationTokenRegistered.set(false);
-    } else {
-        console.log("Would deregister, but never registered")
-    }
-
+	if (typeof notificationToken !== 'undefined') {
+		console.log('Deregister for notifications');
+		fetch(`https://govhack2021-backend.host.qrl.nz/push-notification/${notificationToken}`, {
+			method: 'DELETE'
+		});
+		notificationTokenRegistered.set(false);
+	} else {
+		console.log('Would deregister, but never registered');
+	}
 }
 
 export async function initFirebase(notificationCallback: NotificationCallback) {
-    if (typeof window !== "undefined") {
-        const firebase = (await import('firebase/app')).default;
-        await import('firebase/analytics')
-        await import('firebase/messaging')
-        if (firebase.apps.length === 0) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const messaging = firebase.messaging();
+	if (typeof window !== 'undefined') {
+		const firebase = (await import('firebase/app')).default;
+		await import('firebase/analytics');
+		await import('firebase/messaging');
+		if (firebase.apps.length === 0) {
+			firebase.initializeApp(firebaseConfig);
+		}
+		const messaging = firebase.messaging();
 
-        console.log("Notification Enabled")
+		console.log('Notification Enabled');
 
-        notificationsEnabled.subscribe((value)=> {
-            console.log("Notifications Enabled settings changed,",value)
-            if (value) {
-                getMessagingToken();
-            } else {
-                deregisterForPushNotifications();
-            }
-        });
+		notificationsEnabled.subscribe((value) => {
+			console.log('Notifications Enabled settings changed,', value);
+			if (value) {
+				getMessagingToken();
+			} else {
+				deregisterForPushNotifications();
+			}
+		});
 
+		messaging.onMessage((payload) => {
+			console.log('Message received. ', payload);
+			notificationCallback('There are new Locations of Interest, refresh the app to see them.');
+			// ...
+		});
 
-
-        messaging.onMessage((payload) => {
-            console.log('Message received. ', payload);
-            notificationCallback("There are new Locations of Interest, refresh the app to see them.");
-            // ...
-        });
-
-
-        const analytics = firebase.analytics();
-        analytics.logEvent('Startup');
-        return;
-    }
+		const analytics = firebase.analytics();
+		analytics.logEvent('Startup');
+		return;
+	}
 }
 
 // Notification.requestPermission(function (status) {
