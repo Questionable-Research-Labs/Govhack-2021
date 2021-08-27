@@ -32,6 +32,7 @@
     }
     updateGeoJSON();
 
+    // Tweened for a fancy animation on UI
     export const loiCount = tweened(0, {
 		duration: 400,
 		easing: cubicOut,
@@ -43,8 +44,6 @@
     
     // This contains all entries, but as a tuple with the boolean saying if it matches or not
     export let filteredLocationList: [Feature,boolean][] = [];
-
-    let dateAddedEnabled = false;
 
     const filterList: ((feature: Feature)=>boolean)[]  = [
         TestActiveDateRange,
