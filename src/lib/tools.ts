@@ -7,10 +7,13 @@ export const formatDate = (date: Date): string =>
 		.toLocaleString("sv", { timeZone: "Pacific/Auckland" })
 		.split(" ")[0];
 
+// Takes our custom date system and converts it into a human string
 export function dateToString(value: number, _ = undefined): string {
 	// return value
 	return formatDate(new Date(value * MS_IN_DAY));
 }
+
+// Takes a date and converts it into our custom days since epoch date system
 export const timeFromMoment = (date: Date | Moment) => {
 	let utcTime;
 	if (moment.isMoment(date)) {
@@ -50,3 +53,4 @@ export function compareCaches(arrayA: any[],arrayB: any[]) {
 	}
 	return true
 }
+

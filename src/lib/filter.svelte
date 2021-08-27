@@ -73,7 +73,6 @@
 
         } else {
             // The slider is on the "All" position
-            console.log(addedDateRange[0] !== fullAddedDateRange[0])
             return true
         }
     }
@@ -86,12 +85,9 @@
     $: {
         // Svelte quite often fires updates when not needed
         if (geoData !== null && !compareCaches(filterCache,[activeDateRange,addedDateRange,searchTerm])) {
-            console.log("Updating Filter")
             filterCache = [activeDateRange,addedDateRange,searchTerm];
             filteredLocationList = geoData.features.map((feature: Feature)=>[feature,combineLogic(feature)])
             loiCount.set(filteredLocationList.map(([_,enabled]: [Feature,boolean])=>enabled).filter(Boolean).length)
-        } else {
-            console.log("Skipping Update")
         }
     }
     

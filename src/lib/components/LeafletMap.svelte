@@ -169,46 +169,12 @@
 	afterUpdate(async () => {
 
 		if (typeof map === 'undefined' || typeof markersLayer == 'undefined') return;
-
+		
 		for (let [feature,enabled] of filteredLocationList) {
 			let featureID = feature.properties.id
 			let marker = markersLayer.getLayer(GetMarkerID(featureID))
 			setMarkerState(marker,enabled);
 		}
-
-		// for (let markerID of markerIDList) {
-		// 	let markerInRange = TestRange(dateRange, marker);
-		// 	if (
-		// 		markerInRange === dateRangeTimings.invalid ||
-		// 		markerInRange === dateRangeTimings.outOfRange
-		// 	) {
-		// 		if (typeof markers.getLayer(marker) !== 'undefined') {
-		// 			markers.getLayer(marker).getElement().style.display = 'none';
-		// 			markers.getLayer(marker).setOpacity(0);
-		// 			markers.getLayer(marker).unbindPopup();
-		// 		} else {
-		// 			console.log("What? Marker doesn't exist apparently");
-		// 		}
-		// 	} else if (typeof filteredPlaces !== 'undefined' && !filteredPlaces.includes(parseInt(i))) {
-		// 		if (typeof markers.getLayer(marker) !== 'undefined') {
-		// 			markers.getLayer(marker).getElement().style.display = 'none';
-
-		// 			markers.getLayer(marker).setOpacity(0);
-		// 		} else {
-		// 			console.log("What? Marker doesn't exist apparently");
-		// 		}
-		// 	} else {
-		// 		if (typeof markers.getLayer(marker) !== 'undefined') {
-		// 			totalShown += 1;
-		// 			markers.getLayer(marker).getElement().style.display = 'block';
-		// 			markers.getLayer(marker).setOpacity(1);
-		// 			markers.getLayer(marker).bindPopup(GetPopupData(marker));
-		// 		} else {
-		// 			console.log("What? Marker doesn't exist apparently");
-		// 		}
-		// 	}
-		// }
-		// loiCount.set(totalShown);
 	});
 </script>
 
