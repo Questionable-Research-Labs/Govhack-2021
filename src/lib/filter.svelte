@@ -8,13 +8,12 @@
     import { tweened } from "svelte/motion";
     import { cubicOut } from 'svelte/easing';
 
-    import fuzzysearch from "fuzzysearch";
-
-    import type {Feature} from "$lib/geoJsonResponse";
+    import type { Feature } from "$lib/geoJsonResponse";
     import {timeFromMoment} from "$lib/tools";
     import {GeoData} from "$lib/geoJsonResponse";
 
-    export let dateRange: [number, number];
+    export let activeDateRange: [number, number];
+    export let addedDateRange: [number, number];
     export let searchTerm: string;
     export let geoData: GeoData|null;
     async function updateGeoJSON() {
@@ -43,23 +42,30 @@
 	});
 
     const filterList: ((feature: Feature)=>boolean)[]  = [
-        TestDateRange,
-        TestStringSearch
+        TestActiveDateRange,
+        TestStringSearch,
+        TestDateAdded
     ];
 
 
 
-    function TestDateRange(feature: Feature): boolean {
+    function TestActiveDateRange(feature: Feature): boolean {
             // Start of search range must be before or equal to LOI
             // AND
             // End of search range must be after or equal to LOI
             let searchRange = [timeFromMoment(feature.properties.start),timeFromMoment(feature.properties.end)];
-            return Math.floor(searchRange[0]) <= dateRange[1] && Math.floor(searchRange[1]) >= dateRange[0];
+            return Math.floor(searchRange[0]) <= activeDateRange[1] && Math.floor(searchRange[1]) >= activeDateRange[0];
     }
 
     function TestStringSearch(feature: Feature): boolean {
-        return fuzzysearch((searchTerm).toLowerCase(),(feature.properties.location+feature.properties.event).toLowerCase())
+        return (feature.properties.location+" "+feature.properties.event).toLowerCase().includes(searchTerm.toLowerCase())
     }
+
+    function TestDateAdded(feature: Feature): boolean {
+        let addedDate = timeFromMoment(feature.properties.dateAdded)
+        return Math.floor(addedDateRange[0]) <= addedDate && Math.floor(addedDateRange[1]) >= addedDate;
+    }
+
 
     function combineLogic (feature: Feature): boolean {
         return filterList.map(check => check(feature)).every(Boolean);
@@ -69,14 +75,14 @@
         if (typeof filterCache === "undefined") {
             return false
         }
-        return dateRange[0]===filterCache[0][0] && dateRange[1]===filterCache[0][1] && searchTerm===filterCache[1]
+        return activeDateRange[0]===filterCache[0][0] && activeDateRange[1]===filterCache[0][1] && searchTerm===filterCache[1]
     }
 
     $: {
         // Svelte quite often fires updates when not needed
         if (geoData !== null) {
             console.log("Updating Filter")
-            filterCache = [dateRange,searchTerm];
+            filterCache = [activeDateRange,searchTerm];
             filteredLocationList = geoData.features.map((feature: Feature)=>[feature,combineLogic(feature)])
             loiCount.set(filteredLocationList.map(([_,enabled]: [Feature,boolean])=>enabled).filter(Boolean).length)
         } else {

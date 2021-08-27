@@ -15,15 +15,26 @@
 	import { MS_IN_DAY } from '$lib/consts';
 
 	// FILTERS
-	let fullDateRangeConfigured = false;
-	let fullDateRange = [
+	let fullDateRangesConfigured = false;
+
+	let fullActiveDateRange = [
 		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
 		new Date().getTime() / MS_IN_DAY
 	];
-	let dateRange: [number, number] = [
+	let activeDateRange: [number, number] = [
 		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
 		Math.round(new Date().getTime() / MS_IN_DAY)
 	];
+
+	let fullAddedDateRange = [
+		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
+		new Date().getTime() / MS_IN_DAY
+	];
+	let addedDateRange: [number, number] = [
+		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
+		Math.round(new Date().getTime() / MS_IN_DAY)
+	];
+
 
 	let searchTerm: string = '';
 
@@ -47,14 +58,27 @@
 
 	let geoData: GeoData | null = null;
 	$: {
-		if (geoData !== null && !fullDateRangeConfigured) {
-			fullDateRangeConfigured = true
-			let start_min = geoData.features.reduce(function (prev, curr) {
+		if (geoData !== null && !fullDateRangesConfigured) {
+			fullDateRangesConfigured = true
+			let activeStartMin = geoData.features.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
-			console.log('Start min', start_min.properties.start.valueOf());
-			fullDateRange[0] = start_min.properties.start.valueOf() / MS_IN_DAY;
-			dateRange[0] = fullDateRange[0];
+
+			fullActiveDateRange[0] = activeStartMin.properties.start.valueOf() / MS_IN_DAY;
+			activeDateRange[0] = fullActiveDateRange[0];
+
+			let addedStartMin = geoData.features.reduce((prev, curr) =>
+				curr.properties.dateAdded.isValid()
+					? prev.properties.dateAdded.valueOf() < curr.properties.dateAdded.valueOf()
+						? prev
+						: curr
+					: prev
+			);
+
+			fullAddedDateRange[0] = addedStartMin.properties.start.valueOf() / MS_IN_DAY;
+			addedDateRange[0] = fullAddedDateRange[0];
+
+
 		}
 	}
 
@@ -64,13 +88,15 @@
 <main>
 	<Filter
 		bind:geoData
-		bind:dateRange
+		bind:activeDateRange
+		bind:addedDateRange
 		bind:searchTerm
 		bind:filteredLocationList
 		bind:loiCount
+
 	/>
 	<header class="header" id="header">
-		<ResultHeading bind:dates={dateRange} />
+		<ResultHeading bind:dates={activeDateRange} />
 		<SearchBox bind:searchTerm/>
 		<div class="info-block-container">
 			<InfoBlock>
@@ -107,14 +133,14 @@
 	<footer>
 		<h1>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h1>
 		<DateSlider
-			bind:dateRange={activeDateValues}
-			bind:fullRange={fullRangeActive}
+			bind:dateRange={activeDateRange}
+			bind:fullRange={fullActiveDateRange}
 			id="active-range-slider"
 		/>
 		<h1>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h1>
 		<DateSlider
-			bind:dateRange={addedDateValues}
-			bind:fullRange={fullRangeAdded}
+			bind:dateRange={addedDateRange}
+			bind:fullRange={fullAddedDateRange}
 			showAll={true}
 			id="added-range-slider"
 		/>
