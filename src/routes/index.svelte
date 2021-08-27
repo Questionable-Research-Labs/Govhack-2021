@@ -3,7 +3,7 @@
 	<h1 class="info__title">Toi</h1>
 	<h3 class="info__subtitle">Times of Interest</h3>
 
-	<a class="info__button" href="/map">View the map</a>
+	<a sveltekit:prefetch class="info__button" href="/map">View the map</a>
 	<section class="info__section">
 		<h4 class="info__section__title">What is Toi?</h4>
 		<p class="info__section__text">

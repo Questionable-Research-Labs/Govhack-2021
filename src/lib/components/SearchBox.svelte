@@ -20,6 +20,14 @@
 	function infoPopup() {
 		open(SearchInfoModel, {  });
 	}
+
+	afterUpdate(() => {
+		if (searchTerm === '') {
+			probablePlaces(places);
+		} else {
+			probablePlaces(places.filter(place => place.location.toLowerCase().includes(searchTerm.toLowerCase())));
+		}
+	});
 </script>
 
 <div class='wrapper'>
