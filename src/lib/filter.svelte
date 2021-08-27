@@ -14,8 +14,10 @@
 
     export let activeDateRange: [number, number];
     export let addedDateRange: [number, number];
+    export let fullAddedDateRange: [number, number];
     export let searchTerm: string;
     export let geoData: GeoData|null;
+
     async function updateGeoJSON() {
         fetch(
             'https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson'
@@ -30,16 +32,19 @@
     }
     updateGeoJSON();
 
-    let filterCache: [[number,number],string];
-    
-    // This contains all entries, but as a tuple with the boolean saying if it matches or not
-    export let filteredLocationList: [Feature,boolean][] = [];
-
     export const loiCount = tweened(0, {
 		duration: 400,
 		easing: cubicOut,
 		interpolate: (a,b)=>(t)=>Math.round(a+(b-a)*t)
 	});
+
+
+    let filterCache: [[number,number],string];
+    
+    // This contains all entries, but as a tuple with the boolean saying if it matches or not
+    export let filteredLocationList: [Feature,boolean][] = [];
+
+    let dateAddedEnabled = false;
 
     const filterList: ((feature: Feature)=>boolean)[]  = [
         TestActiveDateRange,
@@ -62,8 +67,14 @@
     }
 
     function TestDateAdded(feature: Feature): boolean {
-        let addedDate = timeFromMoment(feature.properties.dateAdded)
-        return Math.floor(addedDateRange[0]) <= addedDate && Math.floor(addedDateRange[1]) >= addedDate;
+        if (dateAddedEnabled) {
+            let addedDate = timeFromMoment(feature.properties.dateAdded)
+            return Math.floor(addedDateRange[0]) <= addedDate && Math.floor(addedDateRange[1]) >= addedDate;
+
+        } else {
+            // The slider is on the "All" position
+            return true
+        }
     }
 
 
@@ -88,6 +99,10 @@
         } else {
             console.log("Skipping Update")
         }
+    }
+
+    $: {
+        dateAddedEnabled = addedDateRange[0]!==fullAddedDateRange[0]
     }
     
 

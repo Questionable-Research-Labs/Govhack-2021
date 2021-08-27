@@ -26,7 +26,7 @@
 		Math.round(new Date().getTime() / MS_IN_DAY)
 	];
 
-	let fullAddedDateRange = [
+	let fullAddedDateRange: [number, number] = [
 		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
 		new Date().getTime() / MS_IN_DAY
 	];
@@ -93,7 +93,7 @@
 		bind:searchTerm
 		bind:filteredLocationList
 		bind:loiCount
-
+		bind:fullAddedDateRange
 	/>
 	<header class="header" id="header">
 		<ResultHeading bind:dates={activeDateRange} />
