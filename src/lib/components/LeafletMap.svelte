@@ -13,30 +13,46 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
 	import { browser } from '$app/env';
-	import type { Features, GeoData, Properties } from '$lib/geoJsonResponse';
+	import type { Feature, GeoData, Properties } from '$lib/geoJsonResponse';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import {
-		timeFromMoment,
 		StoreMarker,
-		TestRange as testRange,
-		dateRangeTimings as DateRangeTimings,
-		GetMarkers,
+		dateRangeTimings,
 		GetPopupData,
-		testRangeAdded
-	} from '$lib/filteringStore';
+		GetMarkerID
+	} from '$lib/markerStore';
 	import moment from 'moment';
-
-	export let geoData: GeoData;
-	export let activeDateRange: [number, number];
-	export let addedDateRange: [number, number];
-	export let showAdded: boolean;
-	export let filteredPlaces: number[];
 
 	let map;
 	let leaflet;
-	let markers;
+	let markersLayer;
 	let markerIcon;
+
+	export let filteredLocationList: [Feature,boolean][];
+	
+
+	function setMarkerState(marker,enabled: boolean) {
+		if (enabled) {
+			if (marker.getElement().style.display != 'block') {
+				marker.getElement().style.display = 'block';
+				marker.setOpacity(1);
+				marker.bindPopup(GetPopupData(leaflet.stamp(marker)));
+			}
+
+
+		} else {
+			if (marker.getElement().style.display != 'none') {
+				marker.getElement().style.display = 'none';
+				marker.setOpacity(0);
+				marker.unbindPopup();
+			}
+
+
+		}
+		
+	}
+
 
 	/// The popup requires HTML in the form of a string,
 	/// so this generates a table with a title of all the data.
@@ -76,18 +92,25 @@
 	function loadMarkers() {
 		let now = moment();
 		if (
-			(typeof geoData !== 'undefined' || geoData !== null) &&
-			typeof geoData.features !== 'undefined'
+			(typeof filteredLocationList !== 'undefined' || filteredLocationList !== null)
 		) {
-			loiCount.set(geoData?.features.length);
-			for (let feature of geoData?.features) {
+			loiCount.set(filteredLocationList.length);
+			for (let [feature, enabled] of filteredLocationList) {
 				let marker = leaflet.marker(feature.geometry.coordinates, {
 					title: feature.properties.event,
 					icon: markerIcon
 				});
-				marker.addTo(markers);
+				markersLayer.addLayer(marker);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 				marker.bindPopup(popupHTML);
+
+				StoreMarker(
+					feature.properties.id,
+					leaflet.stamp(marker),
+					popupHTML
+				);
+
+				setMarkerState(marker,enabled)
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
@@ -103,15 +126,9 @@
 
 					(marker.getElement() as HTMLElement).style.filter = filter;
 				}
-
-				StoreMarker(
-					[timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end)],
-					timeFromMoment(feature.properties.dateAdded),
-					leaflet.stamp(marker),
-					popupHTML
-				);
 			}
-			map.fitBounds(markers.getBounds());
+			map.fitBounds(markersLayer.getBounds());
+
 		}
 	}
 
@@ -132,7 +149,7 @@
 				shadowSize: [41, 41]
 			});
 
-			markers = leaflet.featureGroup();
+			markersLayer = leaflet.featureGroup();
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution:
 					'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -142,7 +159,7 @@
 				map = leaflet.map('map', {
 					center: [-41, 174], //baseline zoom and location, updates on marker load
 					zoom: 6,
-					layers: [baseMap, markers]
+					layers: [baseMap, markersLayer]
 				});
 			}
 			loadMarkers();
@@ -150,58 +167,14 @@
 	});
 
 	afterUpdate(async () => {
-		if (typeof map === 'undefined' || typeof markers == 'undefined') return;
 
-		let markerList = GetMarkers();
-		if (markerList.length == 0) {
-			// Data hasn't been loaded yet, load it now
-			console.log('Post loading markers');
-			if (browser) {
-				loadMarkers();
-			}
-		} else {
+		if (typeof map === 'undefined' || typeof markersLayer == 'undefined') return;
+		
+		for (let [feature,enabled] of filteredLocationList) {
+			let featureID = feature.properties.id
+			let marker = markersLayer.getLayer(GetMarkerID(featureID))
+			setMarkerState(marker,enabled);
 		}
-
-		let totalShown = 0;
-
-		for (let i in markerList) {
-			let marker = markerList[i];
-			let markerInRange = testRange(activeDateRange, marker);
-			let markerInAddedRange = testRangeAdded(addedDateRange, marker);
-			if (
-				markerInRange === DateRangeTimings.Invalid ||
-				markerInRange === DateRangeTimings.OutOfRange ||
-				(!showAdded &&
-					(markerInAddedRange === DateRangeTimings.Invalid ||
-						markerInAddedRange === DateRangeTimings.OutOfRange))
-			) {
-				if (typeof markers.getLayer(marker) !== 'undefined') {
-					markers.getLayer(marker).getElement().style.display = 'none';
-					markers.getLayer(marker).setOpacity(0);
-					markers.getLayer(marker).unbindPopup();
-				} else {
-					console.log("What? Marker doesn't exist apparently");
-				}
-			} else if (typeof filteredPlaces !== 'undefined' && !filteredPlaces.includes(parseInt(i))) {
-				if (typeof markers.getLayer(marker) !== 'undefined') {
-					markers.getLayer(marker).getElement().style.display = 'none';
-
-					markers.getLayer(marker).setOpacity(0);
-				} else {
-					console.log("What? Marker doesn't exist apparently");
-				}
-			} else {
-				if (typeof markers.getLayer(marker) !== 'undefined') {
-					totalShown += 1;
-					markers.getLayer(marker).getElement().style.display = 'block';
-					markers.getLayer(marker).setOpacity(1);
-					markers.getLayer(marker).bindPopup(GetPopupData(marker));
-				} else {
-					console.log("What? Marker doesn't exist apparently");
-				}
-			}
-		}
-		loiCount.set(totalShown);
 	});
 </script>
 

@@ -4,7 +4,7 @@ import moment from 'moment';
 export class GeoData {
 	name: string;
 	type: string;
-	features: Features[];
+	features: Feature[];
 
 	constructor(data: any) {
 		this.name = data['name'];
@@ -41,7 +41,7 @@ export class GeoData {
 	}
 }
 
-export interface Features {
+export interface Feature {
 	geometry: Geometry;
 	properties: Properties;
 	type: string;

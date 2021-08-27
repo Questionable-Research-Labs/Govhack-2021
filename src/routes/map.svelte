@@ -1,84 +1,48 @@
 <script lang="ts">
-	import { default as LeafletMap, loiCount } from '$lib/components/LeafletMap.svelte';
+	import LeafletMap from '$lib/components/LeafletMap.svelte';
 	import DateSlider from '$lib/components/DateSlider.svelte';
 	import InfoBlock from '$lib/components/InfoBlock.svelte';
 
-	import type { Writable } from 'svelte/store';
-	import { writable } from 'svelte/store';
-	import { GeoData } from '$lib/geoJsonResponse';
+	import type { Writable, Readable } from 'svelte/store';
+	import type { Tweened } from "svelte/motion";
+
+	import { writable, readable } from 'svelte/store';
+	import type { GeoData, Feature } from '$lib/geoJsonResponse';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import ResultHeading from '$lib/components/ResultHeading.svelte';
+	import Filter from '$lib/filter.svelte';
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from '$lib/consts';
 
-	let fullRangeActive = [
+	// FILTERS
+	let fullDateRangesConfigured = false;
+
+	let fullActiveDateRange = [
 		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
 		new Date().getTime() / MS_IN_DAY
 	];
-	let activeDateValues: [number, number] = [
+	let activeDateRange: [number, number] = [
 		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
 		Math.round(new Date().getTime() / MS_IN_DAY)
 	];
 
-	let fullRangeAdded = [
+	let fullAddedDateRange: [number, number] = [
 		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
 		new Date().getTime() / MS_IN_DAY
 	];
-	let addedDateValues: [number, number] = [
+	let addedDateRange: [number, number] = [
 		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
 		Math.round(new Date().getTime() / MS_IN_DAY)
 	];
 
-	let geoData: Writable<null | GeoData> = writable(null);
+
+	let searchTerm: string = '';
+
+	// STATS
+
 	let lastUpdate: Writable<Date> = writable();
-	let geoDataValue: null | GeoData;
-	geoData.subscribe((e) => {
-		geoDataValue = e;
-		if (e !== null) {
-			let activeStartMin = e.features.reduce(function (prev, curr) {
-				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
-			});
+	let loiCount: Tweened<number>;
 
-			let addedStartMin = e.features.reduce((prev, curr) =>
-				curr.properties.dateAdded.isValid()
-					? prev.properties.dateAdded.valueOf() < curr.properties.dateAdded.valueOf()
-						? prev
-						: curr
-					: prev
-			);
-
-			console.log(addedStartMin);
-
-			console.log('Range Start min', activeStartMin.properties.start.valueOf());
-			console.log('Added Start min', addedStartMin.properties.start.valueOf());
-
-			fullRangeActive[0] = activeStartMin.properties.start.valueOf() / MS_IN_DAY;
-			activeDateValues[0] = fullRangeActive[0];
-			fullRangeAdded[0] = addedStartMin.properties.start.valueOf() / MS_IN_DAY;
-			addedDateValues[0] = fullRangeAdded[0];
-		}
-	});
-
-	let places: number[];
-
-	$: console.log('Updated places ', places);
-
-	$: showAllAdded = addedDateValues[0] == fullRangeAdded[0];
-
-	$: console.log('Filterred by added', showAllAdded);
-
-	fetch(
-		'https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson'
-	)
-		.then((response) => response.json())
-		.then((jsonData) => {
-			if (geoDataValue === null) {
-				geoData.set(new GeoData(jsonData));
-			}
-		})
-		.catch((error) => {
-			console.error('Could not fetch data:', error);
-		});
 	(async () => {
 		try {
 			let response = await fetch('https://govhack2021-backend.host.qrl.nz/updated');
@@ -89,12 +53,51 @@
 			console.log('It shit itself', e);
 		}
 	})();
+
+	// FEATURES
+
+	let geoData: GeoData | null = null;
+	$: {
+		if (geoData !== null && !fullDateRangesConfigured) {
+			fullDateRangesConfigured = true
+			let activeStartMin = geoData.features.reduce(function (prev, curr) {
+				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
+			});
+
+			fullActiveDateRange[0] = activeStartMin.properties.start.valueOf() / MS_IN_DAY;
+			activeDateRange[0] = fullActiveDateRange[0];
+
+			let addedStartMin = geoData.features.reduce((prev, curr) =>
+				curr.properties.dateAdded.isValid()
+					? prev.properties.dateAdded.valueOf() < curr.properties.dateAdded.valueOf()
+						? prev
+						: curr
+					: prev
+			);
+
+			fullAddedDateRange[0] = addedStartMin.properties.start.valueOf() / MS_IN_DAY;
+			addedDateRange[0] = fullAddedDateRange[0];
+
+
+		}
+	}
+
+	let filteredLocationList: [Feature, boolean][];
 </script>
 
 <main>
+	<Filter
+		bind:geoData
+		bind:activeDateRange
+		bind:addedDateRange
+		bind:searchTerm
+		bind:filteredLocationList
+		bind:loiCount
+		bind:fullAddedDateRange
+	/>
 	<header class="header" id="header">
-		<ResultHeading bind:dates={activeDateValues} />
-		<SearchBox geoData={$geoData} probablePlaces={(p) => (places = p?.map((e) => e.index))} />
+		<ResultHeading bind:dates={activeDateRange} />
+		<SearchBox bind:searchTerm/>
 		<div class="info-block-container">
 			<InfoBlock>
 				<a href="https://github.com/minhealthnz/nz-covid-data">
@@ -123,27 +126,21 @@
 			</InfoBlock>
 		</div>
 	</header>
-	{#if $geoData != null}
-		<LeafletMap
-			geoData={$geoData}
-			activeDateRange={activeDateValues}
-			filteredPlaces={places}
-			addedDateRange={addedDateValues}
-			showAdded={showAllAdded}
-		/>
+	{#if geoData != null}
+		<LeafletMap bind:filteredLocationList />
 	{/if}
 
 	<footer>
 		<h1>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h1>
 		<DateSlider
-			bind:dateRange={activeDateValues}
-			bind:fullRange={fullRangeActive}
+			bind:dateRange={activeDateRange}
+			bind:fullRange={fullActiveDateRange}
 			id="active-range-slider"
 		/>
 		<h1>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h1>
 		<DateSlider
-			bind:dateRange={addedDateValues}
-			bind:fullRange={fullRangeAdded}
+			bind:dateRange={addedDateRange}
+			bind:fullRange={fullAddedDateRange}
 			showAll={true}
 			id="added-range-slider"
 		/>
