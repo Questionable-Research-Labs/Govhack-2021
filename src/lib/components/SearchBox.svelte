@@ -27,7 +27,7 @@
 		if (searchTerm === '') {
 			probablePlaces(places);
 		} else {
-			probablePlaces(fuse.search(searchTerm));
+			probablePlaces(places.filter(place => place.location.toLowerCase().includes(searchTerm.toLowerCase())));
 		}
 	});
 </script>
