@@ -111,7 +111,7 @@
 				{/if}
 			</InfoBlock>
 			<InfoBlock>
-				<b style="margin-bottom: 0.5rem;">Discovery Date</b>
+				<b style="margin-bottom: 0.5rem;">Date Added</b>
 				<div class="map-key">
 					<div class="labels">
 						<div>Today</div>
@@ -134,13 +134,13 @@
 	{/if}
 
 	<footer>
-		<h1>Filter by active time</h1>
+		<h1>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h1>
 		<DateSlider
 			bind:dateRange={activeDateValues}
 			bind:fullRange={fullRangeActive}
 			id="active-range-slider"
 		/>
-		<h1>Filter by date added</h1>
+		<h1>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h1>
 		<DateSlider
 			bind:dateRange={addedDateValues}
 			bind:fullRange={fullRangeAdded}
@@ -217,6 +217,13 @@
 	@media all and (max-width: 770px) {
 		.header {
 			grid-template-columns: 1fr;
+		}
+		.desktop-explanation {
+			display: block;
+		}
+
+		footer {
+			padding: 0;
 		}
 	}
 </style>
