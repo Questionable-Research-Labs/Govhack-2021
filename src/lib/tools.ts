@@ -21,30 +21,32 @@ export const timeFromMoment = (date: Date | Moment) => {
 	return Math.round(utcTime / MS_IN_DAY);
 };
 
-interface Array {
-    equals(array: Array): boolean;
+// Thanks javascript for flawless equality
+export function compareCaches(arrayA: any[],arrayB: any[]) {
+	if (typeof arrayA === "undefined" || typeof arrayB === "undefined") {
+		return false
+	}
+	if (arrayA.length!==arrayB.length) {
+		return false
+	}
+	for (var i = 0, l=arrayA.length; i < l; i++) {
+		// Check if we have nested arrays
+		if (arrayA[i] instanceof Array && arrayB[i] instanceof Array) {
+			// recurse into the nested arrays
+			if (!compareCaches(arrayA[i], arrayB[i])) {
+				return false; 
+			}
+					  
+		}
+		else if (arrayA[i] instanceof Number && arrayB[i] instanceof Number) {
+			if (Math.round(arrayA[i]) != Math.round(arrayB[i])) {
+				return false;
+			}
+		}     
+		else if (arrayA[i] != arrayB[i]) { 
+			// Warning - two different object instances will never be equal: {x:20} != {x:20}
+			return false;   
+		}           
+	}
+	return true
 }
-// Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false, value: function(array) {
-    // if the other array is a falsy value, return
-    if (!array)
-        return false;
-
-    // compare lengths - can save a lot of time 
-    if (this.length != array.length)
-        return false;
-
-    for (var i = 0, l=this.length; i < l; i++) {
-        // Check if we have nested arrays
-        if (this[i] instanceof Array && array[i] instanceof Array) {
-            // recurse into the nested arrays
-            if (!this[i].equals(array[i]))
-                return false;       
-        }           
-        else if (this[i] != array[i]) { 
-            // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;   
-        }           
-    }       
-    return true;
-}});

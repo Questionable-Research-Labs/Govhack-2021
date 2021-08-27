@@ -9,7 +9,7 @@
     import { cubicOut } from 'svelte/easing';
 
     import type { Feature } from "$lib/geoJsonResponse";
-    import {timeFromMoment} from "$lib/tools";
+    import {timeFromMoment, compareCaches} from "$lib/tools";
     import {GeoData} from "$lib/geoJsonResponse";
 
     export let activeDateRange: [number, number];
@@ -39,7 +39,7 @@
 	});
 
 
-    let filterCache: [[number,number],string];
+    let filterCache: [[number,number],[number,number],string];
     
     // This contains all entries, but as a tuple with the boolean saying if it matches or not
     export let filteredLocationList: [Feature,boolean][] = [];
@@ -67,12 +67,13 @@
     }
 
     function TestDateAdded(feature: Feature): boolean {
-        if (dateAddedEnabled) {
+        if (Math.round(addedDateRange[0]) !== Math.round(fullAddedDateRange[0])) {
             let addedDate = timeFromMoment(feature.properties.dateAdded)
             return Math.floor(addedDateRange[0]) <= addedDate && Math.floor(addedDateRange[1]) >= addedDate;
 
         } else {
             // The slider is on the "All" position
+            console.log(addedDateRange[0] !== fullAddedDateRange[0])
             return true
         }
     }
@@ -82,27 +83,16 @@
         return filterList.map(check => check(feature)).every(Boolean);
     }
 
-    function checkIfFilterCache() {
-        if (typeof filterCache === "undefined") {
-            return false
-        }
-        return activeDateRange[0]===filterCache[0][0] && activeDateRange[1]===filterCache[0][1] && searchTerm===filterCache[1]
-    }
-
     $: {
         // Svelte quite often fires updates when not needed
-        if (geoData !== null) {
+        if (geoData !== null && !compareCaches(filterCache,[activeDateRange,addedDateRange,searchTerm])) {
             console.log("Updating Filter")
-            filterCache = [activeDateRange,searchTerm];
+            filterCache = [activeDateRange,addedDateRange,searchTerm];
             filteredLocationList = geoData.features.map((feature: Feature)=>[feature,combineLogic(feature)])
             loiCount.set(filteredLocationList.map(([_,enabled]: [Feature,boolean])=>enabled).filter(Boolean).length)
         } else {
             console.log("Skipping Update")
         }
-    }
-
-    $: {
-        dateAddedEnabled = addedDateRange[0]!==fullAddedDateRange[0]
     }
     
 
