@@ -23,6 +23,7 @@
 	let leaflet;
 	let markersLayer;
 	let markerIcon;
+	let oms;
 
 	export let filteredLocationList: [Feature, boolean][];
 
@@ -31,13 +32,12 @@
 			if (marker.getElement().style.display != 'block') {
 				marker.getElement().style.display = 'block';
 				marker.setOpacity(1);
-				marker.bindPopup(getPopupData(leaflet.stamp(marker)));
+				// marker.bindPopup(getPopupData(leaflet.stamp(marker)));
 			}
 		} else {
 			if (marker.getElement().style.display != 'none') {
 				marker.getElement().style.display = 'none';
 				marker.setOpacity(0);
-				marker.unbindPopup();
 			}
 		}
 	}
@@ -86,9 +86,11 @@
 					title: feature.properties.event,
 					icon: markerIcon
 				});
+
+
 				markersLayer.addLayer(marker);
+				oms.addMarker(marker);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
-				marker.bindPopup(popupHTML);
 
 				storeMarker(feature.properties.id, leaflet.stamp(marker), popupHTML);
 
@@ -116,6 +118,7 @@
 	onMount(async () => {
 		if (browser) {
 			leaflet = await import('leaflet');
+			let OverlappingMarkerSpiderfier = await (await import('../oms')).default;
 
 			// Mirror of official icon, because of a bug in the icon image url discovery system in leaflet
 			// This is just swaps out the icons inside the library for the ones in the static directory
@@ -141,6 +144,19 @@
 					center: [-41, 174], //baseline zoom and location, updates on marker load
 					zoom: 6,
 					layers: [baseMap, markersLayer]
+				});
+				
+				// maximum brainage to work with old library
+				oms = new OverlappingMarkerSpiderfier(map,leaflet, {});
+				
+				let popup = new leaflet.Popup({closeButton: false});
+				oms.addListener('click', function(marker) {
+					popup.setContent(getPopupData(leaflet.stamp(marker)));
+					popup.setLatLng(marker.getLatLng());
+					map.openPopup(popup);
+				});
+				oms.addListener('spiderfy', function(markers) {
+					map.closePopup();
 				});
 			}
 			loadMarkers();

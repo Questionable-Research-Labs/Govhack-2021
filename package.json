@@ -41,6 +41,7 @@
   "type": "module",
   "dependencies": {
     "firebase": "^8.10.0",
-    "localforage": "^1.10.0"
+    "localforage": "^1.10.0",
+    "overlapping-marker-spiderfier-leaflet": "^0.2.7"
   }
 }
