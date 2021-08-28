@@ -7,7 +7,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
 /*
 	Somehow ported to kinda Typescript after 9 years, how,
 	I don't know, but don't touch it... it might explode.
-	
+
 	oh yeah, now it actually is class and doesn't rely on the
 	global this object and therefore can be jankly included
 	into svelte projects.
@@ -158,9 +158,11 @@ export default class OverlappingMarkerSpiderfier {
 
 	public spiderListener(marker){
 		const markerSpiderfied = (marker['_omsData'] != null);
+		let markerPos = marker.getLatLng();
+
 		if (!markerSpiderfied || !this['keepSpiderfied']) { this['unspiderfy'](); }
 		if (markerSpiderfied) {
-			return this.trigger('click', marker);
+			return this.trigger('click', marker, markerPos);
 		} else {
 			const nearbyMarkerData = [];
 			const nonNearbyMarkers = [];
@@ -176,7 +178,7 @@ export default class OverlappingMarkerSpiderfier {
 				}
 			}
 			if (nearbyMarkerData.length === 1) {  // 1 => the one clicked => none nearby
-				return this.trigger('click', marker);
+				return this.trigger('click', marker, markerPos);
 			} else {
 				return this.spiderfy(nearbyMarkerData, nonNearbyMarkers);
 			}

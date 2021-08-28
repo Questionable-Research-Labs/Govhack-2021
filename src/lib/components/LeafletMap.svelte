@@ -149,10 +149,11 @@
 				// maximum brainage to work with old library
 				oms = new OverlappingMarkerSpiderfier(map,leaflet, {});
 				
-				let popup = new leaflet.Popup({closeButton: false});
-				oms.addListener('click', function(marker) {
+				let popup = new leaflet.Popup({offset: new leaflet.Point(0.5, -24)});
+				oms.addListener('click', function(marker, markerPos) {
+					console.log("Marker Clicked",marker);
 					popup.setContent(getPopupData(leaflet.stamp(marker)));
-					popup.setLatLng(marker.getLatLng());
+					popup.setLatLng(markerPos);
 					map.openPopup(popup);
 				});
 				oms.addListener('spiderfy', function(markers) {
