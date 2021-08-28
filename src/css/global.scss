@@ -55,8 +55,9 @@ h3 {
   }
 }
 
-.leaflet-control-attribution {
-  bottom: 100px !important;
+.leaflet-bottom {
+  // We have added our own atributation at the top
+  display: none;
 }
 
 // @media only screen and (max-width: 440px) {

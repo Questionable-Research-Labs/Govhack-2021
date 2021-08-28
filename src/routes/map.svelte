@@ -100,6 +100,7 @@
 				<a href="https://github.com/minhealthnz/nz-covid-data">
 					Data from the New Zealand Government
 				</a>
+				<span style="white-space: nowrap;"><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</span>
 			</InfoBlock>
 			<InfoBlock>
 				{#if typeof $lastUpdate !== 'undefined'}
