@@ -18,12 +18,13 @@
 	import { cubicOut } from 'svelte/easing';
 	import { storeMarker, dateRangeTimings, getPopupData, getMarkerID } from '$lib/markerStore';
 	import moment from 'moment';
+	import type OverlappingMarkerSpiderfier from '../oms';
 
 	let map;
 	let leaflet;
-	let markersLayer;
+	let renderedMarkersLayer;
 	let markerIcon;
-	let oms;
+	let oms: OverlappingMarkerSpiderfier;
 
 	export let filteredLocationList: [Feature, boolean][];
 
@@ -32,12 +33,16 @@
 			if (marker.getElement().style.display != 'block') {
 				marker.getElement().style.display = 'block';
 				marker.setOpacity(1);
+				oms.addMarker(marker);
 				// marker.bindPopup(getPopupData(leaflet.stamp(marker)));
 			}
 		} else {
 			if (marker.getElement().style.display != 'none') {
 				marker.getElement().style.display = 'none';
 				marker.setOpacity(0);
+				oms.removeMarker(marker);
+				
+
 			}
 		}
 	}
@@ -88,13 +93,13 @@
 				});
 
 
-				markersLayer.addLayer(marker);
+				renderedMarkersLayer.addLayer(marker);
 				oms.addMarker(marker);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 
 				storeMarker(feature.properties.id, leaflet.stamp(marker), popupHTML);
 
-				setMarkerState(marker, enabled);
+				// setMarkerState(marker, enabled);
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
@@ -111,7 +116,7 @@
 					(marker.getElement() as HTMLElement).style.filter = filter;
 				}
 			}
-			map.fitBounds(markersLayer.getBounds());
+			map.fitBounds(renderedMarkersLayer.getBounds());
 		}
 	}
 
@@ -133,7 +138,7 @@
 				shadowSize: [41, 41]
 			});
 
-			markersLayer = leaflet.featureGroup();
+			renderedMarkersLayer = leaflet.featureGroup();
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution:
 					'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -143,7 +148,7 @@
 				map = leaflet.map('map', {
 					center: [-41, 174], //baseline zoom and location, updates on marker load
 					zoom: 6,
-					layers: [baseMap, markersLayer]
+					layers: [baseMap, renderedMarkersLayer]
 				});
 				
 				// maximum brainage to work with old library
@@ -165,11 +170,11 @@
 	});
 
 	afterUpdate(async () => {
-		if (typeof map === 'undefined' || typeof markersLayer == 'undefined') return;
+		if (typeof map === 'undefined' || typeof renderedMarkersLayer == 'undefined') return;
 
 		for (let [feature, enabled] of filteredLocationList) {
 			let featureID = feature.properties.id;
-			let marker = markersLayer.getLayer(getMarkerID(featureID));
+			let marker = renderedMarkersLayer.getLayer(getMarkerID(featureID));
 			setMarkerState(marker, enabled);
 		}
 	});

@@ -160,13 +160,13 @@ export default class OverlappingMarkerSpiderfier {
 		const markerSpiderfied = (marker['_omsData'] != null);
 		let markerPos = marker.getLatLng();
 
-		if (!markerSpiderfied || !this['keepSpiderfied']) { this['unspiderfy'](); }
+		if (!markerSpiderfied || !this.keepSpiderfied) { this.unspiderfy(); }
 		if (markerSpiderfied) {
 			return this.trigger('click', marker, markerPos);
 		} else {
 			const nearbyMarkerData = [];
 			const nonNearbyMarkers = [];
-			const pxSq = this['nearbyDistance'] * this['nearbyDistance'];
+			const pxSq = this.nearbyDistance * this.nearbyDistance;
 			const markerPt = this.map.latLngToLayerPoint(marker.getLatLng());
 			for (let m of Array.from(this.markers)) {
 				if (!this.map.hasLayer(m)) { continue; }
