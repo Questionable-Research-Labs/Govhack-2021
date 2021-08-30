@@ -70,3 +70,7 @@ h3 {
 .notifications * {
   z-index: 999;
 }
+
+.leaflet-marker-icon {
+  transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
