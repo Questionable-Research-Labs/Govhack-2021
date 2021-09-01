@@ -116,13 +116,19 @@
 			</InfoBlock>
 			<InfoBlock>
 				<b style="margin-bottom: 0.5rem;">Date Added</b>
-				<div class="map-key">
+			<div class="map-key" style="height: 4em;">
 					<div class="labels">
 						<div>Today</div>
 						<div>Yesterday</div>
 						<div>Before That</div>
 					</div>
-					<div class="bar" />
+					<div class="key colour-bar" />
+				</div>
+				<div class="map-key">
+					<div class="labels">
+						<div>Unknown</div>
+					</div>
+					<div class="key unknown-key" />
 				</div>
 			</InfoBlock>
 		</div>
@@ -175,7 +181,6 @@
 			display: grid;
 			grid-template-columns: 1fr 1em;
 			grid-column-gap: 0.2rem;
-			height: 4em;
 
 			.labels {
 				text-align: right;
@@ -183,11 +188,18 @@
 				flex-direction: column;
 				justify-content: space-between;
 			}
-			.bar {
+			.key {
 				height: 100%;
-				background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
 				width: 1em;
 				border-radius: 1rem;
+
+			}
+			.key.colour-bar {
+					background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
+
+				}
+			.key.unknown-key {
+				background: #707F89;
 			}
 		}
 	}

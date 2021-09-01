@@ -19,7 +19,7 @@
 
 	function pipFormatter(value: number, _ = undefined) {
 		return value == fullRange[0] && showAll
-			? 'All'
+			? 'Unknown'
 			: dateToString(value).split('-').slice(1, 3).reverse().join('-');
 	}
 	function handleFormatter(value: number, _ = undefined) {

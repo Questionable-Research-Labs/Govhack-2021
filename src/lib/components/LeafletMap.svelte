@@ -114,6 +114,12 @@
 					let filter = `hue-rotate(${hueRotateAmount}deg) saturate(${saturationAmount}%)`;
 
 					(marker.getElement() as HTMLElement).style.filter = filter;
+				} else {
+					let saturationAmount = 20;
+
+					let filter = `saturate(${saturationAmount}%)`;
+
+					(marker.getElement() as HTMLElement).style.filter = filter;
 				}
 			}
 			map.fitBounds(renderedMarkersLayer.getBounds());

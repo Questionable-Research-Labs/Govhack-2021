@@ -69,14 +69,15 @@
 	}
 
 	function testDateAdded(feature: Feature): boolean {
-		if (Math.round(addedDateRange[0]) !== Math.round(fullAddedDateRange[0])) {
+		let includeUnknown = Math.round(addedDateRange[0]) === Math.round(fullAddedDateRange[0]);
+		if (feature.properties.dateAdded.isValid()) {
 			let addedDate = timeFromMoment(feature.properties.dateAdded);
 			return (
-				Math.floor(addedDateRange[0]) <= addedDate && Math.floor(addedDateRange[1]) >= addedDate
+				Math.ceil(addedDateRange[0]) <= addedDate && Math.ceil(addedDateRange[1]) >= addedDate
 			);
 		} else {
-			// The slider is on the "All" position
-			return true;
+			// The slider is including unknown dates
+			return includeUnknown;
 		}
 	}
 
