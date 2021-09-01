@@ -17,22 +17,25 @@
 	// FILTERS
 	let fullDateRangesConfigured = false;
 
+	const initialTime = new Date().getTime();
+	const initialTimeInS = initialTime / MS_IN_DAY;
+
 	let fullActiveDateRange = [
-		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
-		new Date().getTime() / MS_IN_DAY
+		initialTimeInS, // updated when geoData downloads
+		initialTimeInS
 	];
 	let activeDateRange: [number, number] = [
-		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
-		Math.round(new Date().getTime() / MS_IN_DAY)
+		Math.round(initialTimeInS), // updated when geoData downloads
+		Math.round(initialTimeInS)
 	];
 
 	let fullAddedDateRange: [number, number] = [
-		new Date().getTime() / MS_IN_DAY, // updated when geoData downloads
-		new Date().getTime() / MS_IN_DAY
+		initialTimeInS, // updated when geoData downloads
+		initialTimeInS
 	];
 	let addedDateRange: [number, number] = [
-		Math.round(new Date().getTime() / MS_IN_DAY), // updated when geoData downloads
-		Math.round(new Date().getTime() / MS_IN_DAY)
+		Math.round(initialTimeInS), // updated when geoData downloads
+		Math.round(initialTimeInS)
 	];
 
 	let searchTerm: string = '';
