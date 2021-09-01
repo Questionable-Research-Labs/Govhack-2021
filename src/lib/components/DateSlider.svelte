@@ -32,7 +32,7 @@
 			// fit any given screen size
 			let x =
 				window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-			numPipLabels = 0.007442 * x + 1.43;
+			numPipLabels = 0.008 * x + 2;
 		}
 		window.addEventListener('resize', updatePipNum);
 		updatePipNum();
