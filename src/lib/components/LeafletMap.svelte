@@ -13,10 +13,10 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
 	import { browser } from '$app/env';
-	import type { Feature, GeoData, Properties } from '$lib/geoJsonResponse';
+	import type { Feature, Properties } from '$lib/geoJsonResponse';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
-	import { storeMarker, dateRangeTimings, getPopupData, getMarkerID } from '$lib/markerStore';
+	import { storeMarker, getPopupData, getMarkerID } from '$lib/markerStore';
 	import moment from 'moment';
 	import type OverlappingMarkerSpiderfier from '../oms';
 

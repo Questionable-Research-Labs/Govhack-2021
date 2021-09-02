@@ -1742,6 +1742,11 @@ svelte-simple-modal@^1.0.0:
   resolved "https://registry.yarnpkg.com/svelte-simple-modal/-/svelte-simple-modal-1.0.0.tgz#1a0c06d80c593630a82456123fef1833aa9205c8"
   integrity sha512-xHfbNiD43WF7TLNkWT4yo1OPrAUkANvwTbejn9ix4n8V/KxlfqiTFmQoQlVSlR/ipfyVqh/lG5h1ZoEkHEUvlg==
 
+svelte-table@^0.1.18:
+  version "0.1.18"
+  resolved "https://registry.yarnpkg.com/svelte-table/-/svelte-table-0.1.18.tgz#2f042b3233ed841060b364276db13fbedf62679a"
+  integrity sha512-9Oo2rQZNydPwcOxPJLfEvnO3iWTVvcLxg2k5NXrRzZcwUqekef7jjUW4bIMe1ZIaIJ1S5Z37UxgzilNPYanH7Q==
+
 svelte@^3.34.0:
   version "3.42.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.42.1.tgz#d4b4d9068cce911835f7c6b8ff1d290e1a0b5657"
