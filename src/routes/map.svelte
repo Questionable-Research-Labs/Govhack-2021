@@ -18,15 +18,15 @@
 	let fullDateRangesConfigured = false;
 
 	const initialTime = new Date().getTime();
-	const initialTimeInS = initialTime / MS_IN_DAY;
+	const initialTimeInS = Math.round(initialTime / MS_IN_DAY);
 
 	let fullActiveDateRange = [
 		initialTimeInS, // updated when geoData downloads
 		initialTimeInS
 	];
 	let activeDateRange: [number, number] = [
-		Math.round(initialTimeInS), // updated when geoData downloads
-		Math.round(initialTimeInS)
+		initialTimeInS, // updated when geoData downloads
+		initialTimeInS
 	];
 
 	let fullAddedDateRange: [number, number] = [
@@ -34,8 +34,8 @@
 		initialTimeInS
 	];
 	let addedDateRange: [number, number] = [
-		Math.round(initialTimeInS), // updated when geoData downloads
-		Math.round(initialTimeInS)
+		initialTimeInS, // updated when geoData downloads
+		initialTimeInS
 	];
 
 	let searchTerm: string = '';
@@ -76,8 +76,8 @@
 						: curr
 					: prev
 			);
-
-			fullAddedDateRange[0] = addedStartMin.properties.start.valueOf() / MS_IN_DAY;
+			console.log("added Site Min",addedStartMin)
+			fullAddedDateRange[0] = addedStartMin.properties.dateAdded.valueOf() / MS_IN_DAY;
 			addedDateRange[0] = fullAddedDateRange[0];
 		}
 	}
@@ -125,12 +125,6 @@
 					</div>
 					<div class="key colour-bar" />
 				</div>
-				<div class="map-key">
-					<div class="labels">
-						<div>Unknown</div>
-					</div>
-					<div class="key unknown-key" />
-				</div>
 			</InfoBlock>
 		</div>
 	</header>
@@ -145,7 +139,6 @@
 		<DateSlider
 			bind:dateRange={addedDateRange}
 			bind:fullRange={fullAddedDateRange}
-			showAll={true}
 			id="added-range-slider"
 		/>
 	</footer>
@@ -192,9 +185,6 @@
 			}
 			.key.colour-bar {
 				background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
-			}
-			.key.unknown-key {
-				background: #707f89;
 			}
 		}
 	}
