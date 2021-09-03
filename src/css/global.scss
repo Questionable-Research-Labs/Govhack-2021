@@ -1,63 +1,59 @@
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --font-mono: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", monospace;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+		'Segoe UI Emoji', 'Segoe UI Symbol';
+	--font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
 }
 
 h1 {
-  font-size: 4rem;
+	font-size: 4rem;
 }
 
 h2 {
-  font-size: 2.5rem;
+	font-size: 2.5rem;
 }
 
 h3 {
-  font-weight: bold;
-  font-size: 1.5rem;
+	font-weight: bold;
+	font-size: 1.5rem;
 }
 
 .leaflet-top {
-  top: 93px !important;
+	top: 93px !important;
 }
 
 .rangeNub {
-  cursor: grab;
+	cursor: grab;
 }
 @media all and (max-width: 1430px) {
-
-  .leaflet-top {
-    top: 128px !important;
-  }
+	.leaflet-top {
+		top: 128px !important;
+	}
 }
 @media all and (max-width: 1200px) {
-
-  .leaflet-top {
-    top: 170px !important;
-  }
+	.leaflet-top {
+		top: 170px !important;
+	}
 }
 @media all and (max-width: 940px) {
-
-  .leaflet-top {
-    top: 220px !important;
-  }
+	.leaflet-top {
+		top: 220px !important;
+	}
 }
 
 @media all and (max-width: 770px) {
-
-  .leaflet-top {
-    top: 255px !important;
-  }
+	.leaflet-top {
+		top: 255px !important;
+	}
 }
 @media all and (max-width: 440px) {
-
-  .leaflet-top {
-    top: 210px !important;
-  }
+	.leaflet-top {
+		top: 210px !important;
+	}
 }
 
 .leaflet-bottom {
-  // We have added our own atributation at the top
-  display: none;
+	// We have added our own atributation at the top
+	display: none;
 }
 
 // @media only screen and (max-width: 440px) {
@@ -68,9 +64,9 @@ h3 {
 
 // }
 .notifications * {
-  z-index: 999;
+	z-index: 999;
 }
 
 .leaflet-marker-icon {
-  transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+	transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }

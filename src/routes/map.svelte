@@ -100,10 +100,11 @@
 		<SearchBox bind:searchTerm />
 		<div class="info-block-container">
 			<InfoBlock>
-				<a href="https://github.com/minhealthnz/nz-covid-data">
-					Data from the New Zealand Government
-				</a>
-				<span style="white-space: nowrap;"><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</span>
+				<a href="https://github.com/minhealthnz/nz-covid-data"> Data from the New Zealand Government </a>
+				<span style="white-space: nowrap;"
+					><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | ©
+					<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</span
+				>
 			</InfoBlock>
 			<InfoBlock>
 				{#if typeof $lastUpdate !== 'undefined'}
@@ -116,7 +117,7 @@
 			</InfoBlock>
 			<InfoBlock>
 				<b style="margin-bottom: 0.5rem;">Date Added</b>
-			<div class="map-key" style="height: 4em;">
+				<div class="map-key" style="height: 4em;">
 					<div class="labels">
 						<div>Today</div>
 						<div>Yesterday</div>
@@ -139,11 +140,7 @@
 
 	<footer>
 		<h1>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h1>
-		<DateSlider
-			bind:dateRange={activeDateRange}
-			bind:fullRange={fullActiveDateRange}
-			id="active-range-slider"
-		/>
+		<DateSlider bind:dateRange={activeDateRange} bind:fullRange={fullActiveDateRange} id="active-range-slider" />
 		<h1>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h1>
 		<DateSlider
 			bind:dateRange={addedDateRange}
@@ -192,14 +189,12 @@
 				height: 100%;
 				width: 1em;
 				border-radius: 1rem;
-
 			}
 			.key.colour-bar {
-					background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
-
-				}
+				background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
+			}
 			.key.unknown-key {
-				background: #707F89;
+				background: #707f89;
 			}
 		}
 	}

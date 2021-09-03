@@ -33,12 +33,7 @@
 		<h3 class="title">Showing Results</h3>
 		<div class="body">
 			<!-- Another broken library... Works fully but types are broken. -->
-			<Datepicker
-				bind:selected={chosenEnd}
-				on:dateSelected={chosenEndCallback}
-				start={chosenStart}
-				end={new Date()}
-			>
+			<Datepicker bind:selected={chosenEnd} on:dateSelected={chosenEndCallback} start={chosenStart} end={new Date()}>
 				<div class="calenderInner" title="End Date Selector">
 					To
 					<span>{dateToString(dates[1])}</span>

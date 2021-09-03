@@ -21,8 +21,7 @@ export async function getMessagingToken() {
 	messaging
 		.getToken({
 			serviceWorkerRegistration: registration,
-			vapidKey:
-				'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE'
+			vapidKey: 'BFRORkK2I9sWzemLZwT8N4UZVFkql0GT4_1Jz9Oo0rSXMhZQLEjVWFFwQVhb_t2go1uGyG9nrQmtrMnc6kRXnNE'
 		})
 		.then((currentToken) => {
 			if (currentToken) {

@@ -14,7 +14,6 @@
 		width: fit-content;
 		margin-top: 1em;
 		margin-right: 1em;
-		
 	}
 
 	@media (max-width: 770px) {

@@ -1,21 +1,14 @@
-import {
-	notificationSettings,
-	notificationTokenRegistered,
-	notificationsEnabled
-} from '$lib/store';
+import { notificationSettings, notificationTokenRegistered, notificationsEnabled } from '$lib/store';
 
 export let notificationDenied = false;
-const notificationsSupported = () =>
-	typeof window === 'undefined' ? false : 'Notification' in window;
+const notificationsSupported = () => (typeof window === 'undefined' ? false : 'Notification' in window);
 export let notificationErrorText = '';
 
 let storeCaches = { notificationTokenRegistered: false };
 
 function updateNotificationEnabled() {
 	if (notificationsSupported()) {
-		notificationsEnabled.set(
-			Notification.permission === 'granted' && storeCaches['notificationSettings']
-		);
+		notificationsEnabled.set(Notification.permission === 'granted' && storeCaches['notificationSettings']);
 	} else {
 		notificationsEnabled.set(false);
 	}

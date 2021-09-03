@@ -12,12 +12,7 @@ export enum dateRangeTimings {
 let markerStore: Map<number, RelevantTimes> = new Map();
 let popupDataStore: Map<number, string> = new Map();
 
-export function StoreMarker(
-	activeTimes: RelevantTimes,
-	addedTime: number,
-	leafletID: number,
-	popupData: string
-) {
+export function StoreMarker(activeTimes: RelevantTimes, addedTime: number, leafletID: number, popupData: string) {
 	markerStore[leafletID] = {
 		activeTimes,
 		addedTime

@@ -41,8 +41,6 @@
 				marker.getElement().style.display = 'none';
 				marker.setOpacity(0);
 				oms.removeMarker(marker);
-				
-
 			}
 		}
 	}
@@ -92,7 +90,6 @@
 					icon: markerIcon
 				});
 
-
 				renderedMarkersLayer.addLayer(marker);
 				oms.addMarker(marker);
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
@@ -103,9 +100,7 @@
 
 				// Color code the markers based on how recently they were added
 				if (feature.properties.dateAdded.isValid()) {
-					let deltaDateAdded = now
-						.startOf('day')
-						.diff(feature.properties.dateAdded.startOf('day'), 'days');
+					let deltaDateAdded = now.startOf('day').diff(feature.properties.dateAdded.startOf('day'), 'days');
 
 					// Use HSL to Transition #237CC9 (blue marker) to full #f72f2f (red)
 					let hueRotateAmount = Math.max(-48 * deltaDateAdded + 148, 0);
@@ -146,8 +141,7 @@
 
 			renderedMarkersLayer = leaflet.featureGroup();
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution:
-					'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+				attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			});
 
 			if (typeof map === 'undefined') {
@@ -156,18 +150,18 @@
 					zoom: 6,
 					layers: [baseMap, renderedMarkersLayer]
 				});
-				
+
 				// maximum brainage to work with old library
-				oms = new OverlappingMarkerSpiderfier(map,leaflet, {});
-				
-				let popup = new leaflet.Popup({offset: new leaflet.Point(0.5, -24)});
-				oms.addListener('click', function(marker, markerPos) {
-					console.log("Marker Clicked",marker);
+				oms = new OverlappingMarkerSpiderfier(map, leaflet, {});
+
+				let popup = new leaflet.Popup({ offset: new leaflet.Point(0.5, -24) });
+				oms.addListener('click', function (marker, markerPos) {
+					console.log('Marker Clicked', marker);
 					popup.setContent(getPopupData(leaflet.stamp(marker)));
 					popup.setLatLng(markerPos);
 					map.openPopup(popup);
 				});
-				oms.addListener('spiderfy', function(markers) {
+				oms.addListener('spiderfy', function (markers) {
 					map.closePopup();
 				});
 			}

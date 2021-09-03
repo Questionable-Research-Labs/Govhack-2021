@@ -30,8 +30,7 @@
 		function updatePipNum() {
 			// Magical line of best fit to produce good amount of PIP to
 			// fit any given screen size
-			let x =
-				window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+			let x = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 			numPipLabels = 0.008 * x + 2;
 		}
 		window.addEventListener('resize', updatePipNum);

@@ -13,8 +13,7 @@ const config = {
 		adapter: cloudflareAdapter(),
 		vite: {
 			server: {
-				hmr: { overlay: false } 
-
+				hmr: { overlay: false }
 			}
 		}
 	}

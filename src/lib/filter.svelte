@@ -42,24 +42,14 @@
 	// This contains all entries, but as a tuple with the boolean saying if it matches or not
 	export let filteredLocationList: [Feature, boolean][] = [];
 
-	const filterList: ((feature: Feature) => boolean)[] = [
-		testActiveDateRange,
-		testStringSearch,
-		testDateAdded
-	];
+	const filterList: ((feature: Feature) => boolean)[] = [testActiveDateRange, testStringSearch, testDateAdded];
 
 	function testActiveDateRange(feature: Feature): boolean {
 		// Start of search range must be before or equal to LOI
 		// AND
 		// End of search range must be after or equal to LOI
-		let searchRange = [
-			timeFromMoment(feature.properties.start),
-			timeFromMoment(feature.properties.end)
-		];
-		return (
-			Math.floor(searchRange[0]) <= activeDateRange[1] &&
-			Math.floor(searchRange[1]) >= activeDateRange[0]
-		);
+		let searchRange = [timeFromMoment(feature.properties.start), timeFromMoment(feature.properties.end)];
+		return Math.floor(searchRange[0]) <= activeDateRange[1] && Math.floor(searchRange[1]) >= activeDateRange[0];
 	}
 
 	function testStringSearch(feature: Feature): boolean {
@@ -72,9 +62,7 @@
 		let includeUnknown = Math.round(addedDateRange[0]) === Math.round(fullAddedDateRange[0]);
 		if (feature.properties.dateAdded.isValid()) {
 			let addedDate = timeFromMoment(feature.properties.dateAdded);
-			return (
-				Math.ceil(addedDateRange[0]) <= addedDate && Math.ceil(addedDateRange[1]) >= addedDate
-			);
+			return Math.ceil(addedDateRange[0]) <= addedDate && Math.ceil(addedDateRange[1]) >= addedDate;
 		} else {
 			// The slider is including unknown dates
 			return includeUnknown;
@@ -87,19 +75,10 @@
 
 	$: {
 		// Svelte quite often fires updates when not needed
-		if (
-			geoData !== null &&
-			!compareCaches(filterCache, [activeDateRange, addedDateRange, searchTerm])
-		) {
+		if (geoData !== null && !compareCaches(filterCache, [activeDateRange, addedDateRange, searchTerm])) {
 			filterCache = [activeDateRange, addedDateRange, searchTerm];
-			filteredLocationList = geoData.features.map((feature: Feature) => [
-				feature,
-				combineLogic(feature)
-			]);
-			loiCount.set(
-				filteredLocationList.map(([_, enabled]: [Feature, boolean]) => enabled).filter(Boolean)
-					.length
-			);
+			filteredLocationList = geoData.features.map((feature: Feature) => [feature, combineLogic(feature)]);
+			loiCount.set(filteredLocationList.map(([_, enabled]: [Feature, boolean]) => enabled).filter(Boolean).length);
 		}
 	}
 </script>

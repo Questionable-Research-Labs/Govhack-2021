@@ -17,32 +17,25 @@
 <div>
 	<h3>Notifications</h3>
 	<p>
-		Enable notifications within our app to be notified whenever new locations of interest appear. We
-		will send a notification straight to your device alerting you to how many new locations have
-		appeared.
+		Enable notifications within our app to be notified whenever new locations of interest appear. We will send a
+		notification straight to your device alerting you to how many new locations have appeared.
 	</p>
 	<div class="fake-notif">
 		<h3 class="fake-notif__title">New COVID-19 Locations of interest</h3>
 		<p class="fake-notif__body">
-			There are 11 new COVID-19 locations of interest, check the app to see if there are any around
-			you.
+			There are 11 new COVID-19 locations of interest, check the app to see if there are any around you.
 		</p>
 		<span class="fake-notif__time">1:38 pm <span class="dot" /> toi.qrl.nz</span>
 	</div>
 	<p>
-		We will provide you with notifications similar to the image above and you will receive these
-		whenever a new location of interest is added.
+		We will provide you with notifications similar to the image above and you will receive these whenever a new location
+		of interest is added.
 	</p>
 	<div class="buttonContainer">
 		{#if $notificationsEnabled}
-			<button class="actionButton" on:click={notify.disableNotifications}
-				>Disable notifications</button
-			>
+			<button class="actionButton" on:click={notify.disableNotifications}>Disable notifications</button>
 		{:else}
-			<button
-				class="actionButton"
-				on:click={notify.enableNotifications}
-				disabled={notify.notificationDenied}
+			<button class="actionButton" on:click={notify.enableNotifications} disabled={notify.notificationDenied}
 				>Enable notifications
 			</button>
 		{/if}

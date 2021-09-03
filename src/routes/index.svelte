@@ -8,28 +8,25 @@
 		<h4 class="info__section__title">What is Toi?</h4>
 		<p class="info__section__text">
 			<b>Toi</b> is an application that allows people to easily search <b>COVID-19</b>
-			locations of interest between the specified dates. The website has a large easy to navigate map
-			and a slider at the bottom of the webpage to slide through all the different dates and see what
-			the locations of interest were.
+			locations of interest between the specified dates. The website has a large easy to navigate map and a slider at the
+			bottom of the webpage to slide through all the different dates and see what the locations of interest were.
 		</p>
 	</section>
 	<section class="info__section">
 		<h4 class="info__section__title">How do I use Toi?</h4>
 		<p class="info__section__text">
-			To use <b>Toi</b> you must first navigate to <a href="/map">the map</a>. At the bottom of the
-			screen, there is a large slider with this slider you can adjust the two points to select your
-			range of dates. The first point is the starting date and the second is the ending. After this
-			blimps will appear on the map showcasing the locations of interest. You can also filter to
-			only a specific location by using the search box at the top of your screen.
+			To use <b>Toi</b> you must first navigate to <a href="/map">the map</a>. At the bottom of the screen, there is a
+			large slider with this slider you can adjust the two points to select your range of dates. The first point is the
+			starting date and the second is the ending. After this blimps will appear on the map showcasing the locations of
+			interest. You can also filter to only a specific location by using the search box at the top of your screen.
 		</p>
 	</section>
 
 	<section class="info__section">
 		<h4 class="info__section__title">Open Source</h4>
 		<p class="info__section__text">
-			This is an open-source project! This means all of the code that went into this project is
-			available to the public. If you are interested in contributing or would just like to view the
-			code for this website you can view it on <a
+			This is an open-source project! This means all of the code that went into this project is available to the public.
+			If you are interested in contributing or would just like to view the code for this website you can view it on <a
 				href="https://github.com/Questionable-Research-Labs/Govhack-2021"
 				target="_blank"
 				rel="noreferrer">Github here</a
@@ -40,16 +37,15 @@
 	<section class="info__section">
 		<h4 class="info__section__title">Data Used</h4>
 		<p class="info__section__text">
-			This project uses data provided by the <b>New Zealand Government</b>. This data is licensed
-			under the Creative Commons Attribution-Sharealike 4.0 Internation license. You can view this
-			data on <b>Ministry of Health New Zealand</b> github repository which is available at
+			This project uses data provided by the <b>New Zealand Government</b>. This data is licensed under the Creative
+			Commons Attribution-Sharealike 4.0 Internation license. You can view this data on
+			<b>Ministry of Health New Zealand</b>
+			github repository which is available at
 			<a href="https://github.com/minhealthnz/nz-covid-data" target="_blank" rel="noreferrer"
 				>github.com/minhealthnz/nz-covid-data</a
 			>,
-			<a
-				href="https://github.com/minhealthnz/nz-covid-data/blob/main/LICENSE"
-				target="_blank"
-				rel="noreferrer">view license</a
+			<a href="https://github.com/minhealthnz/nz-covid-data/blob/main/LICENSE" target="_blank" rel="noreferrer"
+				>view license</a
 			>.
 		</p>
 	</section>

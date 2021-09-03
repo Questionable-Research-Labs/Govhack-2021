@@ -38,32 +38,27 @@ getItem('notify', function (err, value: string) {
 
 messaging.onBackgroundMessage((payload) => {
 	console.log('[firebase-messaging-sw.js] Received background message ', payload);
-
-	
 });
 
 self.addEventListener('notificationclick', function (event) {
-    //For root applications: just change "'./'" to "'/'"
-    //Very important having the last forward slash on "new URL('./', location)..."
-    const rootUrl = new URL('/').href; 
-    event.notification.close();
-    event.waitUntil(
-        clients.matchAll().then(matchedClients =>
-        {
-            for (let client of matchedClients)
-            {
-                if (client.url.indexOf(rootUrl) >= 0)
-                {
-                    return client.focus();
-                }
-            }
+	//For root applications: just change "'./'" to "'/'"
+	//Very important having the last forward slash on "new URL('./', location)..."
+	const rootUrl = new URL('/').href;
+	event.notification.close();
+	event.waitUntil(
+		clients.matchAll().then((matchedClients) => {
+			for (let client of matchedClients) {
+				if (client.url.indexOf(rootUrl) >= 0) {
+					return client.focus();
+				}
+			}
 
-            return clients.openWindow(rootUrl).then(function (client) { client.focus(); });
-        })
-    );
+			return clients.openWindow(rootUrl).then(function (client) {
+				client.focus();
+			});
+		})
+	);
 });
-
-
 
 // const analytics = firebase.analytics();
 // analytics.logEvent('Startup');
@@ -127,8 +122,7 @@ worker.addEventListener('fetch', (event) => {
 
 	// don't try to handle e.g. data: URIs
 	const isHttp = url.protocol.startsWith('http');
-	const isDevServerRequest =
-		url.hostname === self.location.hostname && url.port !== self.location.port;
+	const isDevServerRequest = url.hostname === self.location.hostname && url.port !== self.location.port;
 	const isStaticAsset = url.host === self.location.host && staticAssets.has(url.pathname);
 	const skipBecauseUncached = event.request.cache === 'only-if-cached' && !isStaticAsset;
 

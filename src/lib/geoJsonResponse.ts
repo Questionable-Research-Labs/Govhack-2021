@@ -20,10 +20,7 @@ export class GeoData {
 			return {
 				geometry: {
 					...e['geometry'],
-					coordinates: [
-						parseFloat(e['geometry']['coordinates'][1]),
-						parseFloat(e['geometry']['coordinates'][0])
-					]
+					coordinates: [parseFloat(e['geometry']['coordinates'][1]), parseFloat(e['geometry']['coordinates'][0])]
 				},
 				type: e['type'],
 				properties: {
