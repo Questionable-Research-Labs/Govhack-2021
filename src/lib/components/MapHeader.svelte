@@ -106,6 +106,12 @@
 					</div>
 					<div class="key colour-bar" />
 				</div>
+				<div class="map-key">
+					<div class="labels">
+						<div>Unknown</div>
+					</div>
+					<div class="key unknown-key" />
+				</div>
 			</InfoBlock>
 		</div>
 	</div>
@@ -121,6 +127,11 @@
 		flex-flow: column;
     align-items: flex-end;
     .map-key {
+
+			&:nth-of-type(2) {
+				margin-top: 0.5em;
+			}
+
       display: grid;
       grid-template-columns: 1fr 1em;
       grid-column-gap: 0.2rem;
@@ -136,8 +147,11 @@
         width: 1em;
         border-radius: 1rem;
       }
-      .key.colour-bar {
+      .colour-bar {
         background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
+      }
+      .unknown-key {
+        background: #707F89;
       }
     }
 	}
