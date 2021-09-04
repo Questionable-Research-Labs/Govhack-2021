@@ -66,8 +66,8 @@
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
 
-			fullActiveDateRange[0] = activeStartMin.properties.start.valueOf() / MS_IN_DAY;
-			activeDateRange[0] = fullActiveDateRange[0];
+			fullActiveDateRange[0] = Math.round(activeStartMin.properties.start.valueOf() / MS_IN_DAY);
+			activeDateRange[0] = Math.round(fullActiveDateRange[0]);
 
 			let addedStartMin = geoData.features.reduce((prev, curr) =>
 				curr.properties.dateAdded.isValid()
@@ -77,8 +77,8 @@
 					: prev
 			);
 			console.log("added Site Min",addedStartMin)
-			fullAddedDateRange[0] = addedStartMin.properties.dateAdded.valueOf() / MS_IN_DAY;
-			addedDateRange[0] = fullAddedDateRange[0];
+			fullAddedDateRange[0] = Math.round(addedStartMin.properties.dateAdded.valueOf() / MS_IN_DAY);
+			addedDateRange[0] = Math.round(fullAddedDateRange[0]);
 		}
 	}
 
