@@ -140,6 +140,8 @@
 			});
 
 			renderedMarkersLayer = leaflet.featureGroup();
+
+			// If changing the base map, remember to change the service worker caching to exclude the new domain
 			const baseMap = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			});

@@ -105,6 +105,8 @@ async function fetchAndCache(request: Request) {
 
 	try {
 		const response = await fetch(request);
+		// Stops caching for the tile server, see photo of results without it
+		// https://cdn.discordapp.com/attachments/878137230357561356/883605775157702666/unknown.png
 		if (!request.url.includes("tile.openstreetmap.org")) {
 			cache.put(request, response.clone());
 		}
