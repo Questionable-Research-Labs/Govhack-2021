@@ -1,4 +1,4 @@
-:root {
+* {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
 		'Segoe UI Emoji', 'Segoe UI Symbol';
 	--font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
@@ -24,30 +24,16 @@ h3 {
 .rangeNub {
 	cursor: grab;
 }
-@media all and (max-width: 1430px) {
-	.leaflet-top {
-		top: 128px !important;
-	}
-}
-@media all and (max-width: 1200px) {
-	.leaflet-top {
-		top: 170px !important;
-	}
-}
-@media all and (max-width: 940px) {
-	.leaflet-top {
-		top: 220px !important;
-	}
-}
 
-@media all and (max-width: 770px) {
+
+@media all and (max-width: 715px) {
 	.leaflet-top {
-		top: 255px !important;
+		top: 135px !important;
 	}
 }
-@media all and (max-width: 440px) {
+@media all and (max-width: 370px) {
 	.leaflet-top {
-		top: 210px !important;
+		top: 155px !important;
 	}
 }
 
@@ -56,13 +42,6 @@ h3 {
 	display: none;
 }
 
-// @media only screen and (max-width: 440px) {
-
-//   .pip {
-//     display: none;
-//   }
-
-// }
 .notifications * {
 	z-index: 999;
 }

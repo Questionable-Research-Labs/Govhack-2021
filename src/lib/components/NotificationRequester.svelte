@@ -26,10 +26,9 @@
 
 <style lang="scss">
 	button {
-		border: #ffe330 3px solid;
-		padding: 5px;
-		border-radius: 37px;
-		background-color: transparent;
-		color: #ffe330;
+		border: none;
+    color: #ffe330;
+    background-color: transparent;
+		padding: 5px 8px;
 	}
 </style>

@@ -1,8 +1,7 @@
-<script lang="ts">
-	import { GeoData } from '$lib/geoJsonResponse';
-	import { afterUpdate, getContext } from 'svelte';
-	import { Place } from '$lib/place';
+<script lang='ts'>
+	import { getContext } from 'svelte';
 	import SearchInfoModel from './models/searchInfoModel.svelte';
+
 	const { open } = getContext('simple-modal');
 
 	// export let probablePlaces: ((places: Place[]) => void);
@@ -22,69 +21,119 @@
 	}
 </script>
 
-<div class="wrapper">
-	<label for="searchBox">Filter by Address/Location</label>
-	<button class="infoIcon" on:click={infoPopup} title="Search Information">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="16"
-			height="16"
-			fill="currentColor"
-			class="bi bi-info-circle"
-			viewBox="0 0 16 16"
-		>
-			<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+<div class='wrapper'>
+	<label class='search'>
+		<svg class='search__icon' xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 0 24 24' width='24px'
+				 fill='var(--icon-colour)'>
+			<path d='M0 0h24v24H0z' fill='none' />
 			<path
-				d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
-			/>
+				d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z' />
 		</svg>
-	</button>
-	<input type="text" bind:value={searchTerm} placeholder="Enter Address/Location" id="searchBox" />
+		<input class='search__input' type='text' bind:value={searchTerm} placeholder='Enter Address/Location'
+					 id='searchBox' />
+		<button class='search__info' on:click={infoPopup} title='Lean more about searching'>
+			<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 0 24 24' width='24px' fill='var(--icon-colour)'>
+				<path d='M0 0h24v24H0z' fill='none' />
+				<path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z' />
+			</svg>
+		</button>
+	</label>
 </div>
 
-<style lang="scss">
-	.wrapper {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0;
-		.infoIcon {
-			margin-left: 0.5rem;
-			border: none;
-			background: none;
-		}
-		input {
-			padding: 1em;
-			margin-left: 1em;
-		}
-	}
+<style lang='scss'>
 
-	@media all and (max-width: 770px) {
-		.wrapper {
-			padding: 1em 0;
-		}
-	}
+  label {
+    vertical-align: bottom;
+    font-size: 1em;
+  }
 
-	@media only screen and (max-width: 440px) {
-		.wrapper {
-			flex-flow: column;
-			padding: 0;
-		}
+  .wrapper {
+    display: flex;
+    align-items: center;
+    vertical-align: baseline;
+    text-align: right;
+    width: auto;
+    background-color: white;
+    box-shadow: 4px 2px 5px rgba(0, 0, 0, 0.5);
+    padding: 1em 1.5em;
+    border-bottom-left-radius: 0.25em;
+  }
 
-		label {
-			font-size: 0.7em;
-			padding-bottom: 0.5em;
-			display: none;
-		}
-		.infoIcon {
-			position: fixed;
-			right: 0;
-		}
+  @media all and (max-width: 840px) {
+    .wrapper {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
 
-		input {
-			padding: 1em;
+  @media all and (max-width: 715px) {
+    .wrapper {
+      padding: 0;
 			width: 100%;
-			font-size: 1em;
+    }
+
+		.search {
+			width: 100%;
 		}
-	}
+  }
+
+  .info-icon {
+    cursor: pointer;
+    padding: 0;
+    color: black;
+    margin-right: 1em;
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    border: 2px solid #b1b1b1;
+    border-radius: 0.2em;
+    --icon-colour: #b1b1b1;
+
+    &__icon {
+      margin: 0.5em 0.5em 0.5em 1em;
+    }
+
+    &__info {
+      background-color: transparent;
+      border: none;
+      height: 24px;
+      width: 24px;
+      margin-right: 1em;
+      --icon-colour: #b1b1b1;
+
+      &:hover {
+        --icon-colour: #333333;
+      }
+
+      > svg {
+        margin: 0;
+        padding: 0;
+      }
+
+    }
+
+    &__input {
+			flex: 1 1 auto;
+      padding: 1em;
+      border: none;
+      background-color: transparent;
+    }
+
+
+    &:focus-within {
+      border-color: #333333;
+      --icon-colour: #333333;
+
+    }
+  }
+
+  input {
+
+  }
+
+  @media all and (max-width: 975px) {
+
+  }
 </style>

@@ -13,6 +13,7 @@
 	import Filter from '$lib/filter.svelte';
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from '$lib/consts';
+	import MapHeader from '$lib/components/MapHeader.svelte';
 
 	// FILTERS
 	let fullDateRangesConfigured = false;
@@ -42,19 +43,7 @@
 
 	// STATS
 
-	let lastUpdate: Writable<Date> = writable();
 	let loiCount: Tweened<number>;
-
-	(async () => {
-		try {
-			let response = await fetch('https://govhack2021-backend.host.qrl.nz/updated');
-			let body = await response.json();
-			console.log('Date pushed', body['getDatePushed']);
-			lastUpdate.set(new Date(body['getDatePushed']));
-		} catch (e) {
-			console.log('It shit itself', e);
-		}
-	})();
 
 	// FEATURES
 
@@ -93,41 +82,12 @@
 		bind:searchTerm
 		bind:filteredLocationList
 		bind:loiCount
-		bind:fullAddedDateRange
+		bind:fullAddedDateRange />
+	<MapHeader
+		bind:dates={activeDateRange}
+		bind:searchTerm={searchTerm}
+		bind:loiCount={loiCount}
 	/>
-	<header class="header" id="header">
-		<ResultHeading bind:dates={activeDateRange} />
-		<SearchBox bind:searchTerm />
-		<div class="info-block-container">
-			<InfoBlock>
-				<a href="https://github.com/minhealthnz/nz-covid-data"> Data from the New Zealand Government </a>
-				<span style="white-space: nowrap;"
-					><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | ©
-					<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</span
-				>
-			</InfoBlock>
-			<InfoBlock>
-				{#if typeof $lastUpdate !== 'undefined'}
-					Last updated {moment($lastUpdate).fromNow()}<br />
-				{/if}
-
-				{#if typeof $loiCount !== 'undefined'}
-					Locations of interest: {$loiCount}
-				{/if}
-			</InfoBlock>
-			<InfoBlock>
-				<b style="margin-bottom: 0.5rem;">Date Added</b>
-				<div class="map-key" style="height: 4em;">
-					<div class="labels">
-						<div>Today</div>
-						<div>Yesterday</div>
-						<div>Before That</div>
-					</div>
-					<div class="key colour-bar" />
-				</div>
-			</InfoBlock>
-		</div>
-	</header>
 	{#if geoData != null}
 		<LeafletMap bind:filteredLocationList />
 	{/if}
@@ -150,45 +110,15 @@
 	}
 
 	.header {
-		position: fixed;
-		z-index: 1;
-		width: 100%;
-		top: 0;
-		left: 0;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		background-color: white;
-	}
-	.info-block-container {
-		display: flex;
-		flex-direction: column;
-		position: absolute;
-		top: calc(100%);
-		z-index: 4;
-		right: 0;
-		align-items: flex-end;
-		.map-key {
-			display: grid;
-			grid-template-columns: 1fr 1em;
-			grid-column-gap: 0.2rem;
-
-			.labels {
-				text-align: right;
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-			}
-			.key {
-				height: 100%;
-				width: 1em;
-				border-radius: 1rem;
-			}
-			.key.colour-bar {
-				background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
-			}
-		}
-	}
-
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: white;
+  } 
 	footer {
 		position: fixed;
 		z-index: 1;

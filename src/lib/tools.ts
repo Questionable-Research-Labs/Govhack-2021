@@ -7,7 +7,7 @@ export const formatDate = (date: Date): string =>
 // Takes our custom date system and converts it into a human string
 export function dateToString(value: number, _ = undefined): string {
 	// return value
-	return formatDate(new Date(value * MS_IN_DAY));
+	return formatDate(new Date(Math.round(value * MS_IN_DAY)));
 }
 
 // Takes a date and converts it into our custom days since epoch date system
