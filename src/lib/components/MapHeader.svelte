@@ -106,12 +106,6 @@
 					</div>
 					<div class="key colour-bar" />
 				</div>
-				<div class="map-key">
-					<div class="labels">
-						<div>Unknown</div>
-					</div>
-					<div class="key unknown-key" />
-				</div>
 			</InfoBlock>
 		</div>
 	</div>
@@ -127,10 +121,6 @@
 		flex-flow: column;
     align-items: flex-end;
     .map-key {
-
-			&:nth-of-type(2) {
-				margin-top: 0.5em;
-			}
 
       display: grid;
       grid-template-columns: 1fr 1em;
