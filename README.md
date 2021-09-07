@@ -30,19 +30,19 @@ Available at [Questionable-Research-Labs/Govhack2021-backend](https://github.com
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Once you've created a project and installed dependencies with `yarn`, start a development server:
 
 ```bash
-npm run dev
+yarn dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+yarn dev -- --open
 ```
 
 ## Building
 
 ```bash
-npm run build
+yarn build
 ```
 
-> You can preview the built app with `npm run preview`, This should _not_ be used to serve your app in production.
+> You can preview the built app with `yarn preview`, This should _not_ be used to serve your app in production.
