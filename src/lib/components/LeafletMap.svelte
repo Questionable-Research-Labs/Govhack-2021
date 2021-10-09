@@ -62,13 +62,13 @@
 		tableLine('City', dataTable.city);
 		tableLine('Location', dataTable.location);
 		if (dataTable.dateAdded.isValid()) {
-			tableLine('Date Added', `${dataTable.dateAdded.format('YYYY-MM-D LT')}`);
+			tableLine('Date Added', `${dataTable.dateAdded.format('YYYY-MM-DD LT')}`);
 		} else {
 			tableLine('Date Added', 'Not specified');
 		}
 		tableLine('Advice', dataTable.advice);
-		tableLine('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
-		tableLine('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
+		tableLine('Start', `${dataTable.start.format('YYYY-MM-DD LT')}`);
+		tableLine('End', `${dataTable.end.format('YYYY-MM-DD LT')}`);
 
 		// End table
 		output += '</table>';
