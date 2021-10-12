@@ -97,7 +97,7 @@
 				{/if}
 			</InfoBlock>
 			<InfoBlock>
-				<b style="margin-bottom: 0.5rem;">Date Added</b>
+				<b>Date Added</b>
 				<div class="map-key" style="height: 4em;">
 					<div class="labels">
 						<div>Today</div>
@@ -105,6 +105,10 @@
 						<div>Before That</div>
 					</div>
 					<div class="key colour-bar" />
+				</div>
+				<div class="map-key">
+					<div>Community</div>
+					<div class="key community-key" />
 				</div>
 			</InfoBlock>
 		</div>
@@ -125,6 +129,7 @@
       display: grid;
       grid-template-columns: 1fr 1em;
       grid-column-gap: 0.2rem;
+	  margin-top: 0.5rem;
 
       .labels {
         text-align: right;
@@ -143,6 +148,9 @@
       .unknown-key {
         background: #707F89;
       }
+	  .community-key {
+		background: #ffe330;
+	  }
     }
 	}
 

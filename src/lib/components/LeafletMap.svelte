@@ -19,7 +19,7 @@
 	import { storeMarker, dateRangeTimings, getPopupData, getMarkerID } from '$lib/markerStore';
 	import moment from 'moment';
 	import type OverlappingMarkerSpiderfier from '../oms';
-import InfoBlock from './InfoBlock.svelte';
+	import InfoBlock from './InfoBlock.svelte';
 
 	let map;
 	let leaflet;
@@ -61,8 +61,8 @@ import InfoBlock from './InfoBlock.svelte';
 			}
 		};
 		const linkGen = (link: string, text: string) => {
-			output += `<a target='none' href='${link}''>${text}</a><br>`
-		}
+			output += `<a target='none' href='${link}''>${text}</a><br>`;
+		};
 
 		// Add table info
 		tableLineGen('City', dataTable.city);
@@ -73,27 +73,28 @@ import InfoBlock from './InfoBlock.svelte';
 			tableLineGen('Date Added', 'Not specified');
 		}
 		if (dataTable.updated.isValid()) {
-			console.log("update",dataTable.event)
-			tableLineGen('Updated',dataTable.updated.format('YYYY-MM-D LT'))
+			console.log('update', dataTable.event);
+			tableLineGen('Updated', dataTable.updated.format('YYYY-MM-D LT'));
 		}
 		tableLineGen('Advice', dataTable.advice);
 		tableLineGen('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
 		tableLineGen('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
-		tableLineGen('Official', `${dataTable.official}`);
-
+		if (!dataTable.official) {
+			tableLineGen('Status', 'Community Self Notification');
+		}
 
 		// End table
 		output += '</table>';
-		
+
 		// Start link section
-		output += '<p>'
+		output += '<p>';
 		// More Info link (Used in community pins)
-		if (typeof dataTable.infoLink !== "undefined") {
-			linkGen(dataTable.infoLink,"View More Info")
+		if (typeof dataTable.infoLink !== 'undefined') {
+			linkGen(dataTable.infoLink, 'View More Info');
 		}
 		// Add link to google maps
-		linkGen("https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}","View in Google Streetview")
-		output += '</p>'
+		linkGen('https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}', 'View in Google Streetview');
+		output += '</p>';
 		return output;
 	}
 
@@ -115,25 +116,29 @@ import InfoBlock from './InfoBlock.svelte';
 
 				storeMarker(feature.properties.id, leaflet.stamp(marker), popupHTML);
 
-				// setMarkerState(marker, enabled);
-
-				// Color code the markers based on how recently they were added
-				if (feature.properties.dateAdded.isValid()) {
-					let deltaDateAdded = now.startOf('day').diff(feature.properties.dateAdded.startOf('day'), 'days');
-
-					// Use HSL to Transition #237CC9 (blue marker) to full #f72f2f (red)
-					let hueRotateAmount = Math.max(-48 * deltaDateAdded + 148, 0);
-					let saturationAmount = Math.max(8 * deltaDateAdded + 93, 70);
-
-					let filter = `hue-rotate(${hueRotateAmount}deg) saturate(${saturationAmount}%)`;
-
+				// If community pin, override colour
+				if (!feature.properties.official) {
+					let filter = `hue-rotate(${-156}deg) saturate(${200}%) brightness(1.4)`;
 					(marker.getElement() as HTMLElement).style.filter = filter;
 				} else {
-					let saturationAmount = 20;
+					// Color code the markers based on how recently they were added
+					if (feature.properties.dateAdded.isValid()) {
+						let deltaDateAdded = now.startOf('day').diff(feature.properties.dateAdded.startOf('day'), 'days');
 
-					let filter = `saturate(${saturationAmount}%)`;
+						// Use HSL to Transition #237CC9 (blue marker) to full #f72f2f (red)
+						let hueRotateAmount = Math.max(-48 * deltaDateAdded + 148, 0);
+						let saturationAmount = Math.max(8 * deltaDateAdded + 93, 70);
 
-					(marker.getElement() as HTMLElement).style.filter = filter;
+						let filter = `hue-rotate(${hueRotateAmount}deg) saturate(${saturationAmount}%)`;
+
+						(marker.getElement() as HTMLElement).style.filter = filter;
+					} else {
+						let saturationAmount = 20;
+
+						let filter = `saturate(${saturationAmount}%)`;
+
+						(marker.getElement() as HTMLElement).style.filter = filter;
+					}
 				}
 			}
 			map.fitBounds(renderedMarkersLayer.getBounds());
