@@ -49,8 +49,19 @@
 	/// The popup requires HTML in the form of a string,
 	/// so this generates a table with a title of all the data.
 	function generatePopup(dataTable: Properties, location: [number, number]): string {
+		let output = "";
+		if (!dataTable.official) {
+			output += `
+			<style>
+				.leaflet-popup-content-wrapper {
+					border-top: solid 5px #ffcc00;
+					border-bottom: solid 5px #ffcc00;
+				}
+			</style>	
+			`
+		}
 		// Title
-		let output = `<p>${dataTable.event}</p>`;
+		output += `<p>${dataTable.event}</p>`;
 
 		// Start table
 		output += '<table>';
