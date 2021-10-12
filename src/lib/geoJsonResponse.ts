@@ -6,15 +6,20 @@ export class GeoData {
 	type: string;
 	features: Feature[];
 
-	constructor(data: any) {
-		this.name = data['name'];
-		this.type = data['type'];
-		this.features = data['features'].map((e) => {
+	constructor(primarySource: object,communitySource: Object) {
+		this.name = primarySource['name'];
+		this.type = primarySource['type'];
+		let allFeatures = [...primarySource['features'],...communitySource['features']]
+		this.features = allFeatures.map((e) => {
 			let dateAdded: Moment;
 			if (e['properties']['Added'].includes('-')) {
 				dateAdded = moment(e['properties']['Added'], 'YYYY-MM-DD HH:mm:ss');
 			} else {
 				dateAdded = moment(e['properties']['Added'], 'DD/MM/YYYY h:mm');
+			}
+			let official: boolean = true
+			if (typeof e['properties']['official'] !== "undefined") {
+				official = e['properties']['official']
 			}
 
 			return {
@@ -31,7 +36,9 @@ export class GeoData {
 					event: e['properties']['Event'],
 					advice: e['properties']['Advice'],
 					location: e['properties']['Location'],
-					id: e['properties']['id']
+					id: e['properties']['id'],
+					updated: moment(e['properties']['Updated'], 'DD/MM/YYYY hh:mm a'),
+					official: official
 				}
 			};
 		});
@@ -58,4 +65,6 @@ export interface Properties {
 	start: Moment;
 	id: string;
 	dateAdded: Moment;
+	updated: Moment;
+	official: boolean;
 }

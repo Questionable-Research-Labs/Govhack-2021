@@ -66,9 +66,15 @@
 		} else {
 			tableLine('Date Added', 'Not specified');
 		}
+		if (dataTable.updated.isValid()) {
+			console.log("update",dataTable.event)
+			tableLine('Updated',dataTable.updated.format('YYYY-MM-D LT'))
+		}
 		tableLine('Advice', dataTable.advice);
 		tableLine('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
 		tableLine('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
+		tableLine('Official', `${dataTable.official}`);
+
 
 		// End table
 		output += '</table>';
