@@ -18,8 +18,8 @@ export class GeoData {
 				dateAdded = moment(e['properties']['Added'], 'DD/MM/YYYY h:mm');
 			}
 			let official: boolean = true
-			if (typeof e['properties']['official'] !== "undefined") {
-				official = e['properties']['official']
+			if (typeof e['properties']['Official'] !== "undefined") {
+				official = e['properties']['Official']
 			}
 
 			return {
@@ -38,7 +38,8 @@ export class GeoData {
 					location: e['properties']['Location'],
 					id: e['properties']['id'],
 					updated: moment(e['properties']['Updated'], 'DD/MM/YYYY hh:mm a'),
-					official: official
+					infoLink: e['properties']["Link"],
+					official
 				}
 			};
 		});
@@ -67,4 +68,5 @@ export interface Properties {
 	dateAdded: Moment;
 	updated: Moment;
 	official: boolean;
+	infoLink: string
 }

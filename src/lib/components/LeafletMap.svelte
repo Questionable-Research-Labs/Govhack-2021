@@ -19,6 +19,7 @@
 	import { storeMarker, dateRangeTimings, getPopupData, getMarkerID } from '$lib/markerStore';
 	import moment from 'moment';
 	import type OverlappingMarkerSpiderfier from '../oms';
+import InfoBlock from './InfoBlock.svelte';
 
 	let map;
 	let leaflet;
@@ -54,33 +55,45 @@
 		// Start table
 		output += '<table>';
 		/// Templates a table row with a key value pair
-		const tableLine = (key: string, value: string | Date) => {
+		const tableLineGen = (key: string, value: string | Date) => {
 			if (value !== null) {
 				output += `<tr><td>${key}</td><td>${value}</td></tr>`;
 			}
 		};
-		tableLine('City', dataTable.city);
-		tableLine('Location', dataTable.location);
+		const linkGen = (link: string, text: string) => {
+			output += `<a target='none' href='${link}''>${text}</a><br>`
+		}
+
+		// Add table info
+		tableLineGen('City', dataTable.city);
+		tableLineGen('Location', dataTable.location);
 		if (dataTable.dateAdded.isValid()) {
-			tableLine('Date Added', `${dataTable.dateAdded.format('YYYY-MM-D LT')}`);
+			tableLineGen('Date Added', `${dataTable.dateAdded.format('YYYY-MM-D LT')}`);
 		} else {
-			tableLine('Date Added', 'Not specified');
+			tableLineGen('Date Added', 'Not specified');
 		}
 		if (dataTable.updated.isValid()) {
 			console.log("update",dataTable.event)
-			tableLine('Updated',dataTable.updated.format('YYYY-MM-D LT'))
+			tableLineGen('Updated',dataTable.updated.format('YYYY-MM-D LT'))
 		}
-		tableLine('Advice', dataTable.advice);
-		tableLine('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
-		tableLine('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
-		tableLine('Official', `${dataTable.official}`);
+		tableLineGen('Advice', dataTable.advice);
+		tableLineGen('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
+		tableLineGen('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
+		tableLineGen('Official', `${dataTable.official}`);
 
 
 		// End table
 		output += '</table>';
-
+		
+		// Start link section
+		output += '<p>'
+		// More Info link (Used in community pins)
+		if (typeof dataTable.infoLink !== "undefined") {
+			linkGen(dataTable.infoLink,"View More Info")
+		}
 		// Add link to google maps
-		output += `<p><a target='none' href='https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}'>View in Google Streetview</a></p>`;
+		linkGen("https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}","View in Google Streetview")
+		output += '</p>'
 		return output;
 	}
 
