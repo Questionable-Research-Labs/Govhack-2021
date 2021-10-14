@@ -65,7 +65,7 @@
 						: curr
 					: prev
 			);
-			console.log("added Site Min",addedStartMin)
+			console.log('added Site Min', addedStartMin);
 			fullAddedDateRange[0] = Math.round(addedStartMin.properties.dateAdded.valueOf() / MS_IN_DAY);
 			addedDateRange[0] = Math.round(fullAddedDateRange[0]);
 		}
@@ -82,12 +82,9 @@
 		bind:searchTerm
 		bind:filteredLocationList
 		bind:loiCount
-		bind:fullAddedDateRange />
-	<MapHeader
-		bind:dates={activeDateRange}
-		bind:searchTerm={searchTerm}
-		bind:loiCount={loiCount}
+		bind:fullAddedDateRange
 	/>
+	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount />
 	{#if geoData != null}
 		<LeafletMap bind:filteredLocationList />
 	{/if}
@@ -96,11 +93,7 @@
 		<h1>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h1>
 		<DateSlider bind:dateRange={activeDateRange} bind:fullRange={fullActiveDateRange} id="active-range-slider" />
 		<h1>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h1>
-		<DateSlider
-			bind:dateRange={addedDateRange}
-			bind:fullRange={fullAddedDateRange}
-			id="added-range-slider"
-		/>
+		<DateSlider bind:dateRange={addedDateRange} bind:fullRange={fullAddedDateRange} id="added-range-slider" />
 	</footer>
 </main>
 
@@ -110,15 +103,15 @@
 	}
 
 	.header {
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    top: 0;
-    left: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background-color: white;
-  } 
+		position: fixed;
+		z-index: 1;
+		width: 100%;
+		top: 0;
+		left: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		background-color: white;
+	}
 	footer {
 		position: fixed;
 		z-index: 1;
@@ -127,6 +120,25 @@
 		left: 0;
 		padding: 1em;
 		background-color: white;
+		transform: translateY(calc(100%));
+		transition: transform 100ms ease-out;
+
+		&:hover {
+			transform: translateY(0);
+		}
+
+		&::before {
+			content: '^';
+			position: absolute;
+			text-align: center;
+			top: -2rem;
+			left: 50%;
+			transform: translateX(-50%);
+			background-color: white;
+			padding: 0.5rem 2rem;
+			border-radius: 5px 5px 0 0;
+			font-weight: bolder;
+		}
 
 		h1 {
 			text-align: center;
