@@ -17,6 +17,7 @@
 
 	let lastUpdate: Writable<Date> = writable();
 	export let loiCount: Tweened<number>;
+	export let communityPins: boolean;
 
 	(async () => {
 		try {
@@ -106,10 +107,12 @@
 					</div>
 					<div class="key colour-bar" />
 				</div>
-				<div class="map-key">
-					<div>Community</div>
-					<div class="key community-key" />
-				</div>
+				{#if communityPins }
+					<div class="map-key">
+						<div>Community</div>
+						<div class="key community-key" />
+					</div>
+				{/if}
 			</InfoBlock>
 		</div>
 	</div>

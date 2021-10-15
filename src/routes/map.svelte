@@ -41,7 +41,7 @@
 
 	let searchTerm: string = '';
 
-	// STATS
+	// HEADER INFO
 
 	let loiCount: Tweened<number>;
 
@@ -87,6 +87,7 @@
 		bind:dates={activeDateRange}
 		bind:searchTerm={searchTerm}
 		bind:loiCount={loiCount}
+		communityPins={geoData?.communityPins}
 	/>
 	{#if geoData != null}
 		<LeafletMap bind:filteredLocationList />
