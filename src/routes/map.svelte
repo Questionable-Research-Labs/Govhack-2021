@@ -1,3 +1,16 @@
+<script context="module">
+	/**
+	 * @type {import('@sveltejs/kit').Load}
+	 */
+	export async function load({ page, fetch, session, stuff }) {
+		return {
+			props: {
+				queryMarker: page.query.get("marker")
+			}
+		};
+	}
+</script>
+
 <script lang="ts">
 	import LeafletMap from '$lib/components/LeafletMap.svelte';
 	import DateSlider from '$lib/components/DateSlider.svelte';
@@ -14,6 +27,9 @@
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from '$lib/consts';
 	import MapHeader from '$lib/components/MapHeader.svelte';
+
+	// QUERY MARKER
+	export let queryMarker;
 
 	// FILTERS
 	let fullDateRangesConfigured = false;
@@ -65,7 +81,7 @@
 						: curr
 					: prev
 			);
-			console.log("added Site Min",addedStartMin)
+			console.log('added Site Min', addedStartMin);
 			fullAddedDateRange[0] = Math.round(addedStartMin.properties.dateAdded.valueOf() / MS_IN_DAY);
 			addedDateRange[0] = Math.round(fullAddedDateRange[0]);
 		}
@@ -82,26 +98,18 @@
 		bind:searchTerm
 		bind:filteredLocationList
 		bind:loiCount
-		bind:fullAddedDateRange />
-	<MapHeader
-		bind:dates={activeDateRange}
-		bind:searchTerm={searchTerm}
-		bind:loiCount={loiCount}
-		communityPins={geoData?.communityPins}
+		bind:fullAddedDateRange
 	/>
+	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount communityPins={geoData?.communityPins} />
 	{#if geoData != null}
-		<LeafletMap bind:filteredLocationList />
+		<LeafletMap bind:filteredLocationList queryMarker={queryMarker}/>
 	{/if}
 
 	<footer>
 		<h1>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h1>
 		<DateSlider bind:dateRange={activeDateRange} bind:fullRange={fullActiveDateRange} id="active-range-slider" />
 		<h1>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h1>
-		<DateSlider
-			bind:dateRange={addedDateRange}
-			bind:fullRange={fullAddedDateRange}
-			id="added-range-slider"
-		/>
+		<DateSlider bind:dateRange={addedDateRange} bind:fullRange={fullAddedDateRange} id="added-range-slider" />
 	</footer>
 </main>
 
@@ -111,15 +119,15 @@
 	}
 
 	.header {
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    top: 0;
-    left: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background-color: white;
-  } 
+		position: fixed;
+		z-index: 1;
+		width: 100%;
+		top: 0;
+		left: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		background-color: white;
+	}
 	footer {
 		position: fixed;
 		z-index: 1;

@@ -28,6 +28,7 @@
 	let oms: OverlappingMarkerSpiderfier;
 
 	export let filteredLocationList: [Feature, boolean][];
+	export let queryMarker: string;
 
 	function setMarkerState(marker, enabled: boolean) {
 		if (enabled) {
@@ -57,9 +58,18 @@
 					border-top: solid 5px #ffcc00;
 					border-bottom: solid 5px #ffcc00;
 				}
+				.leaflet-container .leaflet-popup-close-button {
+					top: 10px !important;
+				}
 			</style>	
 			`
 		}
+		// Share icon
+		output += `<button onclick="navigator.clipboard.writeText(window.location.href+ '?marker=${dataTable.id}');" class="leaflet-container leaflet-popup-close-button leaflet-popup-share-button">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share-fill" viewBox="0 0 16 16">
+							<path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+						</svg>
+					</button>`
 		// Title
 		output += `<p>${dataTable.event}</p>`;
 
@@ -115,6 +125,7 @@
 		let now = moment();
 		if (typeof filteredLocationList !== 'undefined' || filteredLocationList !== null) {
 			loiCount.set(filteredLocationList.length);
+			let queryMarkerReference = undefined;
 			for (let [feature, enabled] of filteredLocationList) {
 				let marker = leaflet.marker(feature.geometry.coordinates, {
 					title: feature.properties.event,
@@ -126,6 +137,15 @@
 				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
 
 				storeMarker(feature.properties.id, leaflet.stamp(marker), popupHTML);
+				
+				if (feature.properties.id === queryMarker) {
+					queryMarkerReference = marker;
+					let popup = new leaflet.Popup({ offset: new leaflet.Point(0.5, -24) });
+					popup.setContent(getPopupData(leaflet.stamp(marker)));
+					popup.setLatLng(marker.getLatLng());
+					map.openPopup(popup);
+				}
+
 
 				// If community pin, override colour
 				if (!feature.properties.official) {
@@ -152,7 +172,19 @@
 					}
 				}
 			}
-			map.fitBounds(renderedMarkersLayer.getBounds());
+			if (typeof queryMarkerReference === "undefined") {
+				if (typeof queryMarker !== "undefined") {
+					console.log("Could not find marker")
+				} else {
+					console.log("Not searching for marker")
+				}
+				map.fitBounds(renderedMarkersLayer.getBounds());
+			} else {
+				console.log("Found marker!",queryMarkerReference.getLatLng())
+				let marker_pos = JSON.parse(JSON.stringify(queryMarkerReference.getLatLng()))
+				marker_pos.lat += 0.02
+				map.setView(marker_pos, 13);
+			}
 		}
 	}
 
