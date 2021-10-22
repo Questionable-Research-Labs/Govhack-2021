@@ -19,6 +19,8 @@
 		setInterval(updatePermissionStatus, 1000);
 		updatePermissionStatus();
 		console.log('Permission Status Loaded');
+		window.history.replaceState(null, null, window.location.pathname);
+
 	});
 </script>
 
