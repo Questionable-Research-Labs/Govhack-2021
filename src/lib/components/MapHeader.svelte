@@ -117,6 +117,8 @@
 		display: flex;
 		flex-flow: column;
 		align-items: flex-end;
+		pointer-events: auto;
+
 		.map-key {
 			display: grid;
 			grid-template-columns: 1fr 1em;
@@ -155,6 +157,7 @@
 
 		display: flex;
 		background-color: transparent;
+		pointer-events: none;
 	}
 
 	.block--first {
@@ -167,6 +170,7 @@
 		margin-right: 5%;
 		padding: 1em;
 		z-index: 1;
+		pointer-events: auto;
 
 		&::before {
 			content: '';

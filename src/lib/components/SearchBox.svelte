@@ -57,6 +57,9 @@
     box-shadow: 4px 2px 5px rgba(0, 0, 0, 0.5);
     padding: 1em 1.5em;
     border-bottom-left-radius: 0.25em;
+
+    pointer-events: auto;
+
   }
 
   @media all and (max-width: 840px) {
