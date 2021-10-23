@@ -5,11 +5,13 @@ export class GeoData {
 	name: string;
 	type: string;
 	features: Feature[];
+	communityPins: boolean;
 
 	constructor(primarySource: object,communitySource: Object) {
 		this.name = primarySource['name'];
 		this.type = primarySource['type'];
-		let allFeatures = [...primarySource['features'],...communitySource['features']]
+		let allFeatures = [...primarySource['features'],...communitySource['features']];
+		this.communityPins = communitySource['features'].length !==0;
 		this.features = allFeatures.map((e) => {
 			let dateAdded: Moment;
 			if (e['properties']['Added'].includes('-')) {

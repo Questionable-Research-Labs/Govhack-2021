@@ -1,3 +1,16 @@
+<script context="module">
+	/**
+	 * @type {import('@sveltejs/kit').Load}
+	 */
+	export async function load({ page, fetch, session, stuff }) {
+		return {
+			props: {
+				queryMarker: page.query.get("marker")
+			}
+		};
+	}
+</script>
+
 <script lang="ts">
 	import LeafletMap from '$lib/components/LeafletMap.svelte';
 	import DateSlider from '$lib/components/DateSlider.svelte';
@@ -14,6 +27,9 @@
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from '$lib/consts';
 	import MapHeader from '$lib/components/MapHeader.svelte';
+
+	// QUERY MARKER
+	export let queryMarker;
 
 	// FILTERS
 	let fullDateRangesConfigured = false;
@@ -41,7 +57,7 @@
 
 	let searchTerm: string = '';
 
-	// STATS
+	// HEADER INFO
 
 	let loiCount: Tweened<number>;
 
@@ -84,9 +100,9 @@
 		bind:loiCount
 		bind:fullAddedDateRange
 	/>
-	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount />
+	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount communityPins={geoData?.communityPins} />
 	{#if geoData != null}
-		<LeafletMap bind:filteredLocationList />
+		<LeafletMap bind:filteredLocationList queryMarker={queryMarker}/>
 	{/if}
 
 	<footer>
