@@ -18,111 +18,11 @@ h3 {
 	font-size: 1.5rem;
 }
 
-.leaflet-top {
-	top: 93px !important;
-}
-
 .rangeNub {
 	cursor: grab;
-}
-
-@media all and (max-width: 715px) {
-	.leaflet-top {
-		top: 135px !important;
-	}
-}
-@media all and (max-width: 370px) {
-	.leaflet-top {
-		top: 155px !important;
-	}
-}
-
-.leaflet-bottom {
-	// We have added our own atributation at the top
-	display: none;
 }
 
 .notifications * {
 	z-index: 999;
 }
 
-.leaflet-marker-icon {
-	transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-.leaflet-container .leaflet-popup-close-button {
-	// Improve contrast for the popup share and close buttons
-	color: #858585 !important;
-}
-.leaflet-container a.leaflet-popup-close-button {
-	// Improve contrast for the popup share and close buttons
-	font-size: 1.5rem !important;
-}
-.leaflet-popup-share-button-wrapper {
-	position: absolute;
-	top: 0;
-	left: 10px;
-	.leaflet-popup-share-button {
-		position: relative;
-
-		padding: 4px 4px 0 0;
-		border: none;
-		text-align: center;
-		width: 18px;
-		background: transparent !important;
-		overflow: visible !important;
-		&::after {
-			content: attr(aria-label); /* here's the magic */
-			position: absolute;
-
-			/* vertically center */
-			top: 110%;
-			transform: translateX(-50%);
-
-			/* move to right */
-			//   left:100%;
-			margin-left: 10px; /* and add a small left margin */
-
-			/* basic styles */
-			width: 60px;
-			padding: 4px;
-			border-radius: 5px;
-			background: rgb(12, 12, 12);
-			color: #fff;
-			text-align: center;
-			opacity: 0;
-			transition: 0.3s opacity;
-			pointer-events: none;
-		}
-		&:hover::after {
-			opacity: 1;
-		}
-
-		&::before {
-			content: "";
-			position: absolute;
-
-			/* position tooltip correctly */
-			left: 100%;
-			margin-left: -5px;
-
-			/* vertically center */
-			top: 47%;
-			transform: translateX(-50%);
-
-			/* move to right */
-			//   left:100%;
-			// margin-left: 10px; /* and add a small left margin */
-
-			/* the arrow */
-			border: 8px solid rgb(12, 12, 12);
-			border-color: transparent transparent rgb(12, 12, 12) transparent;
-
-			opacity: 0;
-			transition: 0.3s opacity;
-			pointer-events: none;
-		}
-		&:hover::before {
-			opacity: 1;
-		}
-	}
-}

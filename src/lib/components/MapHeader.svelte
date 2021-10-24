@@ -214,7 +214,7 @@
 		&__to {
 			color: white;
 			margin: 0 0.5em;
-			font-size: 1.2em;
+			font-size: 0.8rem;
 			font-weight: bold;
 		}
 	}
