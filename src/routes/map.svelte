@@ -184,6 +184,8 @@
 		background-color: white;
 		transition: transform 100ms ease-out;
 		transform: translateY(calc(87%));
+		box-shadow: 2px 2px 10px rgb(75, 70, 70);
+
 
 		.tab {
 			position: absolute;
@@ -199,6 +201,8 @@
 			font-weight: bolder;
 			display: block;
 			z-index: -1;
+			box-shadow: 2px 2px 10px rgb(75, 70, 70);
+
 		}
 		.inner {
 			transform: translateY(calc(100%));
