@@ -5,7 +5,7 @@
 	export async function load({ page, fetch, session, stuff }) {
 		return {
 			props: {
-				queryMarker: page.query.get("marker")
+				queryMarker: page.query.get('marker')
 			}
 		};
 	}
@@ -88,6 +88,29 @@
 	}
 
 	let filteredLocationList: [Feature, boolean][];
+
+	// DATE SLIDER CONTROLS
+	let footerShowen = false;
+	let footerHideTimeout;
+
+	function toggleFooter() {
+		console.log('Showing',footerShowen);
+		footerShowen = !footerShowen;
+	}
+	function showFooter() {
+		if (typeof footerHideTimeout!=="undefined") {
+			clearTimeout(footerHideTimeout);
+			footerHideTimeout = undefined;
+		}
+		setTimeout(function () {
+			footerShowen = true;
+		}, 1);
+	}
+	function hideFooterDelay() {
+		footerHideTimeout = setTimeout(function () {
+			footerShowen = false;
+		}, 400);
+	}
 </script>
 
 <main>
@@ -102,14 +125,37 @@
 	/>
 	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount communityPins={geoData?.communityPins} />
 	{#if geoData != null}
-		<LeafletMap bind:filteredLocationList queryMarker={queryMarker}/>
+		<LeafletMap bind:filteredLocationList {queryMarker} />
 	{/if}
 
-	<footer>
-		<h1>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h1>
-		<DateSlider bind:dateRange={activeDateRange} bind:fullRange={fullActiveDateRange} id="active-range-slider" />
-		<h1>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h1>
-		<DateSlider bind:dateRange={addedDateRange} bind:fullRange={fullAddedDateRange} id="added-range-slider" />
+	<footer
+		id="dateSliderContainer"
+		class={footerShowen ? 'show' : ''}
+		on:mouseenter={showFooter}
+		on:mouseleave={hideFooterDelay}
+	>
+		<button class="tab" on:click={toggleFooter}>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				fill="currentColor"
+				class="bi bi-chevron-up"
+				viewBox="0 0 16 16"
+			>
+				<path
+					fill-rule="evenodd"
+					d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"
+				/>
+			</svg>
+		</button>
+		<h2>FILTERS</h2>
+		<div class="inner">
+			<h3>Filter by Date <span class="desktop-explanation">(when there was a infection)</span></h3>
+			<DateSlider bind:dateRange={activeDateRange} bind:fullRange={fullActiveDateRange} id="active-range-slider" />
+			<h3>Filter by date added <span class="desktop-explanation">(when it was discovered)</span></h3>
+			<DateSlider bind:dateRange={addedDateRange} bind:fullRange={fullAddedDateRange} id="added-range-slider" />
+		</div>
 	</footer>
 </main>
 
@@ -134,10 +180,36 @@
 		width: 100%;
 		bottom: 0;
 		left: 0;
-		padding: 1em;
+		padding: 0;
 		background-color: white;
+		transition: transform 100ms ease-out;
+		transform: translateY(calc(87%));
+		box-shadow: 2px 2px 10px rgb(75, 70, 70);
 
-		h1 {
+
+		.tab {
+			position: absolute;
+			text-align: center;
+			top: -2rem;
+			left: 50%;
+			transform: translateX(-50%);
+			background-color: #ffe330;
+			color: #222222;
+			border: none;
+			padding: 0.5rem 2rem;
+			border-radius: 5px 5px 0 0;
+			font-weight: bolder;
+			display: block;
+			z-index: -1;
+			box-shadow: 2px 2px 10px rgb(75, 70, 70);
+
+		}
+		.inner {
+			transform: translateY(calc(100%));
+			background-color: white;
+		}
+
+		h3 {
 			text-align: center;
 			font-size: 10pt;
 			font-weight: 300;
@@ -145,6 +217,21 @@
 			&:last-child {
 				padding-top: 1em;
 			}
+		}
+		h2 {
+			color: white;
+			text-align: center;
+			font-size: 1.2em;
+			font-weight: bold;
+			padding: 0.4rem 0;
+			margin: 0;
+			background-color: #333333;
+		}
+	}
+	.show {
+		transform: translateY(0);
+		& > .inner {
+			transform: translateY(0);
 		}
 	}
 
