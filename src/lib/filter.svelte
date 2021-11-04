@@ -19,7 +19,7 @@
 	async function updateGeoJSON() {
 		// Retrieve main document
 		let officialResponse = await (await fetch('https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson')).json()
-		let communityResponse = await (await fetch('https://raw.githubusercontent.com/Questionable-Research-Labs/TOI-Community/master/community.geojson')).json()
+		let communityResponse = await (await fetch('https://raw.githubusercontent.com/Questionable-Research-Labs/TOI-Community/master/community.geojson.json')).json()
 		geoData = new GeoData(officialResponse,communityResponse);
 
 	}
