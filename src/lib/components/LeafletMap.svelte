@@ -13,7 +13,7 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
 	import { browser } from '$app/env';
-	import type { Feature, Properties } from '$lib/geoJsonResponse';
+	import type { Feature, Properties } from '$lib/loiData';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { storeMarker, getPopupData, getMarkerID } from '$lib/markerStore';

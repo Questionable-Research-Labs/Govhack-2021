@@ -20,7 +20,7 @@
 	import type { Tweened } from 'svelte/motion';
 
 	import { writable } from 'svelte/store';
-	import type { GeoData, Feature } from '$lib/geoJsonResponse';
+	import type { GeoData, Feature } from '$lib/loiData';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import ResultHeading from '$lib/components/ResultHeading.svelte';
 	import Filter from '$lib/filter.svelte';
@@ -67,14 +67,14 @@
 	$: {
 		if (geoData !== null && !fullDateRangesConfigured) {
 			fullDateRangesConfigured = true;
-			let activeStartMin = geoData.features.reduce(function (prev, curr) {
+			let activeStartMin = geoData.loi.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
 
 			fullActiveDateRange[0] = Math.round(activeStartMin.properties.start.valueOf() / MS_IN_DAY);
 			activeDateRange[0] = Math.round(fullActiveDateRange[0]);
 
-			let addedStartMin = geoData.features.reduce((prev, curr) =>
+			let addedStartMin = geoData.loi.reduce((prev, curr) =>
 				curr.properties.dateAdded.isValid()
 					? prev.properties.dateAdded.valueOf() < curr.properties.dateAdded.valueOf()
 						? prev

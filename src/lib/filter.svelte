@@ -6,9 +6,9 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 
-	import type { Feature } from '$lib/geoJsonResponse';
+	import type { Feature } from '$lib/loiData';
 	import { timeFromMoment, compareCaches } from '$lib/tools';
-	import { GeoData } from '$lib/geoJsonResponse';
+	import { GeoData } from '$lib/loiData';
 
 	export let activeDateRange: [number, number];
 	export let addedDateRange: [number, number];
@@ -72,7 +72,7 @@
 		// Svelte quite often fires updates when not needed
 		if (geoData !== null && !compareCaches(filterCache, [activeDateRange, addedDateRange, searchTerm])) {
 			filterCache = [activeDateRange, addedDateRange, searchTerm];
-			filteredLocationList = geoData.features.map((feature: Feature) => [feature, combineLogic(feature)]);
+			filteredLocationList = geoData.loi.map((feature: Feature) => [feature, combineLogic(feature)]);
 			loiCount.set(filteredLocationList.map(([_, enabled]: [Feature, boolean]) => enabled).filter(Boolean).length);
 		}
 	}
