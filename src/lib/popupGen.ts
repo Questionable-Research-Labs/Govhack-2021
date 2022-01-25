@@ -74,16 +74,16 @@ export function generatePopup(dataTable: Feature): string {
     tableLineGen('City', dataTable.location.city);
     tableLineGen('Location', `${dataTable.location.address}<br/>${linkGen(`https://maps.google.com/maps?q=&layer=c&cbll=${dataTable.location.coordinates[0]},${dataTable.location.coordinates[1]}`, 'View in Google Streetview')}`);
     if (dataTable.properties.dateAdded.isValid()) {
-        tableLineGen('Date Added', `${dataTable.properties.dateAdded.format('YYYY-MM-D LT')}`);
+        tableLineGen('Date Added', `${dataTable.properties.dateAdded.format('YYYY-MM-DD LT')}`);
     } else {
         tableLineGen('Date Added', 'Not specified');
     }
     if (dataTable.properties.updated.isValid()) {
-        tableLineGen('Updated', dataTable.properties.updated.format('YYYY-MM-D LT'));
+        tableLineGen('Updated', dataTable.properties.updated.format('YYYY-MM-DD LT'));
     }
     tableLineGen('Advice', dataTable.properties.publicAdvice);
-    tableLineGen('Start', `${dataTable.properties.start.format('YYYY-MM-D LT')}`);
-    tableLineGen('End', `${dataTable.properties.end.format('YYYY-MM-D LT')}`);
+    tableLineGen('Start', `${dataTable.properties.start.format('YYYY-MM-DD LT')}`);
+    tableLineGen('End', `${dataTable.properties.end.format('YYYY-MM-DD LT')}`);
     if (!dataTable.properties.official) {
         tableLineGen('Status', 'Community Self Notification');
     }
