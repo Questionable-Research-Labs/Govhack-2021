@@ -20,16 +20,16 @@
 	import type { Tweened } from 'svelte/motion';
 
 	import { writable } from 'svelte/store';
-	import type { GeoData, Feature } from '$lib/loiData';
+	import type { LoiData, Feature } from '$lib/loiData';
 	import SearchBox from '$lib/components/SearchBox.svelte';
-	import ResultHeading from '$lib/components/ResultHeading.svelte';
-	import Filter from '$lib/filter.svelte';
+	import Filter from '$lib/filtering/filterManager.svelte';
 	import moment, { Moment } from 'moment';
 	import { MS_IN_DAY } from '$lib/consts';
 	import MapHeader from '$lib/components/MapHeader.svelte';
+	import {clickOutside} from "$lib/clickOutside";
 
 	// QUERY MARKER
-	export let queryMarker;
+	export let queryMarker: string;
 
 	// FILTERS
 	let fullDateRangesConfigured = false;
@@ -37,7 +37,7 @@
 	const initialTime = new Date().getTime();
 	const initialTimeInS = Math.round(initialTime / MS_IN_DAY);
 
-	let fullActiveDateRange = [
+	let fullActiveDateRange: [number, number] = [
 		initialTimeInS, // updated when geoData downloads
 		initialTimeInS
 	];
@@ -63,18 +63,18 @@
 
 	// FEATURES
 
-	let geoData: GeoData | null = null;
+	let loiData: LoiData | null = null;
 	$: {
-		if (geoData !== null && !fullDateRangesConfigured) {
+		if (loiData !== null && !fullDateRangesConfigured) {
 			fullDateRangesConfigured = true;
-			let activeStartMin = geoData.loi.reduce(function (prev, curr) {
+			let activeStartMin = loiData.loi.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
 			});
 
 			fullActiveDateRange[0] = Math.round(activeStartMin.properties.start.valueOf() / MS_IN_DAY);
 			activeDateRange[0] = Math.round(fullActiveDateRange[0]);
 
-			let addedStartMin = geoData.loi.reduce((prev, curr) =>
+			let addedStartMin = loiData.loi.reduce((prev, curr) =>
 				curr.properties.dateAdded.isValid()
 					? prev.properties.dateAdded.valueOf() < curr.properties.dateAdded.valueOf()
 						? prev
@@ -91,7 +91,7 @@
 
 	// DATE SLIDER CONTROLS
 	let footerShowen = false;
-	let footerHideTimeout;
+	let footerHideTimeout: NodeJS.Timeout | undefined;
 
 	function toggleFooter() {
 		console.log('Showing',footerShowen);
@@ -106,6 +106,15 @@
 			footerShowen = true;
 		}, 1);
 	}
+	function hideFooter() {
+		if (typeof footerHideTimeout!=="undefined") {
+			clearTimeout(footerHideTimeout);
+			footerHideTimeout = undefined;
+		}
+		setTimeout(function () {
+			footerShowen = false;
+		}, 1);
+	}
 	function hideFooterDelay() {
 		footerHideTimeout = setTimeout(function () {
 			footerShowen = false;
@@ -115,7 +124,7 @@
 
 <main>
 	<Filter
-		bind:geoData
+		bind:geoData={loiData}
 		bind:activeDateRange
 		bind:addedDateRange
 		bind:searchTerm
@@ -123,8 +132,8 @@
 		bind:loiCount
 		bind:fullAddedDateRange
 	/>
-	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount communityPins={geoData?.communityPins} />
-	{#if geoData != null}
+	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount communityPins={loiData?.communityPins || false} />
+	{#if loiData != null}
 		<LeafletMap bind:filteredLocationList {queryMarker} />
 	{/if}
 
@@ -133,6 +142,7 @@
 		class={footerShowen ? 'show' : ''}
 		on:mouseenter={showFooter}
 		on:mouseleave={hideFooterDelay}
+		use:clickOutside on:click_outside={hideFooter}
 	>
 		<button class="tab" on:click={toggleFooter}>
 			<svg
@@ -202,6 +212,9 @@
 			display: block;
 			z-index: -1;
 			box-shadow: 2px 2px 10px rgb(75, 70, 70);
+			svg {
+				transition: all 100ms ease-out;
+			}
 
 		}
 		.inner {
@@ -232,6 +245,9 @@
 		transform: translateY(0);
 		& > .inner {
 			transform: translateY(0);
+		}
+		.tab svg {
+			transform: rotate(180deg);
 		}
 	}
 

@@ -8,19 +8,19 @@
 
 	import type { Feature } from '$lib/loiData';
 	import { timeFromMoment, compareCaches } from '$lib/tools';
-	import { GeoData } from '$lib/loiData';
+	import { LoiData } from '$lib/loiData';
 
 	export let activeDateRange: [number, number];
 	export let addedDateRange: [number, number];
 	export let fullAddedDateRange: [number, number];
 	export let searchTerm: string;
-	export let geoData: GeoData | null;
+	export let geoData: LoiData | null;
 
 	async function updateGeoJSON() {
 		// Retrieve main document
-		let officialResponse = await (await fetch('https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson')).json()
-		let communityResponse = await (await fetch('https://raw.githubusercontent.com/Questionable-Research-Labs/TOI-Community/master/community.geojson.json')).json()
-		geoData = new GeoData(officialResponse,communityResponse);
+		let officialResponse = await (await fetch('https://api.integration.covid19.health.nz/locations/v1/current-locations-of-interest')).json()
+		// let communityResponse = await (await fetch('https://raw.githubusercontent.com/Questionable-Research-Labs/TOI-Community/master/community.geojson.json')).json()
+		geoData = new LoiData(officialResponse);
 
 	}
 	updateGeoJSON();
@@ -48,7 +48,7 @@
 	}
 
 	function testStringSearch(feature: Feature): boolean {
-		return (feature.properties.location + ' ' + feature.properties.event)
+		return (feature.location.address + ' ' + feature.properties.eventName)
 			.toLowerCase()
 			.includes(searchTerm.toLowerCase());
 	}

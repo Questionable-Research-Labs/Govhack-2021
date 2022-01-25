@@ -2,7 +2,7 @@
 	import type { Writable } from 'svelte/store';
 	import type { Tweened } from 'svelte/motion';
 
-	import Datepicker from 'svelte-calendar/src/Components/Datepicker.svelte';
+	import {Datepicker} from 'svelte-calendar';
 	import NotificationRequester from '$lib/components/NotificationRequester.svelte';
 	import { MS_IN_DAY } from '$lib/consts';
 	import { dateToString } from '$lib/tools';
@@ -51,14 +51,14 @@
 		</a>
 		<div class="pickers-wrapper">
 			<div class="pickers">
-				<Datepicker bind:selected={startDate} on:dateSelected={pickStartCallback} end={new Date()}>
-					<div class="picker__button" title="Select a ending date">
+				<Datepicker bind:selected={startDate} on:dateSelected={pickStartCallback} end={new Date()} let:key let:send let:receive>
+					<div class="picker__button" title="Select a ending date" in:receive|local={{ key }} out:send|local={{ key }}>
 						<span>{dateToString(dates[0])}</span>
 					</div>
 				</Datepicker>
 				<span class="pickers__to">To</span>
-				<Datepicker bind:selected={endDate} on:dateSelected={pickEndCallback} start={startDate} end={new Date()}>
-					<div class="picker__button" title="Select a starting date">
+				<Datepicker bind:selected={endDate} on:dateSelected={pickEndCallback} start={startDate} end={new Date()} let:key let:send let:receive>
+					<div class="picker__button" title="Select a starting date" in:receive|local={{ key }} out:send|local={{ key }}>
 						<span>{dateToString(dates[1])}</span>
 					</div>
 				</Datepicker>
@@ -138,9 +138,6 @@
 			}
 			.colour-bar {
 				background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
-			}
-			.unknown-key {
-				background: #707f89;
 			}
 			.community-key {
 				background: #ffe330;

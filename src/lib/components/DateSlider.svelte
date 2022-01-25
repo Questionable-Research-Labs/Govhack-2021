@@ -4,7 +4,7 @@
 	import { MS_IN_DAY } from '$lib/consts';
 	import { formatDate, dateToString } from '$lib/tools';
 
-	export let fullRange;
+	export let fullRange: [number,number];
 	export let id = 'range-slider';
 	export let showAll = false;
 
@@ -15,7 +15,7 @@
 	let numPipLabels = 2;
 	$: pipStep = Math.round((fullRange[1] - fullRange[0]) / (numPipLabels - 2));
 
-	export let dateRange;
+	export let dateRange: [number,number];
 
 	function pipFormatter(value: number, _ = undefined) {
 		return value == fullRange[0] && showAll

@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-	function interpolate(a, b) {
-		return (t) => Math.round(a + (b - a) * t);
+	function interpolate(a: number, b: number) {
+		return (t: number) => Math.round(a + (b - a) * t);
 	}
 
 	export const loiCount = tweened(0, {
@@ -20,38 +20,43 @@
 	import moment from 'moment';
 	import type OverlappingMarkerSpiderfier from '../oms';
 	import '../../css/leaflet.scss';
+	import type Leaflet from 'leaflet';
 
-	let map;
-	let leaflet;
-	let renderedMarkersLayer;
-	let markerIcon;
+	let map: L.Map;
+	let leaflet: typeof Leaflet;
+	let renderedMarkersLayer: L.FeatureGroup;
+	let markerIcon: L.Icon;
 	let oms: OverlappingMarkerSpiderfier;
 
 	export let filteredLocationList: [Feature, boolean][];
 	export let queryMarker: string;
 
-	function setMarkerState(marker, enabled: boolean) {
+	function setMarkerState(markerLayer: L.Marker | undefined, enabled: boolean) {
+		if (!markerLayer) return;
+		console.log(markerLayer);
+		let markerDom = markerLayer.getElement();
+		if (!markerDom) return;
 		if (enabled) {
-			if (marker.getElement().style.display != 'block') {
-				marker.getElement().style.display = 'block';
-				marker.setOpacity(1);
-				oms.addMarker(marker);
+			if (markerDom.style.display != 'block') {
+				markerDom.style.display = 'block';
+				markerLayer.setOpacity(1);
+				oms.addMarker(markerLayer);
 				// marker.bindPopup(getPopupData(leaflet.stamp(marker)));
 			}
 		} else {
-			if (marker.getElement().style.display != 'none') {
-				marker.getElement().style.display = 'none';
-				marker.setOpacity(0);
-				oms.removeMarker(marker);
+			if (markerDom.style.display != 'none') {
+				markerDom.style.display = 'none';
+				markerLayer.setOpacity(0);
+				oms.removeMarker(markerLayer);
 			}
 		}
 	}
 
 	/// The popup requires HTML in the form of a string,
 	/// so this generates a table with a title of all the data.
-	function generatePopup(dataTable: Properties, location: [number, number]): string {
+	function generatePopup(dataTable: Feature): string {
 		let output = "";
-		if (!dataTable.official) {
+		if (!dataTable.properties.official) {
 			output += `
 			<style>
 				.leaflet-popup-content-wrapper {
@@ -68,7 +73,7 @@
 		// Share Button
 		let copyPrompt = "Copy URL";
 		let copiedPrompt = "Copied!";
-		let shareURL = `window.location.href + '?marker=${dataTable.id}'`;
+		let shareURL = `window.location.href + '?marker=${dataTable.properties.id}'`;
 		let desktopButtonJS = `
 			navigator.clipboard.writeText(${shareURL});
 			var shareButton = document.getElementById('leaflet-popup-share-button');
@@ -78,7 +83,7 @@
 		let mobileButtonJS = `
 			navigator.share({
 				title: 'toi.qrl.nz',
-				text: '${dataTable.event} | Location of Interest:',
+				text: '${dataTable.properties.eventName} | Location of Interest:',
 				url: ${shareURL},
 			});
 		`;
@@ -100,7 +105,7 @@
 		`;
 
 		// Title
-		output += `<p>${dataTable.event}</p>`;
+		output += `<p>${dataTable.properties.eventName}</p>`;
 
 		// Start table
 		output += '<table>';
@@ -115,21 +120,21 @@
 		};
 
 		// Add table info
-		tableLineGen('City', dataTable.city);
-		tableLineGen('Location', dataTable.location);
-		if (dataTable.dateAdded.isValid()) {
-			tableLineGen('Date Added', `${dataTable.dateAdded.format('YYYY-MM-D LT')}`);
+		tableLineGen('City', dataTable.location.city);
+		tableLineGen('Location', dataTable.location.address);
+		if (dataTable.properties.dateAdded.isValid()) {
+			tableLineGen('Date Added', `${dataTable.properties.dateAdded.format('YYYY-MM-D LT')}`);
 		} else {
 			tableLineGen('Date Added', 'Not specified');
 		}
-		if (dataTable.updated.isValid()) {
-			console.log('update', dataTable.event);
-			tableLineGen('Updated', dataTable.updated.format('YYYY-MM-D LT'));
+		if (dataTable.properties.updated.isValid()) {
+			tableLineGen('Updated', dataTable.properties.updated.format('YYYY-MM-D LT'));
 		}
-		tableLineGen('Advice', dataTable.advice);
-		tableLineGen('Start', `${dataTable.start.format('YYYY-MM-D LT')}`);
-		tableLineGen('End', `${dataTable.end.format('YYYY-MM-D LT')}`);
-		if (!dataTable.official) {
+		tableLineGen('Advice', dataTable.properties.publicAdvice);
+		tableLineGen('Start', `${dataTable.properties.start.format('YYYY-MM-D LT')}`);
+		tableLineGen('End', `${dataTable.properties.end.format('YYYY-MM-D LT')}`);
+		tableLineGen('Contact Type', `${dataTable.properties.exposerType}`);
+		if (!dataTable.properties.official) {
 			tableLineGen('Status', 'Community Self Notification');
 		}
 
@@ -139,8 +144,8 @@
 		// Start link section
 		output += '<p>';
 		// More Info link (Used in community pins)
-		if (typeof dataTable.infoLink !== 'undefined') {
-			linkGen(dataTable.infoLink, 'View More Info');
+		if (typeof dataTable.properties.infoLink !== 'undefined') {
+			linkGen(dataTable.properties.infoLink, 'View More Info');
 		}
 		// Add link to google maps
 		linkGen('https://maps.google.com/maps?q=&layer=c&cbll=${location[0]},${location[1]}', 'View in Google Streetview');
@@ -156,14 +161,14 @@
 			loiCount.set(filteredLocationList.length);
 			let queryMarkerReference = undefined;
 			for (let [feature, enabled] of filteredLocationList) {
-				let marker = leaflet.marker(feature.geometry.coordinates, {
-					title: feature.properties.event,
+				let marker = leaflet.marker(feature.location.coordinates, {
+					title: feature.properties.eventName,
 					icon: markerIcon
 				});
 
 				renderedMarkersLayer.addLayer(marker);
 				oms.addMarker(marker);
-				let popupHTML = generatePopup(feature.properties, feature.geometry.coordinates);
+				let popupHTML = generatePopup(feature);
 
 				storeMarker(feature.properties.id, leaflet.stamp(marker), popupHTML);
 				
@@ -253,13 +258,12 @@
 				oms = new OverlappingMarkerSpiderfier(map, leaflet, {});
 
 				let popup = new leaflet.Popup({ offset: new leaflet.Point(0.5, -24) });
-				oms.addListener('click', function (marker, markerPos) {
-					console.log('Marker Clicked', marker);
+				oms.addListener('click', function (marker: L.Marker, markerPos: L.LatLng) {
 					popup.setContent(getPopupData(leaflet.stamp(marker)));
 					popup.setLatLng(markerPos);
 					map.openPopup(popup);
 				});
-				oms.addListener('spiderfy', function (markers) {
+				oms.addListener('spiderfy', function (markers: L.Marker[]) {
 					map.closePopup();
 				});
 			}
@@ -272,8 +276,8 @@
 
 		for (let [feature, enabled] of filteredLocationList) {
 			let featureID = feature.properties.id;
-			let marker = renderedMarkersLayer.getLayer(getMarkerID(featureID));
-			setMarkerState(marker, enabled);
+			let markerLayer = renderedMarkersLayer.getLayer(getMarkerID(featureID));
+			setMarkerState(markerLayer as L.Marker, enabled);
 		}
 	});
 </script>
