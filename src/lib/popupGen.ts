@@ -21,23 +21,6 @@ export function generatePopup(dataTable: Feature): string {
 			`
     }
 
-    // if (dataTable.properties.exposerType !== ExposerType.Unknown) {
-    //     output += `
-    //         <style>
-    //             .leaflet-popup-content-wrapper {
-    //                 border-bottom: solid 20px ${ExposerType.toColor(dataTable.properties.exposerType)};
-    //             }
-    //         </style>
-    //         `
-    // }
-    output += `
-        <style>
-        .leaflet-popup-content-wrapper {
-            padding-bottom: 25px;
-        }
-        </style>
-        `
-
     // Share Button
     let copyPrompt = "Copy URL";
     let copiedPrompt = "Copied!";
@@ -104,18 +87,25 @@ export function generatePopup(dataTable: Feature): string {
     if (!dataTable.properties.official) {
         tableLineGen('Status', 'Community Self Notification');
     }
-
     // End table
     output += '</table>';
-
     // Start link section
     output += '<p>';
+
     // More Info link (Used in community pins)
     if (typeof dataTable.properties.infoLink !== 'undefined') {
         output += linkGen(dataTable.properties.infoLink, 'View More Info');
     }
     // Add link to google maps
     output += '</p>';
+
+    if (dataTable.properties.visibleInWebform) {
+        output += `
+        <div class="register-details">
+            People who where at this location are being asked to register their details with contact tracers with this form.
+            <a target="_blank" rel="nofollow noopener" href="https://tracing.covid19.govt.nz/loi?eventId=${dataTable.properties.id}">Register Now</a>
+        </div>`
+    }
 
     if (dataTable.properties.exposerType !== ExposerType.Unknown) {
         output += `

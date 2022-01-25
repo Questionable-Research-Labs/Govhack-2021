@@ -40,6 +40,7 @@ export class LoiData {
 						infoLink: e["link"],
 						official,
 						exposerType: ExposerType.fromString(e['exposureType']),
+						visibleInWebform: e['visibleInWebform']
 					},
 					locationAvailable,
 				};
@@ -73,6 +74,7 @@ export interface Properties {
 	official: boolean;
 	infoLink: string;
 	exposerType: ExposerType;
+	visibleInWebform: boolean;
 }
 
 export enum ExposerType {
