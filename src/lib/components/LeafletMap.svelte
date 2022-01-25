@@ -21,7 +21,7 @@
 	import type OverlappingMarkerSpiderfier from '../oms';
 	import '../../css/leaflet.scss';
 	import type Leaflet from 'leaflet';
-import { generatePopup } from '$lib/popupGen';
+	import { generatePopup } from '$lib/popupGen';
 
 	let map: L.Map;
 	let leaflet: typeof Leaflet;

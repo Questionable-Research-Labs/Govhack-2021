@@ -19,7 +19,6 @@
 	async function updateGeoJSON() {
 		// Retrieve main document
 		let officialResponse = await (await fetch('https://api.integration.covid19.health.nz/locations/v1/current-locations-of-interest')).json()
-		// let communityResponse = await (await fetch('https://raw.githubusercontent.com/Questionable-Research-Labs/TOI-Community/master/community.geojson.json')).json()
 		geoData = new LoiData(officialResponse);
 
 	}

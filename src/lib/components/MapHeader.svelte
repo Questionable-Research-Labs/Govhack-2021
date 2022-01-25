@@ -14,20 +14,14 @@
 	export let dates: [number, number]; // The active date range 0 = start 1 = end
 	export let searchTerm: string;
 
-	let lastUpdate: Writable<Date> = writable();
+	const genRoundedDate = () => {
+		let x = new Date();
+		x.setMinutes(0,0,0);
+		return x
+	}
+	let lastUpdate: Writable<Date> = writable(genRoundedDate());
 	export let loiCount: Tweened<number>;
 	export let communityPins: boolean;
-
-	(async () => {
-		try {
-			let response = await fetch('https://govhack2021-backend.host.qrl.nz/updated');
-			let body = await response.json();
-			console.log('Date pushed', body['getDatePushed']);
-			lastUpdate.set(new Date(body['getDatePushed']));
-		} catch (e) {
-			console.log('It shit itself', e);
-		}
-	})();
 
 	let startDate: Date;
 	let endDate: Date;
@@ -73,10 +67,10 @@
 		<SearchBox bind:searchTerm />
 		<div class="info">
 			<InfoBlock>
-				<a href="https://github.com/minhealthnz/nz-covid-data"> Data from the New Zealand Government </a>
+				<a href="https://github.com/minhealthnz/nz-covid-data" target="_blank" rel="nofollow noopener"> Data from the New Zealand Government </a>
 				<span style="white-space: nowrap;"
-					><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | ©
-					<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</span
+					><a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank" rel="nofollow noopener">Leaflet</a> | ©
+					<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="nofollow noopener">OpenStreetMap</a> contributors</span
 				>
 			</InfoBlock>
 			<InfoBlock>
