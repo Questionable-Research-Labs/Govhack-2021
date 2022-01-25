@@ -39,7 +39,7 @@ export class LoiData {
 						updated: moment(e['updatedAt']),
 						infoLink: e["link"],
 						official,
-						exposerType: ExposerType[e['exposureType']],
+						exposerType: ExposerType.fromString(e['exposureType']),
 					},
 					locationAvailable,
 				};
@@ -76,7 +76,35 @@ export interface Properties {
 }
 
 export enum ExposerType {
-	"casual",
-	"casual plus",
-	"close",
+	Casual = "Casual",
+	CasualPlus = "Casual Plus",
+	Close = "Close",
+	Unknown = "Unknown",
+}
+
+export namespace ExposerType {
+	export function toColor(type: ExposerType): string {
+		console.log(type);
+		switch (type) {
+			case ExposerType.Casual:
+				return "#4bc44b";
+			case ExposerType.CasualPlus:
+				return "#e6b72c";
+			case ExposerType.Close:
+				return "#d93d2b";
+		}
+		return "#e0e0e0";
+	}
+
+	export function fromString(type: string): ExposerType {
+		switch (type) {
+			case "Casual":
+				return ExposerType.Casual;
+			case "Casual Plus":
+				return ExposerType.CasualPlus;
+			case "Close":
+				return ExposerType.Close;
+		}
+		return ExposerType.Unknown;
+	}
 }
