@@ -102,10 +102,10 @@ export function generatePopup(dataTable: Feature): string {
     if (dataTable.properties.visibleInWebform) {
         output += `
         <a target="_blank" rel="nofollow noopener" href="https://tracing.covid19.govt.nz/loi?eventId=${dataTable.properties.id}" class="register-details">
+            <div class="register-details-action">Register Now</div>    
             <div class="register-details-inner">
-            People who where at this location are being asked to register their details with contact tracers with this form.
+                If you where at this location, please help the contact tracing team by filling out this form!
             </div>
-            <div class="register-details-action">Register Now</div>
         </a>`
     }
 

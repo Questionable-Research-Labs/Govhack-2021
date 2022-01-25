@@ -2,10 +2,10 @@
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
-	export async function load({ page, fetch, session, stuff }) {
+	export async function load({ url }) {
 		return {
 			props: {
-				queryMarker: page.query.get('marker')
+				queryMarker: url.searchParams.get('marker')
 			}
 		};
 	}
