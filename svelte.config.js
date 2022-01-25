@@ -15,9 +15,6 @@ const config = {
 			server: {
 				hmr: { overlay: false }
 			},
-			optimizeDeps: {
-				include: ['just-throttle', 'dayjs']
-			}
 		}
 	}
 };

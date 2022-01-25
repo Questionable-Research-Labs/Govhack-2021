@@ -3,7 +3,7 @@
 	import type { Tweened } from 'svelte/motion';
 	import { browser } from '$app/env';
 
-	import {Datepicker} from 'svelte-calendar';
+	import Datepicker from 'svelte-calendar/src/Components/Datepicker.svelte';
 	import NotificationRequester from '$lib/components/NotificationRequester.svelte';
 	import { MS_IN_DAY } from '$lib/consts';
 	import { adjustForTimezone, dateToString } from '$lib/tools';
@@ -27,51 +27,15 @@
 
 	let startDate: Date;
 	let endDate: Date;
-
-	// $: {
-	// 	if (dates) {
-	// 		startDate = new Date(Math.round(dates[0] * MS_IN_DAY));
-	// 		endDate = new Date(Math.round(dates[1] * MS_IN_DAY));
-	// 	}
-	// }
-
+	$: {
+		if (dates) {
+			startDate = new Date(Math.round(dates[0] * MS_IN_DAY));
+			endDate = new Date(Math.round(dates[1] * MS_IN_DAY));
+		}
+	}
 	const dateToTime = (date: Date): number => Math.round(date.getTime() / MS_IN_DAY);
-	let startDateStore: any;
-	let endDateStore: any;
-
-	$: {
-		if (startDateStore && endDateStore && browser) {
-			if ($startDateStore?.selected > $endDateStore?.selected) {
-				startDateStore.setDay(endDate)
-				startDateStore.set({ ...$startDateStore, start: endDate });
-				startDateStore.selectDay();
-			}
-		}
-	};
-
-	$: {
-		if (startDateStore && endDateStore && browser) {
-			dates[0] = dateToTime(adjustForTimezone($startDateStore?.selected));
-			dates[1] = dateToTime(adjustForTimezone($endDateStore?.selected));
-		}
-	}
-	$: {
-		if (startDateStore && endDateStore && browser) {
-			startDateStore.set({...$startDateStore, start: new Date(Math.round(fullRangeStartDate * MS_IN_DAY)) })
-			endDateStore.set({...$endDateStore, start: new Date(Math.round(fullRangeStartDate * MS_IN_DAY)) })
-
-		}
-	}
-
-	const calendarTheme = {
-		calendar: {
-			maxWidth: "400px",
-			font: {
-			large: "15em"
-		}
-		},
-
-	}
+	const pickStartCallback = () => (dates[0] = dateToTime(adjustForTimezone(startDate)));
+	const pickEndCallback = () => (dates[1] = dateToTime(adjustForTimezone(endDate)));
 </script>
 
 <header>
@@ -81,14 +45,14 @@
 		</a>
 		<div class="pickers-wrapper">
 			<div class="pickers">
-				<Datepicker theme={calendarTheme} bind:selected={startDate} bind:store={startDateStore} end={new Date()} start={new Date(Math.round(fullRangeStartDate * MS_IN_DAY))} let:key let:send let:receive >
-					<div class="picker__button" title="Select a ending date" in:receive|local={{ key }} out:send|local={{ key }}>
+				<Datepicker bind:selected={startDate} on:dateSelected={pickStartCallback} start={new Date(fullRangeStartDate * MS_IN_DAY)} end={new Date()}>
+					<div class="picker__button" title="Select a ending date">
 						<span>{dateToString(dates[0])}</span>
 					</div>
 				</Datepicker>
 				<span class="pickers__to">To</span>
-				<Datepicker theme={calendarTheme} bind:selected={endDate} bind:store={endDateStore} end={new Date()} let:key let:send let:receive>
-					<div class="picker__button" title="Select a starting date" in:receive|local={{ key }} out:send|local={{ key }}>
+				<Datepicker bind:selected={endDate} on:dateSelected={pickEndCallback} start={startDate} end={new Date()}>
+					<div class="picker__button" title="Select a starting date">
 						<span>{dateToString(dates[1])}</span>
 					</div>
 				</Datepicker>

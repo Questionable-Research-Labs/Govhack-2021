@@ -763,11 +763,6 @@ cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-dayjs@^1.10.6:
-  version "1.10.7"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
-  integrity sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==
-
 debug@^4.0.1, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
@@ -1260,11 +1255,6 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha1-nbe1lJatPzz+8wp1FC0tkwrXJlE=
 
-just-throttle@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/just-throttle/-/just-throttle-2.3.1.tgz#ef4a0710073bb4b0faf7dad1bc4ccabaeec4d0e6"
-  integrity sha512-0H4miIAWZYpnpg7oD/Y/PBb77ISSHAETif5xK9EnwIgYCO6oC8ErkJxDumMUTR44shSOwptRIArRuvNuvN/hOw==
-
 kleur@^4.1.4:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.4.tgz#8c202987d7e577766d039a8cd461934c01cda04d"
@@ -1700,13 +1690,12 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-calendar@^3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/svelte-calendar/-/svelte-calendar-3.1.6.tgz#bdbf949f19eae199d04860da7857abb5000e8444"
-  integrity sha512-jOHiPlxBAa1LGVFQZoczdAGnCSI2RKcuQQHj32TjLbXO/P2Povx4JphPEcP7XjKj/s/jimBC6xQyFhyjD0vxbg==
+svelte-calendar@^2.0.5:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/svelte-calendar/-/svelte-calendar-2.0.4.tgz#0084a9e7a0279f43aaae4b4a108b0c68a960a0ee"
+  integrity sha512-a9TGBCc17qrvgdO79py2whwvtgaZzOHiMMygc2aNyYzETQI/H60g3kmHyq+llDf+wSEFWqy0LO71rBrzBCfRFA==
   dependencies:
-    dayjs "^1.10.6"
-    just-throttle "^2.3.1"
+    timeUtils "^2.0.0"
 
 svelte-check@^2.0.0:
   version "2.2.4"
@@ -1774,6 +1763,11 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+timeUtils@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/timeUtils/-/timeUtils-2.0.0.tgz#b3ac3eaa8f6d47e9ca008c76e9fd5b0f0afc18c0"
+  integrity sha512-rk1y/5ix4HczK3q4caEvo2iIhgRIHL6g85sX2rPNse8sKUATzYEAX1jAYYsW139aAcn1b24jV4By0SLmosQVyA==
 
 to-regex-range@^5.0.1:
   version "5.0.1"
