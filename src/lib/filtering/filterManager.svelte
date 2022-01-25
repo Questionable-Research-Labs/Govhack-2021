@@ -70,7 +70,7 @@
 	$: {
 		// Svelte quite often fires updates when not needed
 		if (geoData !== null && !compareCaches(filterCache, [activeDateRange, addedDateRange, searchTerm])) {
-			filterCache = [activeDateRange, addedDateRange, searchTerm];
+			filterCache = [[...activeDateRange], [...addedDateRange], searchTerm];
 			filteredLocationList = geoData.loi.map((feature: Feature) => [feature, combineLogic(feature)]);
 			loiCount.set(filteredLocationList.map(([_, enabled]: [Feature, boolean]) => enabled).filter(Boolean).length);
 		}

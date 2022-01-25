@@ -34,7 +34,6 @@
 
 	function setMarkerState(markerLayer: L.Marker | undefined, enabled: boolean) {
 		if (!markerLayer) return;
-		console.log(markerLayer);
 		let markerDom = markerLayer.getElement();
 		if (!markerDom) return;
 		if (enabled) {
@@ -109,7 +108,7 @@
 				}
 			}
 			if (typeof queryMarkerReference === "undefined") {
-				if (typeof queryMarker !== "undefined") {
+				if (typeof queryMarker === "undefined") {
 					console.log("Could not find marker")
 				} else {
 					console.log("Not searching for marker")

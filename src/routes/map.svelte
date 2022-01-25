@@ -132,7 +132,7 @@
 		bind:loiCount
 		bind:fullAddedDateRange
 	/>
-	<MapHeader bind:dates={activeDateRange} bind:searchTerm bind:loiCount communityPins={loiData?.communityPins || false} />
+	<MapHeader bind:dates={activeDateRange} fullRangeStartDate={fullActiveDateRange[0]} bind:searchTerm bind:loiCount communityPins={loiData?.communityPins || false} />
 	{#if loiData != null}
 		<LeafletMap bind:filteredLocationList {queryMarker} />
 	{/if}
@@ -172,17 +172,6 @@
 <style lang="scss">
 	main {
 		min-height: 100vh;
-	}
-
-	.header {
-		position: fixed;
-		z-index: 1;
-		width: 100%;
-		top: 0;
-		left: 0;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		background-color: white;
 	}
 	footer {
 		position: fixed;
@@ -252,9 +241,6 @@
 	}
 
 	@media all and (max-width: 770px) {
-		.header {
-			grid-template-columns: 1fr;
-		}
 		.desktop-explanation {
 			display: block;
 		}

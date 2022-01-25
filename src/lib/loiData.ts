@@ -86,7 +86,6 @@ export enum ExposerType {
 
 export namespace ExposerType {
 	export function toColor(type: ExposerType): string {
-		console.log(type);
 		switch (type) {
 			case ExposerType.Casual:
 				return "#4bc44b";
