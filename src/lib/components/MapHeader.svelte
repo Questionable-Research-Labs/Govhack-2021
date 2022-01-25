@@ -1,47 +1,41 @@
 <script lang="ts">
-	import type { Writable } from 'svelte/store';
+	import type { Readable, Writable } from 'svelte/store';
 	import type { Tweened } from 'svelte/motion';
+	import { browser } from '$app/env';
 
 	import Datepicker from 'svelte-calendar/src/Components/Datepicker.svelte';
 	import NotificationRequester from '$lib/components/NotificationRequester.svelte';
 	import { MS_IN_DAY } from '$lib/consts';
-	import { dateToString } from '$lib/tools';
+	import { adjustForTimezone, dateToString } from '$lib/tools';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import InfoBlock from '$lib/components/InfoBlock.svelte';
 	import { writable } from 'svelte/store';
 	import moment from 'moment';
-
-	export let dates: [number, number]; // The active date range 0 = start 1 = end
+	
+	export let fullRangeStartDate: number;
+	export let dates: [number, number]; // The active date range 0 = start, 1 = end
 	export let searchTerm: string;
 
-	let lastUpdate: Writable<Date> = writable();
+	const genRoundedDate = () => {
+		let x = new Date();
+		x.setMinutes(0,0,0);
+		return x
+	}
+	let lastUpdate: Writable<Date> = writable(genRoundedDate());
 	export let loiCount: Tweened<number>;
 	export let communityPins: boolean;
 
-	(async () => {
-		try {
-			let response = await fetch('https://govhack2021-backend.host.qrl.nz/updated');
-			let body = await response.json();
-			console.log('Date pushed', body['getDatePushed']);
-			lastUpdate.set(new Date(body['getDatePushed']));
-		} catch (e) {
-			console.log('It shit itself', e);
-		}
-	})();
-
 	let startDate: Date;
 	let endDate: Date;
-
 	$: {
 		if (dates) {
 			startDate = new Date(Math.round(dates[0] * MS_IN_DAY));
 			endDate = new Date(Math.round(dates[1] * MS_IN_DAY));
 		}
 	}
-
 	const dateToTime = (date: Date): number => Math.round(date.getTime() / MS_IN_DAY);
-	const pickStartCallback = () => (dates[0] = dateToTime(startDate));
-	const pickEndCallback = () => (dates[1] = dateToTime(endDate));
+	const pickStartCallback = () => (dates[0] = dateToTime(adjustForTimezone(startDate)));
+	const pickEndCallback = () => (dates[1] = dateToTime(adjustForTimezone(endDate)));
 </script>
 
 <header>
@@ -51,7 +45,7 @@
 		</a>
 		<div class="pickers-wrapper">
 			<div class="pickers">
-				<Datepicker bind:selected={startDate} on:dateSelected={pickStartCallback} end={new Date()}>
+				<Datepicker bind:selected={startDate} on:dateSelected={pickStartCallback} start={new Date(fullRangeStartDate * MS_IN_DAY)} end={new Date()}>
 					<div class="picker__button" title="Select a ending date">
 						<span>{dateToString(dates[0])}</span>
 					</div>
@@ -73,10 +67,10 @@
 		<SearchBox bind:searchTerm />
 		<div class="info">
 			<InfoBlock>
-				<a href="https://github.com/minhealthnz/nz-covid-data"> Data from the New Zealand Government </a>
+				<a href="https://github.com/minhealthnz/nz-covid-data" target="_blank" rel="nofollow noopener"> Data from the New Zealand Government </a>
 				<span style="white-space: nowrap;"
-					><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | ©
-					<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</span
+					><a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank" rel="nofollow noopener">Leaflet</a> | ©
+					<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="nofollow noopener">OpenStreetMap</a> contributors</span
 				>
 			</InfoBlock>
 			<InfoBlock>
@@ -138,9 +132,6 @@
 			}
 			.colour-bar {
 				background: linear-gradient(#f02b15 0%, #d751af 40%, #9171e1 80%, #2f86cc 100%);
-			}
-			.unknown-key {
-				background: #707f89;
 			}
 			.community-key {
 				background: #ffe330;

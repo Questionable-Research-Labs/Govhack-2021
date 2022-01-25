@@ -47,3 +47,10 @@ export function compareCaches(arrayA: any[], arrayB: any[]) {
 	}
 	return true;
 }
+
+export function adjustForTimezone(inputDate: Date): Date {
+	let date = new Date(inputDate);
+    let timeOffsetInMS: number = date.getTimezoneOffset() * 60000;
+    date.setTime(date.getTime() - timeOffsetInMS);
+    return date
+}

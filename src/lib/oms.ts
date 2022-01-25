@@ -30,7 +30,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
 
 import type { Marker } from 'leaflet';
 
-let twoPi = Math.PI * 2;
+const twoPi = Math.PI * 2;
 export default class OverlappingMarkerSpiderfier {
 	public VERSION = '0.2.6';
 

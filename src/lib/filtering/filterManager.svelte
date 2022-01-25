@@ -6,21 +6,20 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 
-	import type { Feature } from '$lib/geoJsonResponse';
+	import type { Feature } from '$lib/loiData';
 	import { timeFromMoment, compareCaches } from '$lib/tools';
-	import { GeoData } from '$lib/geoJsonResponse';
+	import { LoiData } from '$lib/loiData';
 
 	export let activeDateRange: [number, number];
 	export let addedDateRange: [number, number];
 	export let fullAddedDateRange: [number, number];
 	export let searchTerm: string;
-	export let geoData: GeoData | null;
+	export let geoData: LoiData | null;
 
 	async function updateGeoJSON() {
 		// Retrieve main document
-		let officialResponse = await (await fetch('https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson')).json()
-		let communityResponse = await (await fetch('https://raw.githubusercontent.com/Questionable-Research-Labs/TOI-Community/master/community.geojson.json')).json()
-		geoData = new GeoData(officialResponse,communityResponse);
+		let officialResponse = await (await fetch('https://api.integration.covid19.health.nz/locations/v1/current-locations-of-interest')).json()
+		geoData = new LoiData(officialResponse);
 
 	}
 	updateGeoJSON();
@@ -48,7 +47,7 @@
 	}
 
 	function testStringSearch(feature: Feature): boolean {
-		return (feature.properties.location + ' ' + feature.properties.event)
+		return (feature.location.address + ' ' + feature.properties.eventName)
 			.toLowerCase()
 			.includes(searchTerm.toLowerCase());
 	}
@@ -71,8 +70,8 @@
 	$: {
 		// Svelte quite often fires updates when not needed
 		if (geoData !== null && !compareCaches(filterCache, [activeDateRange, addedDateRange, searchTerm])) {
-			filterCache = [activeDateRange, addedDateRange, searchTerm];
-			filteredLocationList = geoData.features.map((feature: Feature) => [feature, combineLogic(feature)]);
+			filterCache = [[...activeDateRange], [...addedDateRange], searchTerm];
+			filteredLocationList = geoData.loi.map((feature: Feature) => [feature, combineLogic(feature)]);
 			loiCount.set(filteredLocationList.map(([_, enabled]: [Feature, boolean]) => enabled).filter(Boolean).length);
 		}
 	}

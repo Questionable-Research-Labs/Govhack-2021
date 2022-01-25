@@ -14,7 +14,7 @@ const config = {
 		vite: {
 			server: {
 				hmr: { overlay: false }
-			}
+			},
 		}
 	}
 };

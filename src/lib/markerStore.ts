@@ -12,12 +12,12 @@ let markerStore: Map<string, number> = new Map();
 let popupDataStore: Map<number, string> = new Map();
 
 export function storeMarker(featureID: string, leafletID: number, popupData: string) {
-	markerStore[featureID] = leafletID;
-	popupDataStore[leafletID] = popupData;
+	markerStore.set(featureID, leafletID);
+	popupDataStore.set(leafletID, popupData);
 }
 
 export function getMarkerID(featureID: string): number {
-	return markerStore[featureID];
+	return markerStore.get(featureID) || -1;
 }
 
 export function getMarkerIDs(): number[] {
@@ -25,5 +25,5 @@ export function getMarkerIDs(): number[] {
 }
 
 export function getPopupData(leafletID: number): string {
-	return popupDataStore[leafletID];
+	return popupDataStore.get(leafletID) || "";
 }
