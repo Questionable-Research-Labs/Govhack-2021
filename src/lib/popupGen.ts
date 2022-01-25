@@ -101,10 +101,12 @@ export function generatePopup(dataTable: Feature): string {
 
     if (dataTable.properties.visibleInWebform) {
         output += `
-        <div class="register-details">
+        <a target="_blank" rel="nofollow noopener" href="https://tracing.covid19.govt.nz/loi?eventId=${dataTable.properties.id}" class="register-details">
+            <div class="register-details-inner">
             People who where at this location are being asked to register their details with contact tracers with this form.
-            <a target="_blank" rel="nofollow noopener" href="https://tracing.covid19.govt.nz/loi?eventId=${dataTable.properties.id}">Register Now</a>
-        </div>`
+            </div>
+            <div class="register-details-action">Register Now</div>
+        </a>`
     }
 
     if (dataTable.properties.exposerType !== ExposerType.Unknown) {
