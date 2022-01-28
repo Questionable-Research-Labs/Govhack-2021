@@ -17,16 +17,16 @@
 	import InfoBlock from '$lib/components/InfoBlock.svelte';
 
 	import type { Writable } from 'svelte/store';
-	import type { Tweened } from 'svelte/motion';
+	import { tweened, Tweened } from 'svelte/motion';
 
 	import { writable } from 'svelte/store';
 	import type { LoiData, Feature } from '$lib/loiData';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import Filter from '$lib/filtering/filterManager.svelte';
 	import moment, { Moment } from 'moment';
-	import { MS_IN_DAY } from '$lib/consts';
+	import { MS_IN_DAY, WholeNumberTweenSettings } from '$lib/consts';
 	import MapHeader from '$lib/components/MapHeader.svelte';
-	import {clickOutside} from "$lib/clickOutside";
+	import { clickOutside } from '$lib/clickOutside';
 
 	// QUERY MARKER
 	export let queryMarker: string;
@@ -60,6 +60,7 @@
 	// HEADER INFO
 
 	let loiCount: Tweened<number>;
+	let noLocationPins: Tweened<number> = tweened(0, WholeNumberTweenSettings);
 
 	// FEATURES
 
@@ -84,6 +85,8 @@
 			console.log('added Site Min', addedStartMin);
 			fullAddedDateRange[0] = Math.round(addedStartMin.properties.dateAdded.valueOf() / MS_IN_DAY);
 			addedDateRange[0] = Math.round(fullAddedDateRange[0]);
+
+			noLocationPins.set(loiData.noLocationPins);
 		}
 	}
 
@@ -94,11 +97,11 @@
 	let footerHideTimeout: NodeJS.Timeout | undefined;
 
 	function toggleFooter() {
-		console.log('Showing',footerShowen);
+		console.log('Showing', footerShowen);
 		footerShowen = !footerShowen;
 	}
 	function showFooter() {
-		if (typeof footerHideTimeout!=="undefined") {
+		if (typeof footerHideTimeout !== 'undefined') {
 			clearTimeout(footerHideTimeout);
 			footerHideTimeout = undefined;
 		}
@@ -107,7 +110,7 @@
 		}, 1);
 	}
 	function hideFooter() {
-		if (typeof footerHideTimeout!=="undefined") {
+		if (typeof footerHideTimeout !== 'undefined') {
 			clearTimeout(footerHideTimeout);
 			footerHideTimeout = undefined;
 		}
@@ -132,7 +135,14 @@
 		bind:loiCount
 		bind:fullAddedDateRange
 	/>
-	<MapHeader bind:dates={activeDateRange} fullRangeStartDate={fullActiveDateRange[0]} bind:searchTerm bind:loiCount communityPins={loiData?.communityPins || false} />
+	<MapHeader
+		bind:dates={activeDateRange}
+		fullRangeStartDate={fullActiveDateRange[0]}
+		bind:searchTerm
+		bind:loiCount
+		communityPins={loiData?.communityPins || false}
+		{noLocationPins}
+	/>
 	{#if loiData != null}
 		<LeafletMap bind:filteredLocationList {queryMarker} />
 	{/if}
@@ -142,7 +152,8 @@
 		class={footerShowen ? 'show' : ''}
 		on:mouseenter={showFooter}
 		on:mouseleave={hideFooterDelay}
-		use:clickOutside on:click_outside={hideFooter}
+		use:clickOutside
+		on:click_outside={hideFooter}
 	>
 		<button class="tab" on:click={toggleFooter}>
 			<svg
@@ -185,7 +196,6 @@
 		transform: translateY(calc(87%));
 		box-shadow: 2px 2px 10px rgb(75, 70, 70);
 
-
 		.tab {
 			position: absolute;
 			text-align: center;
@@ -205,6 +215,12 @@
 				transition: all 100ms ease-out;
 			}
 
+			@media screen and (max-height: 700px) {
+				top: -1rem;
+				padding: 0rem 1.5rem;
+
+			}
+				
 		}
 		.inner {
 			transform: translateY(calc(100%));

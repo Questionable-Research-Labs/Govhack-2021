@@ -4,6 +4,7 @@ import moment from 'moment';
 export class LoiData {
 	loi: Feature[];
 	communityPins: boolean;
+	noLocationPins: number = 0;
 
 	constructor(primarySource: any) {
 		this.communityPins = false;
@@ -20,6 +21,7 @@ export class LoiData {
 			let locationAvailable = true;
 			if (e['location']['latitude'] === "" || e['location']['longitude'] === "") {
 				locationAvailable = false;
+				this.noLocationPins += 1;
 			}
 			if (locationAvailable) {
 				return {

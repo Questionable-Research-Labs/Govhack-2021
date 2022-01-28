@@ -73,6 +73,7 @@
     .wrapper {
       padding: 0;
 			width: 100%;
+      font-size: 0.8rem;
     }
 
 		.search {

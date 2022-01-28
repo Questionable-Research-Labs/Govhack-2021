@@ -56,7 +56,7 @@ export function generatePopup(dataTable: Feature): string {
 		`;
 
     // Title
-    output += `<p>${dataTable.properties.eventName}</p>`;
+    output += `<h3>${dataTable.properties.eventName}</h3>`;
 
     // Start table
     output += '<table>';

@@ -4,11 +4,11 @@
 <script lang="ts">
 	// This is a svelte file for the Auto Subscribe feature
 	import { tweened } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
 
 	import type { Feature } from '$lib/loiData';
 	import { timeFromMoment, compareCaches } from '$lib/tools';
 	import { LoiData } from '$lib/loiData';
+	import { WholeNumberTweenSettings } from '$lib/consts';
 
 	export let activeDateRange: [number, number];
 	export let addedDateRange: [number, number];
@@ -25,11 +25,7 @@
 	updateGeoJSON();
 
 	// Tweened for a fancy animation on UI
-	export const loiCount = tweened(0, {
-		duration: 400,
-		easing: cubicOut,
-		interpolate: (a, b) => (t) => Math.round(a + (b - a) * t)
-	});
+	export const loiCount = tweened(0, WholeNumberTweenSettings);
 
 	let filterCache: [[number, number], [number, number], string];
 

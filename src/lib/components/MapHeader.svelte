@@ -22,8 +22,10 @@
 		return x
 	}
 	let lastUpdate: Writable<Date> = writable(genRoundedDate());
+
 	export let loiCount: Tweened<number>;
 	export let communityPins: boolean;
+	export let noLocationPins: Tweened<number>;
 
 	let startDate: Date;
 	let endDate: Date;
@@ -36,7 +38,28 @@
 	const dateToTime = (date: Date): number => Math.round(date.getTime() / MS_IN_DAY);
 	const pickStartCallback = () => (dates[0] = dateToTime(adjustForTimezone(startDate)));
 	const pickEndCallback = () => (dates[1] = dateToTime(adjustForTimezone(endDate)));
+
+	let screenWidth: number;
+
+	let startDateDisplay: string = "";
+	let endDateDisplay: string = "";
+
+	$: startDateDisplay = lowSizeDateDisplay(dateToString(dates[0]), screenWidth);
+	$: endDateDisplay = lowSizeDateDisplay(dateToString(dates[1]), screenWidth);
+
+
+	function lowSizeDateDisplay(date: string, screenWidth: number): string {
+		console.log(screenWidth);
+		if (screenWidth < 330) {
+			return `${date.split("-")[2]}th`;
+		} else if (screenWidth < 420) {
+			return date.split("-").slice(1).join("-");
+		} else {
+			return date
+		}
+	}
 </script>
+<svelte:window bind:innerWidth={screenWidth}/>
 
 <header>
 	<div class="block--first">
@@ -46,18 +69,20 @@
 		<div class="pickers-wrapper">
 			<div class="pickers">
 				<Datepicker bind:selected={startDate} on:dateSelected={pickStartCallback} start={new Date(fullRangeStartDate * MS_IN_DAY)} end={new Date()}>
-					<div class="picker__button" title="Select a ending date">
-						<span>{dateToString(dates[0])}</span>
+					<div class="picker__button" title="Select a starting date">
+						<span>{startDateDisplay}</span>
 					</div>
 				</Datepicker>
 				<span class="pickers__to">To</span>
 				<Datepicker bind:selected={endDate} on:dateSelected={pickEndCallback} start={startDate} end={new Date()}>
-					<div class="picker__button" title="Select a starting date">
-						<span>{dateToString(dates[1])}</span>
+					<div class="picker__button" title="Select a ending date">
+						<span>{endDateDisplay}</span>
 					</div>
 				</Datepicker>
 			</div>
-			<p class="pickers-help">Click the date to open a calendar</p>
+			{#if screenWidth > 370}
+				<p class="pickers-help">Click the date to open a calendar</p>
+			{/if}
 		</div>
 		<div>
 			<NotificationRequester />
@@ -75,15 +100,25 @@
 			</InfoBlock>
 			<InfoBlock>
 				{#if typeof $lastUpdate !== 'undefined'}
-					Last updated {moment($lastUpdate).fromNow()}<br />
+					<span title="The data comes directly from the MinHealthNZ, which updates every hour on the dot">
+						Last updated: {moment($lastUpdate).fromNow()}<br />
+					</span>
 				{/if}
 
 				{#if typeof $loiCount !== 'undefined'}
-					Locations of interest: {$loiCount}
+					<span title="Number of pins displayed on the map">
+						Locations of interest: {$loiCount}
+					</span>
+				{/if}
+
+				{#if typeof $noLocationPins !== 'undefined'}
+					<span title="Some Locations of Interest don't have precise locations, so we can't display them on the map">
+						Missing Pins: {$noLocationPins}
+					</span>
 				{/if}
 			</InfoBlock>
 			<InfoBlock>
-				<b>Date Added</b>
+				<b title="When the Location of Interest was indentified">Date Added</b>
 				<div class="map-key" style="height: 4em;">
 					<div class="labels">
 						<div>Today</div>
