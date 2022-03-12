@@ -16,8 +16,9 @@
 	import DateSlider from '$lib/components/DateSlider.svelte';
 	import InfoBlock from '$lib/components/InfoBlock.svelte';
 
-	import type { Writable } from 'svelte/store';
 	import { tweened, Tweened } from 'svelte/motion';
+	import { getContext, onMount } from 'svelte';
+	import { browser } from '$app/env';
 
 	import { writable } from 'svelte/store';
 	import type { LoiData, Feature } from '$lib/loiData';
@@ -27,6 +28,8 @@
 	import { MS_IN_DAY, WholeNumberTweenSettings } from '$lib/consts';
 	import MapHeader from '$lib/components/MapHeader.svelte';
 	import { clickOutside } from '$lib/clickOutside';
+	import NoLoiModel from '$lib/components/models/NoLoiModel.svelte';
+
 
 	// QUERY MARKER
 	export let queryMarker: string;
@@ -66,7 +69,7 @@
 
 	let loiData: LoiData | null = null;
 	$: {
-		if (loiData !== null && !fullDateRangesConfigured) {
+		if (loiData !== null && !fullDateRangesConfigured && loiData.loi.length > 0) {
 			fullDateRangesConfigured = true;
 			let activeStartMin = loiData.loi.reduce(function (prev, curr) {
 				return prev.properties.start.valueOf() < curr.properties.start.valueOf() ? prev : curr;
@@ -87,6 +90,16 @@
 			addedDateRange[0] = Math.round(fullAddedDateRange[0]);
 
 			noLocationPins.set(loiData.noLocationPins);
+		}
+	}
+
+	$: {
+		if (loiData && loiData.loi.length===0 && browser) {
+			console.log("No LOI data found");
+			const { open } = getContext('simple-modal');
+			open(NoLoiModel, {}, {
+				styleContent: {padding: '0'},
+			});
 		}
 	}
 

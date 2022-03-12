@@ -10,6 +10,7 @@
 	import { LoiData } from '$lib/loiData';
 	import { WholeNumberTweenSettings } from '$lib/consts';
 
+
 	export let activeDateRange: [number, number];
 	export let addedDateRange: [number, number];
 	export let fullAddedDateRange: [number, number];
@@ -20,7 +21,6 @@
 		// Retrieve main document
 		let officialResponse = await (await fetch('https://api.integration.covid19.health.nz/locations/v1/current-locations-of-interest')).json()
 		geoData = new LoiData(officialResponse);
-
 	}
 	updateGeoJSON();
 

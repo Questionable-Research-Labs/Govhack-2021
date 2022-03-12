@@ -1,6 +1,8 @@
 // Moments a bit funky with typescript
 import { Moment } from 'moment';
 import moment from 'moment';
+
+
 export class LoiData {
 	loi: Feature[];
 	communityPins: boolean;
